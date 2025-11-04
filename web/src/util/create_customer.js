@@ -1,5 +1,5 @@
 async function create_customer (data) {
-    let url = 'http://localhost:8080/CRUDBankServerSide/webresources/customer';
+    let url = `/CRUDBankServerSide/webresources/customer`;
     return await fetch(url, {
         method: 'POST',
         headers: {
