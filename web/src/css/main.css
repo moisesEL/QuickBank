@@ -64,3 +64,21 @@ a {
 a:hover {
     cursor: pointer;
 }
+
+#responseMsg {
+              margin-top: 1em;
+              padding: 0.5em;
+              display: none;
+            }
+
+#responseMsg.success {
+              color: green;
+              background-color: #e0ffe0;
+              border: 1px solid green;
+            }
+
+#responseMsg.error {
+              color: red;
+              background-color: #ffe0e0;
+              border: 1px solid red;
+            }
