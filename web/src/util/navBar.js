@@ -22,7 +22,8 @@ template.innerHTML = `
         top: 0px;
         width: 100%;
         height: 60px;
-        background-color: white;
+        color: var(--primary-text-color);
+        background-color: var(--primary-background);
         display: flex;
         justify-content: space-between;
     }
@@ -40,7 +41,7 @@ template.innerHTML = `
     }
 
     .signIn {
-        background-color: var(--primary-login-background, green);
+        background-color: var(--primary-login-btn-background, green);
         font-size: 20px;
     }
 
@@ -58,6 +59,7 @@ template.innerHTML = `
         height: 100%;
         align-self: center;
     }
+
 </style>
 <header>
     <div class="logo">

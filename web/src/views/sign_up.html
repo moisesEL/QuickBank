@@ -1,8 +1,16 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <link rel="stylesheet" href="../css/main.css">
-        <link rel="stylesheet" href="../css/sign_up.css">
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Login</title>
+        
+        <!-- Alternative styles -->
+        <link rel="stylesheet" href="/QuickBank/src/css/light-theme.css" id="main-style" title="Light Mode">
+        <link rel='alternate stylesheet' href='/QuickBank/src/css/dark-theme.css' title="Dark Mode">
+        
+        <link rel="stylesheet" href="/QuickBank/src/css/main.css">
+        <link rel="stylesheet" href="/QuickBank/src/css/sign_up.css">
     </head>
     <body>
         <main>
@@ -125,7 +133,7 @@
                                         default:
                                             break;
                                     }
-                                    window.location.replace("src/views/sign_in.html");
+                                    window.location.replace("/QuickBank/src/views/sign_in.html");
                                 })
                                 .catch(err => {
                                     const error_message = document.createElement('span');
