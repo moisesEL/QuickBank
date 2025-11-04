@@ -1,3 +1,14 @@
+:root {
+    --primary-color: black;
+    --primary-background: white;
+    
+    --primary-btn-color: white;
+    --primary-btn-background: black;
+    --primary-btn-hover: rgb(210, 210, 210);
+
+    --primary-login-background: green;
+}
+
 body {
     font-family: Arial, Helvetica, sans-serif;
     background-repeat: no-repeat;
@@ -38,8 +49,8 @@ label {
 
 #button {
     width: 100%;
-    color: white;
-    background-color: black;
+    color: var(--primary-btn-color);
+    background-color: var(--primary-btn-background);
     border-radius: 6px;
     border: none;
     align-self: center;
@@ -57,7 +68,7 @@ a {
     white-space: nowrap;
     padding: 8px 6px;
     border-radius: 10px;
-    color: black;
+    color: var(--primary-color);
     text-decoration: none;
 }
 
