@@ -1,0 +1,16 @@
+:root {
+    --primary-text-color: black;
+    --primary-background: white;
+    
+    --primary-btn-color: white;
+    --primary-btn-background: black;
+    --primary-btn-hover: rgb(180, 180, 180);
+    --primary-login-btn-background: green;
+    
+    --secondary-text-color: #666;
+    --secondary-background: #f8f9fa;
+    --border-color: rgba(255, 255, 255, 0.65);
+    --form-background: rgba(255, 255, 255, 0.55);
+
+    --error-border-color: red;
+}
