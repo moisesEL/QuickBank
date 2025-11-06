@@ -2,11 +2,6 @@ const template = document.createElement("template");
 template.innerHTML = `
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <style>
-        label {
-            padding: 0px 0px 0px 2px;
-            font-size: 1em;
-            color: var(--primary-text-color);
-        }
         input {
             min-height: 20px;
             border-radius: 6px;
@@ -21,9 +16,6 @@ template.innerHTML = `
             display: grid;
             grid-template-columns: 1fr 0px;
         }
-        #password {
-            width: calc(100% - 10px);
-        }
         #visibility_icon {
             cursor: pointer;
             position: relative;
@@ -33,12 +25,9 @@ template.innerHTML = `
             color: var(--secondary-text-color);
         }
     </style>
-    <div>
-        <label for="password" id="password-label">Password:</label>
-        <div id="input-wrapper">
-            <input type="password" id="password" name="password"/>
-            <i class="material-icons" id="visibility_icon">visibility</i>
-        </div>
+    <div id="input-wrapper">
+        <input type="password"/>
+        <i class="material-icons" id="visibility_icon">visibility</i>
     </div>
 `;
 class Password extends HTMLElement {
@@ -47,8 +36,7 @@ class Password extends HTMLElement {
         this.root = this.attachShadow({mode: "open"})
         this.root.appendChild(template.content.cloneNode(true))
         
-        this.label = this.root.getElementById("password-label")
-        this.password = this.root.getElementById("password")
+        this.password = this.root.querySelector("input")
         this.visibility_icon = this.root.getElementById("visibility_icon")
         this.visibility_icon.addEventListener("click", (event) => {
             if (this.visibility_icon.innerHTML === 'visibility') {
@@ -61,16 +49,14 @@ class Password extends HTMLElement {
             }
         })
     }
-    connectedCallback () {
-        
-    }
+
     static get observedAttributes(){
-        return ['label', 'placeholder'];
+        return ['placeholder', 'name'];
     }
     
     attributeChangedCallback(attrName, oldVal, newVal) {
-        if (attrName.toLowerCase() === 'label') {
-            this.label.innerHTML = newVal;
+        if (attrName.toLowerCase() === 'name') {
+            this.password.setAttribute('name', newVal);
         }
         if (attrName.toLowerCase() === 'placeholder') {
             this.password.setAttribute('placeholder', newVal);
