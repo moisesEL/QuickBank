@@ -14,22 +14,13 @@ body {
     position: absolute;
     top: 380px;
     left: 250px;
-    /* sombreado */
-    /*text-shadow: 
-        1px 1px 2px black,
-        0 0 20px rgb(0, 0, 0),
-        0 0 0.20px rgb(0, 0, 0);*/
-}
+
 .Sign{
     color: aliceblue;
     font-size: 30px;
     position: absolute;
     top: 240px;
     left: 1100px;
-  /*  text-shadow:
-        1px 1px 6px black,
-        0 0 20px rgb(0, 0, 0),
-        0 0 0.20px rgb(0, 0, 0);*/
 }
 
 .login-container {
@@ -92,4 +83,4 @@ a {
     color: red;
     background-color: #ffe0e0;
     border: 1px solid red;
-}
+}}
