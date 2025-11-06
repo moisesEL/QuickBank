@@ -11,11 +11,14 @@
         
         <link rel="stylesheet" href="/QuickBank/src/css/main.css">
         <link rel="stylesheet" href="/QuickBank/src/css/sign_up.css">
+        <script src="/QuickBank/src/components/custom_password.js"></script>
+        
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     </head>
     <body>
         <main>
             <div id="leftDiv">
-                <h1>Welcome</h1>
+                
             </div>
             <div id="rightDiv">
                 <h1>Sign up</h1>
@@ -36,10 +39,7 @@
                         <label for="lastName">Last name:</label>
                         <input type="text" name="lastName" placeholder="Your last name...">
                     </div>
-                    <div>
-                        <label for="password">Password:</label>
-                        <input type="password" name="password" placeholder="Your password...">
-                    </div>
+                    <custom-password label="Password: " placeholder="Your password..."></custom-password>
                     <div>
                         <label for="street">Street:</label>
                         <input type="text" name="street" placeholder="The name of your street...">
