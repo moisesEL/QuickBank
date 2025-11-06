@@ -42,7 +42,7 @@ input {
 label {
     padding: 0px 0px 0px 2px;
     font-size: 1em;
-    color: var(--text-primary);
+    color: var(--primary-text-color);
 }
 
 #button {
