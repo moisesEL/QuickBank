@@ -16,8 +16,8 @@ template.innerHTML = `
         button {
             cursor: pointer;
             position: relative;
-            top: 1.5px;
-            left: -29px;
+            top: 1px;
+            left: -24px;
             border-radius: 6px;
             color: var(--secondary-text-color);
             border: none;
@@ -31,7 +31,7 @@ template.innerHTML = `
     </style>
     <div>
         <slot></slot>
-        <button id="visibility_button">
+        <button id="visibility_button" aria-label="Show password" aria-pressed="false">
             <i class="material-icons" id="visibility_icon">visibility</i>
         </button>
     </div>
@@ -41,22 +41,29 @@ class Password extends HTMLElement {
         super();
         this.root = this.attachShadow({mode: "open"})
         this.root.appendChild(template.content.cloneNode(true))
-        
-        this.password = this.root.querySelector("slot");
-        console.log(this.password)
+    }
+    
+    connectedCallback() {
+        this.passwordWrapper = this.root.querySelector("slot");
         this.visibility_icon = this.root.getElementById("visibility_icon")
         this.visibility_button = this.root.getElementById("visibility_button")
 
-        // toggle visibility on click
-        this.visibility_button.addEventListener("click", () => {
-            this.toggleVisibility();
-        })
-
-        // toggle visibility on enter or space
-        this.visibility_button.addEventListener("keydown", (event) => {
-            if (event.key === 'Enter' || event.key === ' ') {
-                event.preventDefault();
-                this.toggleVisibility();
+        this.passwordWrapper.addEventListener('slotchange', () => {
+            this.password = this.passwordWrapper.assignedNodes()[1];
+            if (this.password) {
+                // toggle visibility on click
+                this.visibility_button.addEventListener("click", (event) => {
+                    event.preventDefault();
+                    this.toggleVisibility();
+                })
+    
+                // toggle visibility on enter or space
+                this.visibility_button.addEventListener("keydown", (event) => {
+                    if (event.key === 'Enter' || event.key === ' ') {
+                        event.preventDefault();
+                        this.toggleVisibility();
+                    }
+                });
             }
         });
     }
@@ -64,10 +71,12 @@ class Password extends HTMLElement {
     toggleVisibility() {
         if (this.visibility_icon.innerHTML === 'visibility') {
             this.visibility_icon.innerHTML = 'visibility_off';
+            this.visibility_button.setAttribute('aria-pressed', 'true');
             this.password.setAttribute("type", "text")
         }
         else {
             this.visibility_icon.innerHTML = 'visibility';
+            this.visibility_button.setAttribute('aria-pressed', 'false');
             this.password.setAttribute("type", "password")
         }
     }
