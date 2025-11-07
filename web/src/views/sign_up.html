@@ -11,7 +11,7 @@
         
         <link rel="stylesheet" href="/QuickBank/src/css/main.css">
         <link rel="stylesheet" href="/QuickBank/src/css/sign_up.css">
-        <script src="/QuickBank/src/components/custom_password.js"></script>
+        <script src="../components/custom_password.js"></script>
         
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     </head>
@@ -20,24 +20,28 @@
             <h1>Sign up</h1>
             <form id="form">
                 <div>
-                    <label for="email">Email:</label>
-                    <input type="text" name="email" placeholder="Your email...">
-                </div>
-                <div>
                     <label for="firstName">First name:</label>
-                    <input type="text" name="firstName" placeholder="Your first name...">
+                    <input type="text" name="firstName" id="firstName" placeholder="Your first name...">
                 </div>
                 <div>
                     <label for="middleInitial">Middle initial:</label>
-                    <input type="text" name="middleInitial" placeholder="Your middle initial...">
+                    <input type="text" name="middleInitial" id="middleInitial" placeholder="Your middle initial...">
                 </div>
                 <div>
                     <label for="lastName">Last name:</label>
-                    <input type="text" name="lastName" placeholder="Your last name...">
+                    <input type="text" name="lastName" id="lastName" placeholder="Your last name...">
+                </div>
+                <div>
+                    <label for="email">Email:</label>
+                    <input type="text" name="email" id="email" placeholder="Your email...">
                 </div>
                 <div>
                     <label for="password">Password:</label>
-                    <custom-password name="password" placeholder="Your password...">
+                    <custom-password name="password" placeholder="Your password..." id="password"></custom-password>
+                </div>
+                <div>
+                    <label for="phone">Phone:</label>
+                    <input type="text" name="phone" placeholder="Your phone number...">
                 </div>
                 <div>
                     <label for="street">Street:</label>
@@ -55,10 +59,6 @@
                     <label for="zip">Zip:</label>
                     <input type="text" name="zip" placeholder="Your zip code...">
                 </div>
-                <div>
-                    <label for="phone">Phone:</label>
-                    <input type="text" name="phone" placeholder="Your phone number...">
-                </div>
                 <input id="button" type="submit" value="Sign up">
                 <a href="./sign_in.html">Already have an account?</a>
             </form>
@@ -67,12 +67,13 @@
                 document.getElementById('form').addEventListener('submit', (event) => {
                         event.preventDefault(); // prevent form submit
                         const form = event.target;
+                        console.log(form)
                         let customer = {
                             email: form.email.value,
                             firstName: form.firstName.value,
                             middleInitial: form.middleInitial.value,                    
                             lastName: form.lastName.value,
-                            password: form.password.value,
+                            password: document.querySelector('custom-password').value,
                             street: form.street.value,
                             city: form.city.value,
                             state: form.state.value,
@@ -80,27 +81,30 @@
                             phone: form.phone.value
                         };
                         try {
-                            document.querySelectorAll('#input_error').forEach(input => input.id = '');
+                            document.querySelectorAll('.input_error').forEach(input => input.className = '');
                             document.querySelectorAll('#server_error').forEach(span => span.remove());
                             document.getElementById('form').querySelectorAll('span').forEach(span => span.remove());
                             let emailRegex = new RegExp(/(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/);
                             let passwordRegex = new RegExp(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{0,20}$/);
                             let phoneRegex = new RegExp(/^\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}$/);
                             let zipRegex = new RegExp(/^\d{1,6}$/);
-                            if (!emailRegex.test(customer.email)) {
-                                throw {input: "email", message: "Email not valid."};
-                            }
                             if (customer.firstName > 255 || customer.firstName == '' || customer.firstName.includes('\'')) {
                                 throw {input: "firstName", message: "Your first name is not valid."}
                             }
-                            if (customer.middleInitial.length != 1 || !customer.middleInitial.match(/[a-z]|[A-Z]/)) {
+                            if (customer.middleInitial.length > 0 && !customer.middleInitial.match(/[a-z]|[A-Z]/)) {
                                 throw {input: "middleInitial", message: "Your middle initial is not valid.\nIt should be 1 alphabetic character."}
                             }
                             if (customer.lastName > 255 || customer.lastName == '' || customer.lastName.includes('\'')) {
                                 throw {input: "lastName", message: "Your last name is not valid."}
                             }
+                            if (!emailRegex.test(customer.email)) {
+                                throw {input: "email", message: "Email not valid."};
+                            }
                             if (!passwordRegex.test(customer.password)) {
                                 throw {input: "password", message: "Your password has to be between 5 and 20 characters.\nIt should have at least 1 uppercase letter, 1 lowercase letter, 1 digit, and 1 special character."};
+                            }
+                            if (!phoneRegex.test(customer.phone)) {
+                                throw {input: "phone", message: "Your phone is not valid."}
                             }
                             if (customer.street > 255 || customer.street == '' || customer.street.includes('\'')) {
                                 throw {input: "street", message: "Your street is not valid."}
@@ -113,9 +117,6 @@
                             }
                             if (!zipRegex.test(customer.zip)) {
                                 throw {input: "zip", message: "Your zip is not valid.\nIt should be a number"}
-                            }
-                            if (!phoneRegex.test(customer.phone)) {
-                                throw {input: "phone", message: "Your phone is not valid."}
                             }
                             create_customer(customer)
                             .then(response => {
@@ -144,12 +145,22 @@
                                 }
                             })
                         } catch (err) {
-                            form[`${err.input}`].id = "input_error";
-                            const error_message = document.createElement('span');
-                            error_message.style = 'color:red;';
-                            error_message.innerText = err.message;
-                            error_message.id = `${err.input}_error`;
-                            if (!document.getElementById(`${err.input}`)) {
+                            if (err.input === 'password') {
+                                let passwordInput = document.querySelector('custom-password')
+                                passwordInput.className = "input_error";
+                                passwordInput.style = 'border-radius: 6px';
+                                const error_message = document.createElement('span');
+                                error_message.style = 'color:red;';
+                                error_message.innerText = err.message;
+                                error_message.id = `${err.input}_error`;
+                                passwordInput.parentNode.appendChild(error_message);
+                            }
+                            else {
+                                form[`${err.input}`].className = "input_error";
+                                const error_message = document.createElement('span');
+                                error_message.style = 'color:red;';
+                                error_message.innerText = err.message;
+                                error_message.id = `${err.input}_error`;
                                 form[`${err.input}`].parentNode.appendChild(error_message);
                             }
                         }
@@ -159,3 +170,4 @@
         </main>
     </body>
 </html>
+			    P
