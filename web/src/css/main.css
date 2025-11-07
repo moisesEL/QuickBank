@@ -35,7 +35,7 @@ input {
     transition: all 0.3s ease;
 }
 
-#input_error {
+.input_error {
     border: 2px solid red;
 }
 
