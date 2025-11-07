@@ -37,27 +37,29 @@
                 </div>
                 <div>
                     <label for="password">Password:</label>
-                    <custom-password name="password" placeholder="Your password..." id="password"></custom-password>
+                    <custom-password>
+                        <input type="password" name="password" id="password" placeholder="Your password..." >
+                    </custom-password>
                 </div>
                 <div>
                     <label for="phone">Phone:</label>
-                    <input type="text" name="phone" placeholder="Your phone number...">
+                    <input type="text" name="phone" id="phone" placeholder="Your phone number...">
                 </div>
                 <div>
                     <label for="street">Street:</label>
-                    <input type="text" name="street" placeholder="The name of your street...">
+                    <input type="text" name="street" id="street" placeholder="The name of your street...">
                 </div>
                 <div>
                     <label for="city">City:</label>
-                    <input type="text" name="city" placeholder="The name of your city...">
+                    <input type="text" name="city" id="city" placeholder="The name of your city...">
                 </div>
                 <div>
                     <label for="state">State:</label>
-                    <input type="text" name="state" placeholder="Your state (ex: Madrid)...">
+                    <input type="text" name="state" id="state" placeholder="Your state (ex: Madrid)...">
                 </div> 
                 <div>
                     <label for="zip">Zip:</label>
-                    <input type="text" name="zip" placeholder="Your zip code...">
+                    <input type="text" name="zip" id="zip" placeholder="Your zip code...">
                 </div>
                 <input id="button" type="submit" value="Sign up">
                 <a href="./sign_in.html">Already have an account?</a>
@@ -67,13 +69,12 @@
                 document.getElementById('form').addEventListener('submit', (event) => {
                         event.preventDefault(); // prevent form submit
                         const form = event.target;
-                        console.log(form)
                         let customer = {
                             email: form.email.value,
                             firstName: form.firstName.value,
                             middleInitial: form.middleInitial.value,                    
                             lastName: form.lastName.value,
-                            password: document.querySelector('custom-password').value,
+                            password: form.password.value,
                             street: form.street.value,
                             city: form.city.value,
                             state: form.state.value,
@@ -145,22 +146,15 @@
                                 }
                             })
                         } catch (err) {
+                            form[`${err.input}`].className = "input_error";
+                            const error_message = document.createElement('span');
+                            error_message.style = 'color:red;';
+                            error_message.innerText = err.message;
+                            error_message.id = `${err.input}_error`;
                             if (err.input === 'password') {
-                                let passwordInput = document.querySelector('custom-password')
-                                passwordInput.className = "input_error";
-                                passwordInput.style = 'border-radius: 6px';
-                                const error_message = document.createElement('span');
-                                error_message.style = 'color:red;';
-                                error_message.innerText = err.message;
-                                error_message.id = `${err.input}_error`;
-                                passwordInput.parentNode.appendChild(error_message);
+                                form[`${err.input}`].parentNode.parentNode.appendChild(error_message);
                             }
                             else {
-                                form[`${err.input}`].className = "input_error";
-                                const error_message = document.createElement('span');
-                                error_message.style = 'color:red;';
-                                error_message.innerText = err.message;
-                                error_message.id = `${err.input}_error`;
                                 form[`${err.input}`].parentNode.appendChild(error_message);
                             }
                         }
