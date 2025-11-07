@@ -7,16 +7,21 @@ body {
     line-height: 1.5;
     margin: 0px;
     padding: 0px;
+    background-color: var(--primary-background);
+    color: var(--primary-text-color);
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 #form {
     display: flex;
     flex-direction: column;
     padding: 30px;
-    background-color: rgb(255, 255, 255, .55);
-    border: rgba(255, 255, 255, 0.65) solid 0.2px;
+    background-color: var(--form-background);
+    border: 0.2px solid var(--border-color);
     border-radius: 8px;
     gap: 10px;
+    backdrop-filter: blur(1.5px);
+    transition: all 0.3s ease;
 }
 
 input {
@@ -24,7 +29,10 @@ input {
     border-radius: 6px;
     border: none;
     padding: 3px 5px;
+    color: var(--secondary-text-color);
+    background-color: var(--secondary-background);
     font-size: 1em;
+    transition: all 0.3s ease;
 }
 
 #input_error {
@@ -34,21 +42,24 @@ input {
 label {
     padding: 0px 0px 0px 2px;
     font-size: 1em;
+    color: var(--text-primary);
 }
 
 #button {
     width: 100%;
-    color: white;
-    background-color: black;
+    color: var(--primary-btn-color);
+    background-color: var(--primary-btn-background);
     border-radius: 6px;
     border: none;
     align-self: center;
     font-size: 20px;
     padding: 6px 1px;
+    transition: all 0.3s ease;
+    cursor: pointer;
 }
 
 #button:hover {
-    cursor: pointer;
+    color: var(--primary-btn-hover);
 }
 
 a {
@@ -57,10 +68,27 @@ a {
     white-space: nowrap;
     padding: 8px 6px;
     border-radius: 10px;
-    color: black;
+    color: var(--primary-text-color);
+    background-color: var(--);
     text-decoration: none;
+    transition: all 0.3s ease;
+    cursor: pointer;
 }
 
-a:hover {
-    cursor: pointer;
+#responseMsg {
+    margin-top: 1em;
+    padding: 0.5em;
+    display: none;
+}
+
+#responseMsg.success {
+    color: green;
+    background-color: #e0ffe0;
+    border: 1px solid green;
+}
+
+#responseMsg.error {
+    color: red;
+    background-color: #ffe0e0;
+    border: 1px solid red;
 }

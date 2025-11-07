@@ -1,19 +1,23 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <link rel="stylesheet" href="./src/css/main.css">
-        <link rel='stylesheet' href='./src/css/index.css'>
-        <link rel='stylesheet' href='./src/css/navBar.css'>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="icon" type="image/x-icon" href="/QuickBank/src/assets/Favicon.ico">
+        <title>QuickBank</title>
+        
+        <!-- Alternative styles -->
+        <link rel="stylesheet" href="src/css/light-theme.css" id="main-style" title="Light Mode">
+        <link rel='alternate stylesheet' href='src/css/dark-theme.css' title="Dark Mode">
+        
+        <link rel="stylesheet" href="src/css/main.css">
+        <link rel='stylesheet' href='src/css/index.css'>
+
+        <script src="src/util/navBar.js"></script>
     </head>
     <body>
         <main id="mainWrapper">
-            <script type="module">
-                import navBar from "./src/util/navBar.js";
-                document.body.appendChild(navBar);
-            </script>
-            <!-- <div>
-
-            </div> -->
+            <nav-bar></nav-bar>
         </main>
     </body>
 </html>
