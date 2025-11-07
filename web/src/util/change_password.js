@@ -1,7 +1,7 @@
 async function sendRequestAndProcessResponse(newPassword, msgBox) {
     const valueNewPassword = newPassword.value.trim();
 
-    fetch("/CRUDBankServerSide/webresources/customer/", {
+    return fetch("/CRUDBankServerSide/webresources/customer/", {
         method: "PUT",
         headers: {
             "Content-Type": "application/json"
