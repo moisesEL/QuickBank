@@ -16,18 +16,28 @@ template.innerHTML = `
             display: grid;
             grid-template-columns: 1fr 0px;
         }
-        #visibility_icon {
+        button {
             cursor: pointer;
             position: relative;
             top: 0px;
             left: -26.5px;
             border-radius: 6px;
             color: var(--secondary-text-color);
+            border: none;
+            background: none;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .input_error {
+            border: 2px solid var(--error-border-color);
         }
     </style>
     <div id="input-wrapper">
         <input type="password"/>
-        <i class="material-icons" id="visibility_icon">visibility</i>
+        <button id="visibility_button"><i class="material-icons" id="visibility_icon">visibility</i></button>
     </div>
 `;
 class Password extends HTMLElement {
@@ -38,20 +48,44 @@ class Password extends HTMLElement {
         
         this.password = this.root.querySelector("input")
         this.visibility_icon = this.root.getElementById("visibility_icon")
-        this.visibility_icon.addEventListener("click", (event) => {
-            if (this.visibility_icon.innerHTML === 'visibility') {
-                this.visibility_icon.innerHTML = 'visibility_off';
-                this.password.setAttribute("type", "text")
-            }
-            else {
-                this.visibility_icon.innerHTML = 'visibility';
-                this.password.setAttribute("type", "password")
-            }
+        this.visibility_button = this.root.getElementById("visibility_button")
+
+        // toggle visibility on click
+        this.visibility_button.addEventListener("click", () => {
+            this.toggleVisibility();
         })
+        // toggle visibility on enter or space
+        this.visibility_button.addEventListener("keydown", (event) => {
+            if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                this.toggleVisibility();
+            }
+        });
+
+        this.password.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                const form = this.closest('form');
+                if (form) {
+                    form.dispatchEvent(new Event('submit', { cancelable: true }));
+                }
+            }
+        });
     }
 
-    static get observedAttributes(){
-        return ['placeholder', 'name'];
+    toggleVisibility() {
+        if (this.visibility_icon.innerHTML === 'visibility') {
+            this.visibility_icon.innerHTML = 'visibility_off';
+            this.password.setAttribute("type", "text")
+        }
+        else {
+            this.visibility_icon.innerHTML = 'visibility';
+            this.password.setAttribute("type", "password")
+        }
+    }
+
+    static get observedAttributes() {
+        return ['placeholder', 'name', 'id', 'class'];
     }
     
     attributeChangedCallback(attrName, oldVal, newVal) {
@@ -61,6 +95,36 @@ class Password extends HTMLElement {
         if (attrName.toLowerCase() === 'placeholder') {
             this.password.setAttribute('placeholder', newVal);
         }
+        if (attrName.toLowerCase() === 'id') {
+            this.password.setAttribute('id', newVal);
+        }
+        if (attrName.toLowerCase() === 'class') {
+            this.password.setAttribute('class', newVal);
+        }
+    }
+
+    get value() {
+        return this.password.value;
+    }
+
+    get name() {
+        return this.password.getAttribute('name');
+    }
+
+    get id() {
+        return this.password.id;
+    }
+
+    set id(value) {
+        this.password.setAttribute('id', value);
+    }
+
+    get class() {
+        return this.password.className;
+    }
+
+    set class(value) {
+        this.password.setAttribute('className', value);
     }
 }
 
