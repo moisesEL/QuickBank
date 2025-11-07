@@ -35,14 +35,14 @@ input {
     transition: all 0.3s ease;
 }
 
-#input_error {
+.input_error {
     border: 2px solid red;
 }
 
 label {
     padding: 0px 0px 0px 2px;
     font-size: 1em;
-    color: var(--text-primary);
+    color: var(--primary-text-color);
 }
 
 #button {
