@@ -17,7 +17,7 @@
         <div class="in" >
             <h1>Sign in</h1>
         
-            <form class="formu" id="signInForm" action="CRUDBankServerSide/webresources/customer/sigin/">
+            <form class="formu" id="signInForm" action="/CRUDBankServerSide/webresources/customer/sigin/">
             
                 <label for="email">Email</label>
                 <input type="email" id="Email" placeholder="Email">
@@ -100,8 +100,7 @@
                         sessionStorage.setItem("customer.password", data.password);
             
 
-                       // window.location.replace("/QuickBank/src/views/profile.html");
-                        window.location.replace("/QuickBank/src/views/change_password.html");
+                       window.location.replace("/QuickBank/src/views/profile.html");
                     })
                     .catch(error => {
                         // Mostrar mensaje de error

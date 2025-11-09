@@ -1,7 +1,7 @@
 // This is a custom web component that wraps around a password input to
 // dinamically change it's type attribute between "text" and "password".
 // To use it, you have to add <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-// and <script src="<PATH>/custom_password.js"></script> in the head element of your html
+// and <script type="module" src="<PATH>/custom_password.js"></script> in the head element of your html
 // then wrap each SINGULAR password input between the custom-password element.
 // Example: <custom-password> <input type="password" name="password"> </custom-password>
 
@@ -11,7 +11,7 @@ template.innerHTML = `
     <style>
         div {
             display: grid;
-            grid-template-columns: 1fr 0px;
+            grid-template-columns: 100% 0px;
         }
         button {
             cursor: pointer;
