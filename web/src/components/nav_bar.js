@@ -1,6 +1,33 @@
 const template = document.createElement("template");
 template.innerHTML = `
 <style>
+    @import url('https://fonts.googleapis.com/css2?family=Kode+Mono&display=swap');
+
+    :host::before {
+        content: '';
+        display: block;
+        height: calc(50px + 20px + 5px);
+        width: 100%;
+    }
+
+    header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        width: calc(100% - 120px);
+        height: 50px;
+        color: var(--primary-text-color);
+        background-color: var(--primary-background);
+        display: flex;
+        justify-content: space-between;
+        padding: 20px 60px 5px 60px;
+        z-index: 100;
+        font-family: 'Kode Mono', monospace;
+        font-weight: 400;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    }
+
     a {
         border: none;
         width: min-content;
@@ -12,59 +39,52 @@ template.innerHTML = `
         cursor: pointer;
     }
 
-    header {
-        position: fixed;
-        top: 0px;
-        width: calc(100% - 60px);
-        height: 60px;
+    #logoContainer {
+        display: grid;
+        grid-template-columns: min-content min-content;
+        align-items: center;
+        grid-gap: 5px;
+        padding: 0px;
+        border-radius: 10px;
         color: var(--primary-text-color);
-        background-color: var(--primary-background);
-        display: flex;
-        justify-content: space-between;
-        padding-left: 30px;
-        padding-right: 30px;
     }
 
-    header > div {
+    #logoIcon {
+        height: 40px;
+        align-self: center;
+        flex-shrink: 0;
+    }
+
+    #title {
+        align-self: flex-end;
+        margin: 0;
+        white-space: nowrap;
+    }
+
+    #loginContainer {
+        padding: 0px 10px;
         display: flex;
         align-items: center;
-        width: min-content;
-    }
-
-    .logContainer {
-        padding: 4px 10px;
-        display: flex;
         gap: 10px;
     }
 
-    .signIn {
+    #signIn {
         background-color: var(--primary-login-btn-background);
         font-size: 20px;
     }
 
-    .signIn:hover {
+    #signIn:hover {
         color: var(--primary-btn-hover);
     }
 
-    .signUp {
+    #signUp {
         background-color: var(--primary-btn-background);
         font-size: 20px;
     }
 
-    .signUp:hover {
+    #signUp:hover {
         color: var(--primary-btn-hover);
     }
-
-    .logo {
-        width: min-content;
-        flex-shrink: 0;
-    }
-
-    .logoIcon {
-        height: 100%;
-        align-self: center;
-    }
-
 
     .dropdown-container {
         position: relative;
@@ -162,10 +182,10 @@ template.innerHTML = `
 
 </style>
 <header>
-    <div class="logo">
-        <img class="logoIcon" src="src/assets/Logo.png"/></image>
-        <h1>QuickBank</h1>
-    </div>
+    <a id="logoContainer" href="/QuickBank">
+        <img id="logoIcon" src="/QuickBank/src/assets/Logo.png"/></image>
+        <h1 id="title">QuickBank</h1>
+    </a>
 </header>`;
 
 class NavBar extends HTMLElement {
@@ -177,11 +197,11 @@ class NavBar extends HTMLElement {
     connectedCallback () {
         const loginContainer = document.createElement("template");
         loginContainer.innerHTML = `
-        <div class="logContainer">
-            <a class="signIn" href="src/views/sign_in.html">
+        <div id="loginContainer">
+            <a id="signIn" href="/QuickBank/src/views/sign_in.html">
                 Sign in
             </a>
-            <a class="signUp" href="src/views/sign_up.html">
+            <a id="signUp" href="/QuickBank/src/views/sign_up.html">
                 Sign up
             </a>
         </div>`;
@@ -194,7 +214,7 @@ class NavBar extends HTMLElement {
                 <span class="dropdown-arrow">▼</span>
             </button>
             <div class="dropdown-content">
-                <a href="src/views/profile.html" class="dropdown-item">
+                <a href="/QuickBank/src/views/profile.html" class="dropdown-item">
                     <span>👤</span> Profile
                 </a>
                 <button class="dropdown-item logout-btn">
