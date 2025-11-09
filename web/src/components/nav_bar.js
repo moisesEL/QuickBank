@@ -255,7 +255,7 @@ class NavBar extends HTMLElement {
         // Manejar logout
         logoutBtn.addEventListener('click', () => {
             sessionStorage.clear();
-            window.location.href = 'index.html';
+            window.location.href = '/QuickBank';
         });
 
         // Prevenir que el dropdown se cierre al hacer click dentro
