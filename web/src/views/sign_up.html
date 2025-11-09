@@ -1,167 +1,182 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <!--  -->
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Login</title>
+        <title>Sign up</title>
         
         <!-- Alternative styles -->
-        <link rel="stylesheet" href="/QuickBank/src/css/light-theme.css" id="main-style" title="Light Mode">
-        <link rel='alternate stylesheet' href='/QuickBank/src/css/dark-theme.css' title="Dark Mode">
+        <link rel="stylesheet" href="/QuickBank/src/css/light_theme.css" id="main-style" title="Light Mode">
+        <link rel='alternate stylesheet' href='/QuickBank/src/css/dark_theme.css' title="Dark Mode">
         
-        <link rel="stylesheet" href="/QuickBank/src/css/main.css">
-        <link rel="stylesheet" href="/QuickBank/src/css/sign_up.css">
-        <script src="../components/custom_password.js"></script>
+        <!-- Main style first -->
+        <link rel="stylesheet" href="../css/main.css">
+        <!-- Personal style -->
+        <link rel="stylesheet" href="../css/sign_up.css">
         
+        <!-- Custom Google material icon import for custom password input -->
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <script src="../components/custom_password.js"></script>
+
+        <!-- Custom Google font import for navbar -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Kode+Mono&display=swap" rel="stylesheet">
+        <script type="module" src="../components/nav_bar.js"></script>
+
+        <script>
+            if (sessionStorage.getItem('customer.email'))
+                window.location.replace("/QuickBank/src/views/profile.html");
+        </script>
     </head>
     <body>
+        <nav-bar></nav-bar>
         <main>
-            <h1>Sign up</h1>
-            <form id="form">
-                <div>
-                    <label for="firstName">First name:</label>
-                    <input type="text" name="firstName" id="firstName" placeholder="Your first name...">
-                </div>
-                <div>
-                    <label for="middleInitial">Middle initial:</label>
-                    <input type="text" name="middleInitial" id="middleInitial" placeholder="Your middle initial...">
-                </div>
-                <div>
-                    <label for="lastName">Last name:</label>
-                    <input type="text" name="lastName" id="lastName" placeholder="Your last name...">
-                </div>
-                <div>
-                    <label for="email">Email:</label>
-                    <input type="text" name="email" id="email" placeholder="Your email...">
-                </div>
-                <div>
-                    <label for="password">Password:</label>
-                    <custom-password>
-                        <input type="password" name="password" id="password" placeholder="Your password..." >
-                    </custom-password>
-                </div>
-                <div>
-                    <label for="phone">Phone:</label>
-                    <input type="text" name="phone" id="phone" placeholder="Your phone number...">
-                </div>
-                <div>
-                    <label for="street">Street:</label>
-                    <input type="text" name="street" id="street" placeholder="The name of your street...">
-                </div>
-                <div>
-                    <label for="city">City:</label>
-                    <input type="text" name="city" id="city" placeholder="The name of your city...">
-                </div>
-                <div>
-                    <label for="state">State:</label>
-                    <input type="text" name="state" id="state" placeholder="Your state (ex: Madrid)...">
-                </div> 
-                <div>
-                    <label for="zip">Zip:</label>
-                    <input type="text" name="zip" id="zip" placeholder="Your zip code...">
-                </div>
-                <input id="button" type="submit" value="Sign up">
-                <a href="./sign_in.html">Already have an account?</a>
-            </form>
-            <script type="module">
-                import create_customer from "../util/create_customer.js";
-                document.getElementById('form').addEventListener('submit', (event) => {
-                        event.preventDefault(); // prevent form submit
-                        const form = event.target;
-                        let customer = {
-                            email: form.email.value,
-                            firstName: form.firstName.value,
-                            middleInitial: form.middleInitial.value,                    
-                            lastName: form.lastName.value,
-                            password: form.password.value,
-                            street: form.street.value,
-                            city: form.city.value,
-                            state: form.state.value,
-                            zip: form.zip.value,
-                            phone: form.phone.value
-                        };
-                        try {
-                            document.querySelectorAll('.input_error').forEach(input => input.className = '');
-                            document.querySelectorAll('#server_error').forEach(span => span.remove());
-                            document.getElementById('form').querySelectorAll('span').forEach(span => span.remove());
-                            let emailRegex = new RegExp(/(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/);
-                            let passwordRegex = new RegExp(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{0,20}$/);
-                            let phoneRegex = new RegExp(/^\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}$/);
-                            let zipRegex = new RegExp(/^\d{1,6}$/);
-                            if (customer.firstName > 255 || customer.firstName == '' || customer.firstName.includes('\'')) {
-                                throw {input: "firstName", message: "Your first name is not valid."}
-                            }
-                            if (customer.middleInitial.length > 0 && !customer.middleInitial.match(/[a-z]|[A-Z]/)) {
-                                throw {input: "middleInitial", message: "Your middle initial is not valid.\nIt should be 1 alphabetic character."}
-                            }
-                            if (customer.lastName > 255 || customer.lastName == '' || customer.lastName.includes('\'')) {
-                                throw {input: "lastName", message: "Your last name is not valid."}
-                            }
-                            if (!emailRegex.test(customer.email)) {
-                                throw {input: "email", message: "Email not valid."};
-                            }
-                            if (!passwordRegex.test(customer.password)) {
-                                throw {input: "password", message: "Your password has to be between 5 and 20 characters.\nIt should have at least 1 uppercase letter, 1 lowercase letter, 1 digit, and 1 special character."};
-                            }
-                            if (!phoneRegex.test(customer.phone)) {
-                                throw {input: "phone", message: "Your phone is not valid."}
-                            }
-                            if (customer.street > 255 || customer.street == '' || customer.street.includes('\'')) {
-                                throw {input: "street", message: "Your street is not valid."}
-                            }
-                            if (customer.city > 255 || customer.city == '' || customer.city.includes('\'')) {
-                                throw {input: "city", message: "Your city is not valid."}
-                            }
-                            if (customer.state > 255 || customer.state == '' || customer.state.includes('\'')) {
-                                throw {input: "state", message: "Your state is not valid."}
-                            }
-                            if (!zipRegex.test(customer.zip)) {
-                                throw {input: "zip", message: "Your zip is not valid.\nIt should be a number"}
-                            }
-                            create_customer(customer)
-                            .then(response => {
-                                switch (response.status) {
-                                    case response.status >= 500:
-                                        throw {status: 500, message: "The server is not working, try again later."}
-                                    case 404:
-                                        throw {status: 404, message: "The server is not working, try again later."}
-                                        break;
-                                    case 403:
-                                        throw {status: 403, message: "The email is already taken, wanna try to log in?"}
-                                    case response.status > 400 && response.status < 500:
-                                        throw {status: response.status, message: "Something was wrong"}
-                                    default:
-                                        break;
-                                }
-                                window.location.replace("/QuickBank/src/views/sign_in.html");
-                            })
-                            .catch(err => {
-                                const error_message = document.createElement('span');
-                                error_message.id = "server_error";
-                                error_message.style = 'padding:5px; background-color:rgb(255, 255, 255); border: 2px solid red; margin-bottom: 5px';
-                                error_message.innerText = err.message;
-                                if (!document.getElementById(`${err.input}`)) {
-                                    form.parentNode.insertBefore(error_message, form);
-                                }
-                            })
-                        } catch (err) {
-                            form[`${err.input}`].className = "input_error";
-                            const error_message = document.createElement('span');
-                            error_message.style = 'color:red;';
-                            error_message.innerText = err.message;
-                            error_message.id = `${err.input}_error`;
-                            if (err.input === 'password') {
-                                form[`${err.input}`].parentNode.parentNode.appendChild(error_message);
-                            }
-                            else {
-                                form[`${err.input}`].parentNode.appendChild(error_message);
-                            }
-                        }
-                    }
-                )
-            </script>
+            <div id="leftDiv"></div>
+            <div id="rightDiv">
+                <form id="form">
+                    <div>
+                        <label for="firstName">First name:</label>
+                        <input type="text" name="firstName" id="firstName" placeholder="Your first name...">
+                    </div>
+                    <div>
+                        <label for="middleInitial">Middle initial:</label>
+                        <input type="text" name="middleInitial" id="middleInitial" placeholder="Your middle initial...">
+                    </div>
+                    <div>
+                        <label for="lastName">Last name:</label>
+                        <input type="text" name="lastName" id="lastName" placeholder="Your last name...">
+                    </div>
+                    <div>
+                        <label for="email">Email:</label>
+                        <input type="text" name="email" id="email" placeholder="Your email...">
+                    </div>
+                    <div>
+                        <label for="password">Password:</label>
+                        <custom-password>
+                            <input type="password" name="password" id="password" placeholder="Your password..." >
+                        </custom-password>
+                    </div>
+                    <div>
+                        <label for="phone">Phone:</label>
+                        <input type="text" name="phone" id="phone" placeholder="Your phone number...">
+                    </div>
+                    <div>
+                        <label for="street">Street:</label>
+                        <input type="text" name="street" id="street" placeholder="The name of your street...">
+                    </div>
+                    <div>
+                        <label for="city">City:</label>
+                        <input type="text" name="city" id="city" placeholder="The name of your city...">
+                    </div>
+                    <div>
+                        <label for="state">State:</label>
+                        <input type="text" name="state" id="state" placeholder="Your state (ex: Madrid)...">
+                    </div> 
+                    <div>
+                        <label for="zip">Zip:</label>
+                        <input type="text" name="zip" id="zip" placeholder="Your zip code...">
+                    </div>
+                    <input id="button" type="submit" value="Sign up">
+                    <a href="./sign_in.html">Already have an account?</a>
+                </form>
+            </div>
         </main>
     </body>
+    <script type="module">
+        import create_customer from "../util/create_customer.js";
+        document.getElementById('form').addEventListener('submit', (event) => {
+                event.preventDefault(); // prevent form submit
+                const form = event.target;
+                let customer = {
+                    email: form.email.value,
+                    firstName: form.firstName.value,
+                    middleInitial: form.middleInitial.value,                    
+                    lastName: form.lastName.value,
+                    password: form.password.value,
+                    street: form.street.value,
+                    city: form.city.value,
+                    state: form.state.value,
+                    zip: form.zip.value,
+                    phone: form.phone.value
+                };
+                try {
+                    document.querySelectorAll('.input_error').forEach(input => input.className = '');
+                    document.querySelectorAll('#server_error').forEach(span => span.remove());
+                    document.getElementById('form').querySelectorAll('span').forEach(span => span.remove());
+                    let emailRegex = new RegExp(/^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/ );
+                    let passwordRegex = new RegExp(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{0,20}$/);
+                    let phoneRegex = new RegExp(/^\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}$/);
+                    let zipRegex = new RegExp(/^\d{1,6}$/);
+                    if (customer.firstName > 255 || customer.firstName == '' || customer.firstName.includes('\''))
+                        throw {input: "firstName", message: "Your first name is not valid."}
+                    if (customer.middleInitial.length > 0 && !customer.middleInitial.match(/[a-z]|[A-Z]/))
+                        throw {input: "middleInitial", message: "Your middle initial is not valid.\nIt should be 1 alphabetic character."}
+                    if (customer.lastName > 255 || customer.lastName == '' || customer.lastName.includes('\''))
+                        throw {input: "lastName", message: "Your last name is not valid."}
+
+                    if (!emailRegex.test(customer.email))
+                        throw {input: "email", message: "Email not valid."}
+
+                    if (!passwordRegex.test(customer.password))
+                        throw {input: "password", message: "Your password has to be between 5 and 20 characters.\nIt should have at least 1 uppercase letter, 1 lowercase letter, 1 digit, and 1 special character."}
+
+                    if (!phoneRegex.test(customer.phone))
+                        throw {input: "phone", message: "Your phone is not valid."}
+
+                    if (customer.street > 255 || customer.street == '' || customer.street.includes('\''))
+                        throw {input: "street", message: "Your street is not valid."}
+
+                    if (customer.city > 255 || customer.city == '' || customer.city.includes('\''))
+                        throw {input: "city", message: "Your city is not valid."}
+
+                    if (customer.state > 255 || customer.state == '' || customer.state.includes('\''))
+                        throw {input: "state", message: "Your state is not valid."}
+
+                    if (!zipRegex.test(customer.zip))
+                        throw {input: "zip", message: "Your zip is not valid.\nIt should be a number"}
+
+                    create_customer(customer)
+                    .then(response => {
+                        switch (response.status) {
+                            case response.status >= 500:
+                                throw {status: 500, message: "The server is not working, try again later."}
+                            case 404:
+                                throw {status: 404, message: "The server is not working, try again later."}
+                                break;
+                            case 403:
+                                throw {status: 403, message: "The email is already taken, wanna try to log in?"}
+                            case response.status > 400 && response.status < 500:
+                                throw {status: response.status, message: "Something was wrong"}
+                            default:
+                                break;
+                        }
+                        window.location.replace("/QuickBank/src/views/sign_in.html");
+                    })
+                    .catch(err => {
+                        const error_message = document.createElement('span');
+                        error_message.id = "server_error";
+                        error_message.style = 'padding:5px; background-color:rgb(255, 255, 255); border: 2px solid red; margin-bottom: 5px';
+                        error_message.innerText = err.message;
+                        if (!document.getElementById(`${err.input}`)) {
+                            form.parentNode.insertBefore(error_message, form);
+                        }
+                    })
+                } catch (err) {
+                    form[`${err.input}`].className = "input_error";
+                    const error_message = document.createElement('span');
+                    error_message.style = 'color:red;';
+                    error_message.innerText = err.message;
+                    error_message.id = `${err.input}_error`;
+                    if (err.input === 'password') {
+                        form[`${err.input}`].parentNode.parentNode.appendChild(error_message);
+                    }
+                    else {
+                        form[`${err.input}`].parentNode.appendChild(error_message);
+                    }
+                }
+            }
+        )
+    </script>
 </html>
-			    P
