@@ -21,7 +21,7 @@ template.innerHTML = `
         background-color: var(--primary-background);
         display: flex;
         justify-content: space-between;
-        padding: 20px 60px 5px 60px;
+        padding: 15px 60px 10px 60px;
         z-index: 100;
         font-family: 'Kode Mono', monospace;
         font-weight: 400;
@@ -43,22 +43,26 @@ template.innerHTML = `
         display: grid;
         grid-template-columns: min-content min-content;
         align-items: center;
-        grid-gap: 5px;
+        max-height: 100%;
+        grid-gap: 15px;
         padding: 0px;
         border-radius: 10px;
         color: var(--primary-text-color);
     }
 
     #logoIcon {
-        height: 40px;
+        height: 48px;
         align-self: center;
         flex-shrink: 0;
     }
 
-    #title {
-        align-self: flex-end;
+    #logoText {
         margin: 0;
         white-space: nowrap;
+        line-height: 1;
+        display: flex;
+        align-items: flex-end;
+        height: 100%; /* ← Ocupa toda la altura disponible */
     }
 
     #loginContainer {
@@ -184,7 +188,7 @@ template.innerHTML = `
 <header>
     <a id="logoContainer" href="/QuickBank">
         <img id="logoIcon" src="/QuickBank/src/assets/Logo.png"/></image>
-        <h1 id="title">QuickBank</h1>
+        <h1 id="logoText">QuickBank</h1>
     </a>
 </header>`;
 
