@@ -4,137 +4,120 @@
     <title>Sign in</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="/QuickBank/src/assets/Favicon.ico">
     <link rel="stylesheet" href="../css/sign_in.css">
     <link rel="stylesheet" href="../css/main.css">
 </head>
 <body>
-    <div class="Welcome">
-        <h1>WELCOME</h1>
-    </div>
-    
-    <div class="Sign">
-        <h1>Sign in</h1>
-    </div>
+    <main>
+        <div class="welcome">
+            <h1>Welcome</h1>
+        </div>
 
-    <div class="login-container">
-    <!--     <form action="http://localhost:46413/CRUDBankServerSide/webresources/customer/sigin/" id="signInForm">--> 
-        <form action="/CRUDBankServerSide/webresources/customer/sigin/" id="signInForm">
-              
-            <label for="email">Email</label>
-            <input type="email" id="tfEmail">
-
-            <label for="password">Password</label>
-            <input type="password" id="tfPassword">
-
-            <button type="button" id="btSignIn" onclick="validarSignIn(event);">Sign In</button>
-            
-            <a href="./sign_up.html">Create una cuenta</a>
-        </form>
-        <div id="responseMsg"></div>
-    </div>
-    <script>
-
-
-    function validarSignIn(event) {
-        try {
-            //De aqui obtenemos los objetos para los elementos del form
-            const tfEmail = document.getElementById("tfEmail");
-            const tfPassword = document.getElementById("tfPassword");
-            const signInForm = document.getElementById("signInForm");
-
-            // Detenemos la propagación de eventos y la acción por defecto del formulario como dijo javi
-            event.preventDefault();
-            event.stopPropagation();
-                    
-            // Validar que email y password están informados
-            if (tfEmail.value.trim() === "" || tfPassword.value.trim() === "") {
-                throw new Error("Los campos están vacíos.");
-            }
-                   
-            // Validar longitud del email
-            if (tfEmail.value.length > 255) {
-                throw new Error("El email demasiado largo");
-            }
-                    
-            // Validar formato del email con la nueva expresión regular 
-            const emailRegExp = new RegExp("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,255}$");
-            if (!emailRegExp.exec(tfEmail.value.trim())) {
-                throw new Error("El email no tiene el formato");
-            }
-            // validar longitud del password
-            if (tfPassword.value.length>255)
-                throw new Error("Password demasiado largo.");
-     
-         // Con esto llamar a la función para enviar datos 
-            sendRequestAndProcessResponse();
-        } catch (error) {
-            // Mostramos mensaje de error en la pantalla
-            const msgBox = document.getElementById("responseMsg");
-            msgBox.className = 'error';
-            msgBox.textContent = 'Error: ' + error.message;
-            msgBox.style.display = 'block';
-        }
-    }
-
-    
-     // Envía una petición GET y procesa la respuesta en formato JSON.
-    
-    function sendRequestAndProcessResponse() {
-        const signInForm = document.getElementById("signInForm");
-        const msgBox = document.getElementById("responseMsg");
-        const tfEmail = document.getElementById("tfEmail");
-        const tfPassword = document.getElementById("tfPassword");
+        <div class="in" >
+            <h1>Sign in</h1>
         
-        const valueTfEmail = tfEmail.value.trim();
-        const valueTfPassword = tfPassword.value.trim();
+            <form class="formu" id="signInForm" action="CRUDBankServerSide/webresources/customer/sigin/">
+            
+                <label for="email">Email</label>
+                <input type="email" id="Email" placeholder="Email">
 
-        // Petición Fetch usando JSON
-        fetch(
-            signInForm.action +
-            `${encodeURIComponent(valueTfEmail)}/${encodeURIComponent(valueTfPassword)}`,
-            {
-                method: 'GET',
-                headers: {
-                    'Accept': 'application/json'
+                <label for="password">Password</label>
+                <input type="password" id="Password" placeholder="Password">
+                        
+                <input id="button"  type="submit" value="Sign In">
+            
+             <a href="./sign_up.html">Create an Account</a>
+            </form>
+
+           
+        
+            <div id="responseMsg"></div>
+        </div>
+
+        <script type="module">
+            import sendRequestAndProcessResponse from "../util/sign_in.js";
+
+                
+            const msgBox = document.getElementById("responseMsg");
+            document.getElementById("signInForm").addEventListener("submit", validarSignIn);
+
+            async function validarSignIn(event) {
+                event.preventDefault();
+                event.stopPropagation();
+
+                const Email = document.getElementById("Email");
+                const Password = document.getElementById("Password");
+                try{
+
+                    // Validar que email y password no esten vacios
+                    if (Email.value.trim() === "" || Password.value.trim() === "")
+                        throw new Error("Email and password input must be filled.");
+                    
+                     // Expresión regular para validar el email
+                    const emailRegExp = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,255}$/;
+                    if (!emailRegExp.test(Email.value.trim())) {
+                    throw new Error("Email has not a valid format.");
+                    }
+                        
+                    // Validar longitud del email y password
+                    if (Email.value.length > 255)
+                        throw new Error("Email cannot have more than 255 characters");
+                                
+                    if (Password.value.length > 20)
+                        throw new Error("Password cannot have more than 20 characters");
+            
+                    
+                    msgBox.className = "success";
+                    msgBox.textContent = "Validación exitosa, puedes continuar.";
+                    msgBox.style.display = "block";
+
+                    // Llama a la función para enviar datos y procesar respuesta
+                    sendRequestAndProcessResponse(Email, Password, signInForm, msgBox) 
+
+                    .then(response => {
+                        if (response.status === 401) {
+                        throw new Error('El usuario y/o la contraseña son incorrectos.');
+                        } else if (response.status === 500) {
+                        throw new Error('Error en el servidor. Intente más tarde.');
+                        } else if (!response.ok) {
+                        throw new Error('Error inesperado.');
+                        }
+                        return response.json(); // si todo va bien, convertimos la respuesta
+                    })                    
+                    .then(data => {
+                    // Guardamos los datos en el sessionStorage
+                        sessionStorage.setItem("customer.id", data.id);
+                        sessionStorage.setItem("customer.firstName", data.firstName);
+                        sessionStorage.setItem("customer.lastName", data.lastName);
+                        sessionStorage.setItem("customer.middleInitial", data.middleInitial);
+                        sessionStorage.setItem("customer.email", data.email);
+                        sessionStorage.setItem("customer.phone", data.phone);
+                        sessionStorage.setItem("customer.street", data.street);
+                        sessionStorage.setItem("customer.city", data.city);
+                        sessionStorage.setItem("customer.state", data.state);
+                        sessionStorage.setItem("customer.zip", data.zip);
+                        sessionStorage.setItem("customer.password", data.password);
+            
+
+                       // window.location.replace("/QuickBank/src/views/profile.html");
+                        window.location.replace("/QuickBank/src/views/change_password.html");
+                    })
+                    .catch(error => {
+                        // Mostrar mensaje de error
+                        msgBox.className = 'error';
+                        msgBox.textContent = 'Error: ' + error.message;
+                        msgBox.style.display = 'block';
+                    });
+                } catch (error) {
+                    msgBox.className = "error";
+                    msgBox.textContent = "Error: " + error.message;
+                    msgBox.style.display = "block";
                 }
             }
-        )
-        .then(response => {
-            if (response.status === 401) {
-                    throw new Error('El usuario y/o la contraseña son incorrectos.');
-            } else if (response.status === 500) {
-                    throw new Error('Error en el servidor. Intente más tarde.');
-            } else if (!response.ok) {
-                    throw new Error('Error inesperado.');
-            }
-                        
-            return response.json();
-        })
-        .then(data => {
-             // Aquí guardamos los datos en la sessionStorage
-            sessionStorage.setItem("customer.id", data.id);
-            sessionStorage.setItem("customer.firstName", data.firstName);
-            sessionStorage.setItem("customer.lastName", data.lastName);
-            sessionStorage.setItem("customer.middleInitial", data.middleInitial);
-            sessionStorage.setItem("customer.street", data.street);
-            sessionStorage.setItem("customer.city", data.city);
-            sessionStorage.setItem("customer.state", data.state);
-            sessionStorage.setItem("customer.zip", data.zip);
-            sessionStorage.setItem("customer.phone", data.phone);
-            sessionStorage.setItem("customer.email", data.email);
-            sessionStorage.setItem("customer.password", data.password);
-        
-            window.location.replace("./change_password.html") ;
-        })
-        .catch(error => {
-            // Mensaje de error
-            msgBox.className = 'error';
-            msgBox.textContent = 'Error: ' + error.message;
-            msgBox.style.display = 'block';
-        });
-    }
-</script>
+            
+        </script>
 
+    </main>
 </body>
 </html>
-
