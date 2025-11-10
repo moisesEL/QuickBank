@@ -1,10 +1,10 @@
-async function sendRequestAndProcessResponse(Email, Password, signInForm, msgBox) {
+async function sendRequestAndProcessResponse(Email, Password, form, msgBox) {
     const valueEmail = Email.value.trim();
     const valuePassword = Password.value.trim();
 
         // Aquí devolvemos la promesa del fetch (no hace falta try/catch)
         return fetch(
-            signInForm.action + 
+            form.action + 
             `${encodeURIComponent(valueEmail)}/${encodeURIComponent(valuePassword)}`,
             {
             method: 'GET',

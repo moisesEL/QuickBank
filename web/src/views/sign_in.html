@@ -1,53 +1,84 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Sign in</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/x-icon" href="/QuickBank/src/assets/Favicon.ico">
-    <link rel="stylesheet" href="../css/sign_in.css">
-    <link rel="stylesheet" href="../css/main.css">
+    <link rel="icon" type="image/x-icon" href="../assets/Favicon.ico">
+
+    <title>Sign in</title>
+
+    
+        <!-- Alternative styles -->
+        <link rel="stylesheet" href="/QuickBank/src/css/light_theme.css" id="main-style" title="Light Mode">
+        <link rel='alternate stylesheet' href='/QuickBank/src/css/dark_theme.css' title="Dark Mode">
+
+        <link rel="stylesheet" href="../css/main.css">
+        <link rel="stylesheet" href="../css/sign_in.css">
+        
+        <!-- Importación de iconos personalizados de Google Material para la contraseñas  -->
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <script type="module" src="../components/custom_password.js"></script>
+
+        <!-- Importación de fuentes personalizadas de Google para la barra de navegación -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Kode+Mono&display=swap" rel="stylesheet">
+        <script type="module" src="../components/nav_bar.js"></script>
+        <script> if(sessionStorage.getItem("customer.email")){
+             window.location.replace("/QuickBank/src/views/change_password.html");}     
+         </script>
 </head>
 <body>
+
+    <nav-bar></nav-bar>
     <main>
         <div class="welcome">
             <h1>Welcome</h1>
         </div>
 
-        <div class="in" >
+        <div class="login-container" >
             <h1>Sign in</h1>
         
-            <form class="formu" id="signInForm" action="CRUDBankServerSide/webresources/customer/sigin/">
+            <form  id="form" action="/CRUDBankServerSide/webresources/customer/sigin/">
             
                 <label for="email">Email</label>
                 <input type="email" id="Email" placeholder="Email">
 
                 <label for="password">Password</label>
+                <custom-password class="coustomerpass">
                 <input type="password" id="Password" placeholder="Password">
-                        
+                </custom-password>       
+            
                 <input id="button"  type="submit" value="Sign In">
             
              <a href="./sign_up.html">Create an Account</a>
             </form>
 
-           
-        
             <div id="responseMsg"></div>
-        </div>
+        </div> 
+        <p>QuickBank © 2025  </p>
+    </main>   
 
         <script type="module">
             import sendRequestAndProcessResponse from "../util/sign_in.js";
 
                 
             const msgBox = document.getElementById("responseMsg");
-            document.getElementById("signInForm").addEventListener("submit", validarSignIn);
+            const Email = document.getElementById("Email");
+            const Password = document.getElementById("Password");
+        
+            //Rellena automaticamente el inpuy email si existe una correo guardado
+            const storedEmail = sessionStorage.getItem("customer.email");
+            if(storedEmail){
+                Email.value = storedEmail;
+            }
 
-            async function validarSignIn(event) {
+            document.getElementById("form").addEventListener("submit", validarSignIn);
+
+            function validarSignIn(event) {
                 event.preventDefault();
                 event.stopPropagation();
 
-                const Email = document.getElementById("Email");
-                const Password = document.getElementById("Password");
                 try{
 
                     // Validar que email y password no esten vacios
@@ -73,7 +104,7 @@
                     msgBox.style.display = "block";
 
                     // Llama a la función para enviar datos y procesar respuesta
-                    sendRequestAndProcessResponse(Email, Password, signInForm, msgBox) 
+                    sendRequestAndProcessResponse(Email, Password, form, msgBox) 
 
                     .then(response => {
                         if (response.status === 401) {
@@ -98,10 +129,9 @@
                         sessionStorage.setItem("customer.state", data.state);
                         sessionStorage.setItem("customer.zip", data.zip);
                         sessionStorage.setItem("customer.password", data.password);
-            
-
-                       // window.location.replace("/QuickBank/src/views/profile.html");
-                        window.location.replace("/QuickBank/src/views/change_password.html");
+                        
+                       //  window.location.replace("/QuickBank/src/views/profile.html");
+                       window.location.replace("/QuickBank/src/views/change_password.html");
                     })
                     .catch(error => {
                         // Mostrar mensaje de error
@@ -117,7 +147,5 @@
             }
             
         </script>
-
-    </main>
-</body>
+    </body>
 </html>
