@@ -6,8 +6,6 @@ body {
 main {
   display: flex;
   height: 80vh;
-  padding: 0;
-
 }
 
 .welcome {
@@ -24,12 +22,8 @@ main {
 
 .welcome h1 {
   font-size: 60px;
-  margin-bottom: 10px;
 }
 
-.welcome p {
-  font-size: 20px;
-}
 h1 {
     font-size: 40px;
     color: rgb(0, 0, 0);
@@ -43,18 +37,20 @@ h1 {
   align-items: center;
   align-content: center;
 }
-
-.login-container form {
+#form {
   background-color: rgba(255, 255, 255, 0.85);
   border: 1px solid rgba(0, 0, 0, 0.1);
   color: black;
   font-size: 17px;
-  width: 280px;
-  padding: 25px;
+  width: 290px;
+  padding: 35px;
 }
 
+label {
+    text-align: left;   
+}
 
-.login-container input {
+input {
   background-color: white;
   color: black;
   width: 100%;
@@ -66,33 +62,20 @@ h1 {
 }
 
 #button {
- 
-  background-color: #000000;
-  color: white;
+    color: white;
+    background-color: black;
+    font-size: 20px;
 }
 
 #button:hover {
-  background-color: #2f2f2f;
   color:rgb(225, 225, 225);
-  cursor: pointer;
 }
 
 a {
-  display: block;
   color: black;
-  font-size: 16px;
-  text-align: center;
-  margin-top: 10px;
 }
 
 a:hover {
   text-decoration: underline;
 }
-/*
-p{  
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  align-content: center;
-  color:rgb(45, 99, 146);
-}*/
+

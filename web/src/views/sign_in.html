@@ -45,7 +45,7 @@
                 <input type="email" id="Email" placeholder="Email">
 
                 <label for="password">Password</label>
-                <custom-password class="coustomerpass">
+                <custom-password>
                 <input type="password" id="Password" placeholder="Password">
                 </custom-password>       
             
@@ -56,9 +56,8 @@
 
             <div id="responseMsg"></div>
         </div> 
-        <p>QuickBank © 2025  </p>
     </main>   
-
+</body>
         <script type="module">
             import sendRequestAndProcessResponse from "../util/sign_in.js";
 
@@ -80,7 +79,6 @@
                 event.stopPropagation();
 
                 try{
-
                     // Validar que email y password no esten vacios
                     if (Email.value.trim() === "" || Password.value.trim() === "")
                         throw new Error("Email and password input must be filled.");
@@ -97,22 +95,17 @@
                                 
                     if (Password.value.length > 20)
                         throw new Error("Password cannot have more than 20 characters");
-            
-                    
-                    msgBox.className = "success";
-                    msgBox.textContent = "Validación exitosa, puedes continuar.";
-                    msgBox.style.display = "block";
 
                     // Llama a la función para enviar datos y procesar respuesta
                     sendRequestAndProcessResponse(Email, Password, form, msgBox) 
 
                     .then(response => {
                         if (response.status === 401) {
-                        throw new Error('El usuario y/o la contraseña son incorrectos.');
+                        throw new Error('The username and/or password are incorrect.');
                         } else if (response.status === 500) {
-                        throw new Error('Error en el servidor. Intente más tarde.');
+                        throw new Error('Server error. Please try again later.');
                         } else if (!response.ok) {
-                        throw new Error('Error inesperado.');
+                        throw new Error('Unexpected error.');
                         }
                         return response.json(); // si todo va bien, convertimos la respuesta
                     })                    
@@ -130,8 +123,8 @@
                         sessionStorage.setItem("customer.zip", data.zip);
                         sessionStorage.setItem("customer.password", data.password);
                         
-                       //  window.location.replace("/QuickBank/src/views/profile.html");
-                       window.location.replace("/QuickBank/src/views/change_password.html");
+                            window.location.replace("/QuickBank/src/views/profile.html");
+                            //window.location.replace("/QuickBank/src/views/change_password.html");
                     })
                     .catch(error => {
                         // Mostrar mensaje de error
@@ -147,5 +140,5 @@
             }
             
         </script>
-    </body>
+    
 </html>
