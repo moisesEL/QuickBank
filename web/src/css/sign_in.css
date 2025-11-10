@@ -1,77 +1,81 @@
 body {
-    background-image: url('../assets/Crypto\ login\ background.jpg');
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: cover;
-    margin: 0px;
+  font-family: 'Kode Mono', monospace;
+
 }
 
 main {
-    display: flex;
-    align-items: center;
-    justify-content: space-evenly;
-   /* no esten tan separados los div de wel e in  */
-    height: 80vh;
-    padding: 0 15%;
-
+  display: flex;
+  height: 80vh;
 }
 
 .welcome {
-    color: white;
-    display: flex;
-    justify-content: center;
+  background: url('../assets/Crypto login background.jpg');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 0 25%;
+  display: flex;
 }
 
 .welcome h1 {
-    font-size: 80px;
-}
-
-.in{
-  flex-direction: column;
-  justify-content: center;
-  display: flex;
-
+  font-size: 60px;
 }
 
 h1 {
-    text-align: center;
     font-size: 40px;
-    color: white;
+    color: rgb(0, 0, 0);
     width: 100%;
+    text-align: center;
 }
-
-.in form {
-  background-color: rgba(255, 255, 255, 0.555); /* Fondo semitransparente */
-  color: rgb(0, 0, 0);
+.login-container {
   display: flex;
   flex-direction: column;
-  width: 250px;
-  position: relative;
-  border-radius: 3%;
-  padding: 20px;
-  gap: 20px;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+}
+#form {
+  background-color: rgba(255, 255, 255, 0.85);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  color: black;
+  font-size: 17px;
+  width: 290px;
+  padding: 35px;
 }
 
-.in label {
-    width: 100%;
-    font-size: 20px;
-}
-.in input {
-    border-color: #d8d8d8;
-    border-radius: 5px;
-    padding: 12px; 
-    box-sizing: border-box;
-    width: 100%;
-}
-.in button {
-    width: 100%;
-    padding: 12px;
-    border: none;
-}
-.in a {
-    color: rgb(0, 0, 0);
-    font-size: 20px;
-    text-align: center;
+label {
+    text-align: left;   
 }
 
+input {
+  background-color: white;
+  color: black;
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #aaa;
+  border-radius: 5px;
+  margin-bottom: 20px;
+  box-sizing: border-box;
+}
+
+#button {
+    color: white;
+    background-color: black;
+    font-size: 20px;
+}
+
+#button:hover {
+  color:rgb(225, 225, 225);
+}
+
+a {
+  color: black;
+}
+
+a:hover {
+  text-decoration: underline;
+}
 
