@@ -4,13 +4,15 @@
     
     --primary-btn-color: white;
     --primary-btn-background: black;
+    --secondary-btn-background: red;
     --primary-btn-hover: rgb(180, 180, 180);
     --primary-login-btn-background: green;
     
     --secondary-text-color: #666;
     --secondary-background: #c8c8c8;
+    --third-background: rgb(213, 209, 204);
     --border-color: rgba(255, 255, 255, 0.65);
-    --form-background: rgba(255, 255, 255, 0.55);
+    --form-background: #D9D9D9;
 
     --error-border-color: red;
 }
