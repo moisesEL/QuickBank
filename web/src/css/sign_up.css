@@ -4,7 +4,6 @@ main {
     justify-content: start;
     justify-items: start;
     align-items: center;
-    overflow-x: hidden;
     display: grid;
     grid-template-columns: 1fr 1fr;
 }
@@ -13,7 +12,7 @@ main {
     background-image: url("/QuickBank/src/assets/Crypto\ login\ background.jpg");
     background-size: cover;
     background-repeat: no-repeat;
-    background-position-x: 40% center;
+    background-position-x: center;
     min-height: 100%;
     width: 100%;
     -webkit-background-size: cover;
@@ -24,10 +23,17 @@ main {
 #rightDiv {
     padding: 50px 200px;
     width: calc(100% - 400px);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
 }
 
 #form {
     border: 2px solid #D9D9D9;
+    width: calc(100% - 60px);
 }
 
 #form > div {
@@ -39,4 +45,25 @@ main {
 
 #button {
     margin: 6px 0px 0px 0px;
+}
+
+@media screen and (max-width: 900px) {
+    #leftDiv {
+        display: none;
+    }
+    main {
+        display: flex;
+    }
+}
+
+@media screen and (max-width: 700px) {
+    #rightDiv {
+        padding: 20px 50px;
+        width: calc(100% - 100px);
+    }
+
+    #form {
+        padding: 10px;
+        width: calc(100% - 20px);
+    }
 }
