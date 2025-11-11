@@ -184,6 +184,25 @@ template.innerHTML = `
         border-radius: 0 0 8px 8px;
     }
 
+    @media screen and (max-width: 600px) {
+        header {
+            width: calc(100% - 40px);
+            padding: 15px 20px 10px 20px;
+        }
+        #logoText {
+            font-size: 1.5em;
+        }
+        #logoIcon {
+            height: 38px;
+        }
+        #loginContainer a {
+            font-size: 1em;
+            padding: 4px 3px;
+            width: min-content;
+            border-radius: 10px;
+        }
+    }
+
 </style>
 <header>
     <a id="logoContainer" href="/QuickBank">
@@ -214,7 +233,7 @@ class NavBar extends HTMLElement {
         <div class="dropdown-container">
             <button class="dropdown-button">
                 <span class="user-avatar">👤</span>
-                ${sessionStorage.getItem('customer.firstName') || 'User'}
+                <span>${sessionStorage.getItem('customer.firstName') || 'User'}<span>
                 <span class="dropdown-arrow">▼</span>
             </button>
             <div class="dropdown-content">
