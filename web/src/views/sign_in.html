@@ -24,7 +24,8 @@
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Kode+Mono&display=swap" rel="stylesheet">
         <script type="module" src="../components/nav_bar.js"></script>
-        <script> if(sessionStorage.getItem("customer.email")){
+        
+        <script> if(sessionStorage.getItem("customer.id")){
              window.location.replace("/QuickBank/src/views/change_password.html");}     
          </script>
 </head>
@@ -33,7 +34,6 @@
     <nav-bar></nav-bar>
     <main>
         <div class="welcome">
-            <h1>Welcome</h1>
         </div>
 
         <div class="login-container" >
@@ -41,12 +41,12 @@
         
             <form  id="form" action="/CRUDBankServerSide/webresources/customer/sigin/">
             
-                <label for="email">Email</label>
-                <input type="email" id="Email" placeholder="Email">
+                <label for="Email">Email</label>
+                <input type="email" id="Email" placeholder="Email" autoFocus>
 
-                <label for="password">Password</label>
+                <label for="Password">Password</label>
                 <custom-password>
-                <input type="password" id="Password" placeholder="Password">
+                <input type="password" id="Password" placeholder="Password" >
                 </custom-password>       
             
                 <input id="button"  type="submit" value="Sign In">
@@ -59,16 +59,18 @@
     </main>   
 </body>
         <script type="module">
-            import sendRequestAndProcessResponse from "../util/sign_in.js";
+            import sign_in from "../util/sign_in.js";
 
                 
             const msgBox = document.getElementById("responseMsg");
             const Email = document.getElementById("Email");
             const Password = document.getElementById("Password");
         
-            //Rellena automaticamente el inpuy email si existe una correo guardado
+            //Rellena automaticamente el input email si existe una correo guardado
             const storedEmail = sessionStorage.getItem("customer.email");
             if(storedEmail){
+                Email.autofocus = false;
+                Password.autofocus = true;
                 Email.value = storedEmail;
             }
 
@@ -97,7 +99,7 @@
                         throw new Error("Password cannot have more than 20 characters");
 
                     // Llama a la función para enviar datos y procesar respuesta
-                    sendRequestAndProcessResponse(Email, Password, form, msgBox) 
+                    sign_in(Email, Password, form, msgBox) 
 
                     .then(response => {
                         if (response.status === 401) {
@@ -122,9 +124,9 @@
                         sessionStorage.setItem("customer.state", data.state);
                         sessionStorage.setItem("customer.zip", data.zip);
                         sessionStorage.setItem("customer.password", data.password);
-                        
-                            window.location.replace("/QuickBank/src/views/profile.html");
-                            //window.location.replace("/QuickBank/src/views/change_password.html");
+
+                        window.location.replace("/QuickBank/src/views/profile.html");
+
                     })
                     .catch(error => {
                         // Mostrar mensaje de error
