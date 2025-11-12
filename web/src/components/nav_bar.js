@@ -1,5 +1,6 @@
 const template = document.createElement("template");
 template.innerHTML = `
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Kode+Mono&display=swap');
 
@@ -25,7 +26,7 @@ template.innerHTML = `
         z-index: 100;
         font-family: 'Kode Mono', monospace;
         font-weight: 400;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+        box-shadow: 0 2px 10px var(--navbar-shadow);
     }
 
     a {
@@ -62,11 +63,30 @@ template.innerHTML = `
         line-height: 1;
         display: flex;
         align-items: flex-end;
-        height: 100%; /* ← Ocupa toda la altura disponible */
+        height: 100%;
+    }
+
+    #rightContainer {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-items: center;
+        gap: 10px;
+    }
+
+    #toggle-theme-button {
+        padding: 3px;
+        width: min-content;
+        height: min-content;
+        border-radius: 15px;
+        cursor: pointer;
+        color: purple;
+        background: var(--toggle-background);
+        border-color: var(--toggle-border);
+        transition: all 0.3s ease;
     }
 
     #loginContainer {
-        padding: 0px 10px;
         display: flex;
         align-items: center;
         gap: 10px;
@@ -132,7 +152,7 @@ template.innerHTML = `
         top: 100%;
         background-color: var(--primary-background);
         min-width: 200px;
-        box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+        box-shadow: 0 8px 16px var(--dropdown-content-shadow);
         border-radius: 8px;
         z-index: 1000;
         margin-top: 5px;
@@ -209,6 +229,11 @@ template.innerHTML = `
         <img id="logoIcon" src="/QuickBank/src/assets/Logo.png"/></image>
         <h1 id="logoText">QuickBank</h1>
     </a>
+    <div id="rightContainer">
+        <button id="toggle-theme-button">
+            <i class="material-icons" id="toggle-theme-icon">mode_night</i>
+        </button>
+    </div>
 </header>`;
 
 class NavBar extends HTMLElement {
@@ -216,8 +241,13 @@ class NavBar extends HTMLElement {
         super();
         this.root = this.attachShadow({mode: "open"});
         this.root.appendChild(template.content.cloneNode(true))
+        this.rightContainer = this.root.querySelector("#rightContainer")
+        this.toggleThemeButton = this.root.querySelector("#toggle-theme-button");
+        this.toggleThemeIcon = this.root.querySelector("#toggle-theme-icon");
+        this.logoIcon = this.root.querySelector("#logoIcon");
     }
     connectedCallback () {
+        this.checkTheme();
         const loginContainer = document.createElement("template");
         loginContainer.innerHTML = `
         <div id="loginContainer">
@@ -247,12 +277,40 @@ class NavBar extends HTMLElement {
         </div>`;
 
         if (sessionStorage.getItem('customer.email')) {
-            this.root.querySelector("header").appendChild(dropDownMenu.content.cloneNode(true))
+            this.rightContainer.insertBefore(dropDownMenu.content.cloneNode(true), this.rightContainer.firstElementChild)
             this.initializeDropdown();
         }
         else {
-            this.root.querySelector("header").appendChild(loginContainer.content.cloneNode(true))
+            this.rightContainer.insertBefore(loginContainer.content.cloneNode(true), this.rightContainer.firstElementChild)
         }
+
+        this.toggleThemeButton.addEventListener('click', () => this.toggleTheme())
+    }
+
+    checkTheme() {
+        let theme = sessionStorage.getItem('theme') || 'light';
+        const lightStyle = document.querySelector('link[href="/QuickBank/src/css/light_theme.css"]');
+        const darkStyle = document.querySelector('link[href="/QuickBank/src/css/dark_theme.css"]');
+        if (theme === 'dark') {
+            if (lightStyle) lightStyle.disabled = true;
+            if (darkStyle) darkStyle.disabled = false;
+            this.toggleThemeIcon.innerText = 'mode_night';
+            this.logoIcon.setAttribute('src', '/QuickBank/src/assets/Logo dark mode.png')
+        }
+        else {
+            if (lightStyle) lightStyle.disabled = false;
+            if (darkStyle) darkStyle.disabled = true;
+            this.toggleThemeIcon.innerText = 'light_mode';
+            this.logoIcon.setAttribute('src', '/QuickBank/src/assets/Logo.png')
+        }
+    }
+
+    toggleTheme() {
+    const currentTheme = sessionStorage.getItem('theme') || 'light';
+    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    
+    sessionStorage.setItem('theme', newTheme);
+    this.checkTheme();
     }
 
     initializeDropdown() {
