@@ -4,16 +4,12 @@ template.innerHTML = `
     @import url('https://fonts.googleapis.com/css2?family=Kode+Mono&display=swap');
 
     footer {
-        background-color: var(--secondary-background);
+        background-color: var(--primary-background);
         color: var(--primary-text-color);
         text-align: center;
         padding: 20px 10px;
         font-family: 'Kode Mono', monospace;
         border-top: 1px solid var(--border-color);
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        right: 0;
         width: 100%;
         box-sizing: border-box;
 

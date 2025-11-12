@@ -1,3 +1,8 @@
-body {
+#mainWrapper {
     background-image: url('/QuickBank/src/assets/Crypto\ background.jpg');
+    min-height: calc(100vh - 75px);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
 }
+
