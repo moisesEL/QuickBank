@@ -1,8 +1,44 @@
+body {
+display: flex;
+flex-direction: column;
+}
+main {
+    display: grid;
+    grid-template-rows: 1fr 1fr ;
+
+
+}
 #mainWrapper {
     background-image: url('/QuickBank/src/assets/Crypto\ background.jpg');
-    min-height: calc(100vh - 75px);
+    min-height: calc(100vh - 50vh);
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
 }
 
+#bottomDiv {
+    display: grid;
+    grid-template-columns: 1fr 1fr ;
+
+}
+
+#bottomDiv > :first-child {
+    background-color: aquamarine;
+    color: rgb(150, 35, 35);
+    
+}
+
+#bottomDiv > :last-child {
+    background-color: rgb(22, 75, 208);
+    color: rgb(21, 20, 20);
+}
+
+#box {
+      margin: 0 auto;
+    width: 100px;
+    height: 100px;
+    border-radius: 10px;
+    background-color: #D9D9D9;
+    color: #0a0a0a;
+    text-align: center;
+}
