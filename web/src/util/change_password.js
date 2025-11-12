@@ -1,4 +1,4 @@
-async function sendRequestAndProcessResponse(newPassword, msgBox) {
+async function changePassword(newPassword) {
     const valueNewPassword = newPassword.value.trim();
 
     return fetch("/CRUDBankServerSide/webresources/customer/", {
@@ -20,7 +20,6 @@ async function sendRequestAndProcessResponse(newPassword, msgBox) {
             zip: sessionStorage.getItem("customer.zip")
         })
     })
-
 }
 
-export default sendRequestAndProcessResponse;
+export default changePassword;
