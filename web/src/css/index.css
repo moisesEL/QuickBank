@@ -1,44 +1,67 @@
 body {
-display: flex;
-flex-direction: column;
+    display: flex;
+    flex-direction: column;
+    font-family: 'Kode Mono', monospace;
 }
+
 main {
     display: grid;
-    grid-template-rows: 1fr 1fr ;
+    grid-template-rows: 1fr 1fr;
 
 
 }
+
 #mainWrapper {
     background-image: url('/QuickBank/src/assets/Crypto\ background.jpg');
     min-height: calc(100vh - 50vh);
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+#text-content {
+    background-color: rgba(252, 224, 224, 0.678);
+    padding: 50px;
+    border-radius: 16px;
+    backdrop-filter: blur(10px);
+}
+
+#text-content h1 {
+
+    font-size: 48px;
+    letter-spacing: 3px;
+    margin-bottom: 16px;
+}
+
+#text-content p {
+
+    font-size: 20rem;
+    margin-bottom: 2rem;
 }
 
 #bottomDiv {
     display: grid;
-    grid-template-columns: 1fr 1fr ;
-
+    grid-template-columns: 1fr 1fr;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+    padding: 4rem 6rem;
 }
 
-#bottomDiv > :first-child {
-    background-color: aquamarine;
-    color: rgb(150, 35, 35);
-    
-}
-
-#bottomDiv > :last-child {
-    background-color: rgb(22, 75, 208);
-    color: rgb(21, 20, 20);
-}
-
-#box {
-      margin: 0 auto;
-    width: 100px;
-    height: 100px;
-    border-radius: 10px;
-    background-color: #D9D9D9;
-    color: #0a0a0a;
+.card {
+    height: 40%;
+    border-radius: 15px;
+    padding: 30px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
     text-align: center;
+    transition: transform 0.2s ease;
+}
+
+.card:hover {
+    transform: translateY(-8px);
 }
