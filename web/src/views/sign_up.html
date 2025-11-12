@@ -25,6 +25,9 @@
         <link href="https://fonts.googleapis.com/css2?family=Kode+Mono&display=swap" rel="stylesheet">
         <script type="module" src="../components/nav_bar.js"></script>
 
+        <!-- Footer -->
+        <script type= "module" src="/QuickBank/src/components/footer.js"></script>   
+
         <script>
             if (sessionStorage.getItem('customer.email'))
                 window.location.replace("/QuickBank/src/views/profile.html");
@@ -35,10 +38,11 @@
         <main>
             <div id="leftDiv"></div>
             <div id="rightDiv">
+                <h1>Sign Up</h1>
                 <form id="form">
                     <div>
                         <label for="firstName">First name:</label>
-                        <input type="text" name="firstName" id="firstName" placeholder="Your first name...">
+                        <input type="text" name="firstName" id="firstName" placeholder="Your first name..." autofocus>
                     </div>
                     <div>
                         <label for="middleInitial">Middle initial:</label>
@@ -50,7 +54,7 @@
                     </div>
                     <div>
                         <label for="email">Email:</label>
-                        <input type="text" name="email" id="email" placeholder="Your email...">
+                        <input type="email" name="email" id="email" placeholder="Your email...">
                     </div>
                     <div>
                         <label for="password">Password:</label>
@@ -83,6 +87,7 @@
                 </form>
             </div>
         </main>
+     <main-footer></main-footer>   
     </body>
     <script type="module">
         import create_customer from "../util/create_customer.js";
@@ -152,6 +157,7 @@
                             default:
                                 break;
                         }
+                        sessionStorage.setItem("customer.email", customer.email)
                         window.location.replace("/QuickBank/src/views/sign_in.html");
                     })
                     .catch(err => {
