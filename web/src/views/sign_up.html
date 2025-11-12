@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <!--  -->
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="icon" type="image/x-icon" href="/QuickBank/src/assets/Favicon.ico">
         <title>Sign up</title>
         
         <!-- Alternative styles -->
         <link rel="stylesheet" href="/QuickBank/src/css/light_theme.css" id="main-style" title="Light Mode">
-        <link rel='alternate stylesheet' href='/QuickBank/src/css/dark_theme.css' title="Dark Mode">
+        <link rel='alternate stylesheet' href='/QuickBank/src/css/dark_theme.css' title="Dark Mode" disabled>
         
         <!-- Main style first -->
         <link rel="stylesheet" href="../css/main.css">
@@ -95,16 +95,16 @@
                 event.preventDefault(); // prevent form submit
                 const form = event.target;
                 let customer = {
-                    email: form.email.value,
-                    firstName: form.firstName.value,
-                    middleInitial: form.middleInitial.value,                    
-                    lastName: form.lastName.value,
-                    password: form.password.value,
-                    street: form.street.value,
-                    city: form.city.value,
-                    state: form.state.value,
-                    zip: form.zip.value,
-                    phone: form.phone.value
+                    email: form.email.value.trim(),
+                    firstName: form.firstName.value.trim(),
+                    middleInitial: form.middleInitial.value.trim(),                    
+                    lastName: form.lastName.value.trim(),
+                    password: form.password.value.trim(),
+                    street: form.street.value.trim(),
+                    city: form.city.value.trim(),
+                    state: form.state.value.trim(),
+                    zip: form.zip.value.trim(),
+                    phone: form.phone.value.trim()
                 };
                 try {
                     document.querySelectorAll('.input_error').forEach(input => input.className = '');
