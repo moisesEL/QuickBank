@@ -29,15 +29,14 @@
         <script type= "module" src="/QuickBank/src/components/footer.js"></script>  
          
         <script> if(sessionStorage.getItem("customer.id")){
-             window.location.replace("/QuickBank/src/views/change_password.html");}     
+             window.location.replace("/QuickBank/src/views/profile.html");}     
          </script>
 </head>
 <body>
 
     <nav-bar></nav-bar>
     <main>
-        <div class="welcome">
-        </div>
+        <div class="welcome"></div>
 
         <div class="login-container" >
             <h1>Sign in</h1>
@@ -64,24 +63,22 @@
    <main-footer></main-footer>
 
 </body>
-        <script type="module">
-            import sign_in from "../util/sign_in.js";
-
+    <script type="module">
+        import sign_in from "../util/sign_in.js";
                 
-            const msgBox = document.getElementById("responseMsg");
-            const Email = document.getElementById("Email");
-            const Password = document.getElementById("Password");
-        
-            //Rellena automaticamente el input email si existe una correo guardado
-            const storedEmail = sessionStorage.getItem("customer.email");
-            if(storedEmail){
-                Email.autofocus = false;
-                Password.autofocus = true;
-                Email.value = storedEmail;
-            }
+        const msgBox = document.getElementById("responseMsg");
+        const Email = document.getElementById("Email");
+        const Password = document.getElementById("Password");
 
             document.getElementById("form").addEventListener("submit", validarSignIn);
-
+            //Rellena automaticamente el input email si existe una correo guardado
+            const storedEmail = sessionStorage.getItem("customer.email");
+                if(storedEmail){
+                    Email.removeAttribute("autofocus");
+                    document.activeElement.blur();
+                    Password.focus;
+                    Email.value = storedEmail;
+                }
             function validarSignIn(event) {
                 event.preventDefault();
                 event.stopPropagation();
@@ -92,7 +89,7 @@
                         throw new Error("Email and password input must be filled.");
                     
                      // Expresión regular para validar el email
-                    const emailRegExp = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,255}$/;
+                    const emailRegex = new RegExp(/^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/ );
                     if (!emailRegExp.test(Email.value.trim())) {
                     throw new Error("Email has not a valid format.");
                     }
@@ -132,7 +129,6 @@
                         sessionStorage.setItem("customer.password", data.password);
 
                         window.location.replace("/QuickBank/src/views/profile.html");
-
                     })
                     .catch(error => {
                         // Mostrar mensaje de error
@@ -147,6 +143,6 @@
                 }
             }
             
-        </script>
+    </script>
     
 </html>

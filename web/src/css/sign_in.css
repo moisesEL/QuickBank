@@ -1,7 +1,7 @@
 main {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  height: 80vh;
+  min-height: calc(100vh - 75px);
 }
 
 .welcome {
