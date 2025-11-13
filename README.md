@@ -1,4 +1,5 @@
 # Proyecto Autenticación DAW2
+
 ## 📝 Descripción general  
 
 El proyecto consiste en el desarrollo del **lado cliente (front-end)** de una aplicación web que proporcione la **interfaz gráfica de usuario (GUI)** para realizar los casos de uso especificados:  
@@ -7,13 +8,23 @@ El proyecto consiste en el desarrollo del **lado cliente (front-end)** de una ap
 - **Sign In** (inicio de sesión)  
 - **Change Password** (cambio de contraseña)  
 
-### Tecnologías a utilizar  
+### Tecnologías a utilizar:  
 
 - **HTML5**  
 - **CSS3**  
 - **JavaScript**  
 
 El **lado servidor (back-end)** se proporciona mediante servicios **RESTful** para las entidades del modelo de datos.  
+
+### Links a los repositorios:
+
+Repositorio Servidor:
+
+[CRUDBankServerSide](https://github.com/uriajavi/CRUDBankServerSide/tree/dev_signup_signin/)
+
+Repositorio Cliente creado en este proyecto:
+
+[QuickBank](https://github.com/moisesEL/QuickBank)
 
 ---
 
