@@ -1,0 +1,27 @@
+:root {
+    --primary-text-color: white;
+    --primary-background: #0f172a;
+    
+    --primary-btn-color: black;
+    --primary-btn-background: #e2e8f0;
+    --secondary-btn-background: red;
+    --primary-btn-hover: rgba(0, 0, 0, 0.75);
+    --primary-login-btn-background: #10b981;
+    
+    --secondary-text-color: #cbd5e1;
+    --secondary-background: #1e293b;
+    --third-background: #475569;
+    --border-color: rgba(255, 255, 255, 0.2);
+    --form-background: rgba(30, 41, 59, 0.85);
+
+    --error-border-color: red;
+    
+    --white: white;
+    --footer-background: rgb(20, 20, 20);
+    
+    --navbar-shadow: rgba(255, 255, 255, 0.5);
+    --dropdown-content-shadow: rgba(255, 255, 255, 0.1);
+
+    --index-card-shadow: rgba(42, 94, 207, 0.4);
+    --text-content-background: rgba(31, 56, 182, 0.678);
+}

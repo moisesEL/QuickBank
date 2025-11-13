@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="icon" type="image/x-icon" href="/QuickBank/src/assets/Favicon.ico">
+        <title>Profile</title>
+        
+        <!-- Alternative styles -->
+        <link rel="stylesheet" href="/QuickBank/src/css/light_theme.css" id="main-style" title="Light Mode">
+        <link rel='alternate stylesheet' href='/QuickBank/src/css/dark_theme.css' title="Dark Mode" disabled>
+        
+        <!-- Main style first -->
+        <link rel="stylesheet" href="/QuickBank/src/css/main.css">
+        <!-- Personal style -->
+        <link rel='stylesheet' href='/QuickBank/src/css/profile.css'>
+
+        <!-- Custom Google font import for navbar -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Kode+Mono&display=swap" rel="stylesheet">
+        <!-- Custom navBar -->
+        <script type="module" src="/QuickBank/src/components/nav_bar.js"></script>
+
+        <!-- Checks if user is logged in, if not, redirects to Index -->
+        <script>
+            if (!sessionStorage.getItem('customer.id')) window.location.replace("/QuickBank");
+        </script>
+
+        <!-- Custom Google icon import for password component -->
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <!-- Custom password input -->
+        <script type="module" src="../components/custom_password.js"></script>
+
+        <!-- Footer -->
+        <script type= "module" src="/QuickBank/src/components/footer.js"></script>   
+    </head>
+    <body>
+        <nav-bar></nav-bar>
+        <main id="mainWrapper">
+            <div id="leftDiv">
+                <h1 id="leftDivTitle">Profile</h1>
+                <div id="informationWrapper">
+                    <h3>Personal information</h3>
+                    <div id="personalInformationWrapper">
+                        <div>
+                            <h4>Name</h4>
+                            <input type="text" id="customerFirstName" disabled>
+                        </div>
+                        <div>
+                            <h4>Middle Initial</h4>
+                            <input type="text" id="customerMiddleInitial" disabled>
+                        </div>
+                        <div>
+                            <h4>Last Name</h4>
+                            <input type="text" id="customerLastName" disabled>
+                        </div>
+                        <div>
+                            <h4>Password</h4>
+                            <custom-password>
+                                <input type="password" id="customerPassword" placeholder="******" disabled>
+                            </custom-password>
+                        </div>
+                    </div>
+                    <hr>
+                    <h3>Contact and Address</h3>
+                    <div id="contactAndAddressWrapper">
+                        <div>
+                            <h4>Email</h4>
+                            <input type="text" id="customerEmail" disabled>
+                        </div>
+                        <div>
+                            <h4>Phone</h4>
+                            <input type="text" id="customerPhone" disabled>
+                        </div>
+                        <div>
+                            <h4>Zip</h4>
+                            <input type="text" id="customerZip" disabled>
+                        </div>
+                        <div>
+                            <h4>City</h4>
+                            <input type="text" id="customerCity" disabled>
+                        </div>
+                    </div>
+                    <hr>
+                    <div id="securityWrapper">
+                        <h3>Security: </h3>
+                        <a id="changePasswordButton" href="/QuickBank/src/views/change_password.html">Change password</a>
+                    </div>
+                </div>
+            </div>
+            <div id="rightDiv">
+                <h1>Balance: XXX bitcoins</h1>
+            </div>
+        </main>
+    <main-footer></main-footer>    
+    </body>
+    <script>
+        let customer = {
+            firstName: sessionStorage.getItem('customer.firstName'),
+            middleInitial: sessionStorage.getItem('customer.middleInitial'),
+            lastName: sessionStorage.getItem('customer.lastName'),
+            email: sessionStorage.getItem('customer.email'),
+            city: sessionStorage.getItem('customer.city'),
+            id: sessionStorage.getItem('customer.id'),
+            password: sessionStorage.getItem('customer.password'),
+            phone: sessionStorage.getItem('customer.phone'),
+            state: sessionStorage.getItem('customer.state'),
+            street: sessionStorage.getItem('customer.street'),
+            zip: sessionStorage.getItem('customer.zip'),
+        }
+        document.getElementById("customerFirstName").value = customer.firstName;
+        document.getElementById("customerMiddleInitial").value = customer.middleInitial;
+        document.getElementById("customerLastName").value = customer.lastName;
+        document.getElementById("customerPassword").value = customer.password;
+        document.getElementById("customerEmail").value = customer.email;
+        document.getElementById("customerPhone").value = customer.phone;
+        document.getElementById("customerZip").value = customer.zip;
+        document.getElementById("customerCity").value = customer.city;
+    </script>
+</html>

@@ -1,0 +1,38 @@
+main {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: calc(100vh - 75px);
+}
+
+.welcome {
+  background: url('../assets/Crypto login background.jpg');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+
+h1 {
+    font-size: 45px;
+}
+
+.login-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  gap: 8px;
+  width: 100%;
+}
+@media screen and (max-width: 900px) {
+  main{
+    display:flex;
+  }
+  .welcome{
+    display: none;
+  }
+  .login-container{
+    display: flex;
+  }
+}
+

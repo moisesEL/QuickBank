@@ -1,0 +1,112 @@
+*{
+    margin: 0;
+    padding: 0;
+
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    min-height: max(100vh, 800px);
+    line-height: 1.5;
+    margin: 0px;
+    padding: 0px;
+    background-color: var(--primary-background);
+    color: var(--primary-text-color);
+    transition: background-color 0.3s ease, color 0.3s ease;
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+h1, h2, h3, h4 {
+    color: var(--primary-text-color);
+    
+}
+
+#form {
+    display: flex;
+    flex-direction: column;
+    padding: 30px;
+    background-color: var(--form-background);
+    border: 0.2px solid var(--border-color);
+    border-radius: 8px;
+    gap: 10px;
+    backdrop-filter: blur(1.5px);
+    transition: all 0.3s ease;
+    
+}
+
+input {
+    min-height: 20px;
+    border-radius: 6px;
+    border: none;
+    padding: 3px 5px;
+    color: var(--secondary-text-color);
+    background-color: var(--secondary-background);
+    font-size: 1em;
+    transition: all 0.3s ease;
+}
+
+.input_error {
+    border: 2px solid red;
+}
+
+label {
+    padding: 0px 0px 0px 2px;
+    font-size: 1em;
+    color: var(--primary-text-color);
+}
+
+#button {
+    width: 100%;
+    color: var(--primary-btn-color);
+    background-color: var(--primary-btn-background);
+    border-radius: 6px;
+    border: none;
+    align-self: center;
+    font-size: 20px;
+    padding: 6px 1px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+#button:hover {
+    color: var(--primary-btn-hover);
+}
+
+a {
+    border: none;
+    width: min-content;
+    white-space: nowrap;
+    padding: 8px 6px;
+    border-radius: 10px;
+    color: var(--primary-text-color);
+    background-color: var(--);
+    text-decoration: none;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+#responseMsg {
+    margin-top: 1em;
+    padding: 0.5em;
+    display: none;
+}
+
+#responseMsg.success {
+    color: green;
+    background-color: #e0ffe0;
+    border: 1px solid green;
+}
+
+#responseMsg.error {
+    color: red;
+    background-color: #ffe0e0;
+    border: 1px solid red;
+}

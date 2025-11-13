@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="icon" type="image/x-icon" href="/QuickBank/src/assets/Favicon.ico">
+        <title>QuickBank</title>
+            
+        <!-- Alternative styles -->
+        <link rel="stylesheet" href="/QuickBank/src/css/light_theme.css" id="main-style" title="Light Mode">
+        <link rel='alternate stylesheet' href='/QuickBank/src/css/dark_theme.css' title="Dark Mode" disabled >
+        
+        <link rel="stylesheet" href="/QuickBank/src/css/main.css">
+        <link rel='stylesheet' href='/QuickBank/src/css/index.css'>
+
+        <!-- Custom Google font import for navbar -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Kode+Mono&display=swap" rel="stylesheet">
+        <!-- Custom Google icon import for navbar -->
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <script type="module" src="src/components/nav_bar.js"></script>
+        
+        <!-- Footer -->
+        <script type= "module" src="/QuickBank/src/components/footer.js"></script>   
+    </head>
+    <body>
+        <nav-bar></nav-bar>
+        <main>
+            <div id="mainWrapper">
+            <div id="text-content"> 
+                <h1>EL MEJOR BANCO</h1>
+                <p>Seguridad, rapidez y tecnología blockchain al servicio de tus finanzas.</p>
+            </div>
+            </div>
+            <div id="bottomDiv">                 
+                <div class="card"> 
+                    <h2>Pagos con Criptomonedas</h2>
+                    <p>Envía y recibe pagos en Bitcoin, Ethereum y más, directamente desde tu cuenta QuickBank.</p>
+                </div>
+                <div class="card">
+                    <h2>Máxima Seguridad</h2>
+                    <p>Tus transacciones están protegidas con encriptación avanzada y autenticación 2FA.</p>
+                </div>
+            </div>
+        </main>
+        <main-footer></main-footer>
+    </body>
+</html>
