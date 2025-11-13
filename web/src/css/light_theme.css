@@ -15,7 +15,13 @@
     --form-background: #D9D9D9;
 
     --error-border-color: red;
+
+    --white: white;
     --footer-background: rgb(49, 49, 49);
+
     --navbar-shadow: rgba(0,0,0,0.5);
     --dropdown-content-shadow: rgba(0,0,0,0.1);
+
+    --index-card-shadow: rgba(0, 80,255, 0.4);
+    --text-content-background: rgba(228, 238, 255, 0.678);
 }

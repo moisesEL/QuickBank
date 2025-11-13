@@ -25,21 +25,19 @@ main {
 }
 
 #text-content {
-    background-color: rgba(252, 224, 224, 0.678);
+    background-color: var(--text-content-background);
     padding: 50px;
     border-radius: 16px;
     backdrop-filter: blur(10px);
 }
 
 #text-content h1 {
-
     font-size: 48px;
     letter-spacing: 3px;
     margin-bottom: 16px;
 }
 
 #text-content p {
-
     font-size: 2rem;
     margin-bottom: 2rem;
 }
@@ -57,9 +55,13 @@ main {
     height: 40%;
     border-radius: 15px;
     padding: 30px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 5px 15px var(--index-card-shadow);
     text-align: center;
     transition: transform 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
 }
 
 .card:hover {
