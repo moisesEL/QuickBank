@@ -28,10 +28,21 @@
         <!-- Footer -->
         <script type= "module" src="/QuickBank/src/components/footer.js"></script>   
 
-        <script>
+        <script type="module">
             if (sessionStorage.getItem('customer.email'))
                 window.location.replace("/QuickBank/src/views/profile.html");
+            let inputs = (document.getElementsByTagName('input'));
+            for (let input of inputs) {
+                input.style = "font-size: 1.5rem;";
+            }
         </script>
+
+            <!-- Realizar las siguientes modificaciones sobre el código de su aplicación. Las modificaciones se realizarán sobre una rama llamada eval_NOMBRE (donde NOMBRE es su propio nombre) creada a partir del último commit de su rama principal:
+                Mediante el uso del método getElementsByTagName de la interfaz Document, cambiar la propiedad de estilo font-size de todos los INPUT  al valor 1.25rem. Hacerlo en el onload del BODY.
+                Pedir la contraseña por duplicado y validar que el valor de ambos campos coincide.
+                Enviar datos en XML en el fetch.
+
+            Al finalizar, generar y entregar el nuevo archivo .WAR -->
     </head>
     <body>
         <nav-bar></nav-bar>
@@ -62,6 +73,13 @@
                             <input type="password" name="password" id="password" placeholder="Your password..." >
                         </custom-password>
                     </div>
+                    <!-- Password de validacion -->
+                    <div>
+                        <label for="validatePassword">Repeat your password:</label>
+                        <custom-password>
+                            <input type="password" name="validatePassword" id="validatePassword" placeholder="Repeat your password..." >
+                        </custom-password>
+                    </div>
                     <div>
                         <label for="phone">Phone:</label>
                         <input type="text" name="phone" id="phone" placeholder="Your phone number...">
@@ -90,7 +108,7 @@
      <main-footer></main-footer>   
     </body>
     <script type="module">
-        import create_customer from "../util/create_customer.js";
+        import create_customer_xml from "../util/create_customer_xml.js";
         document.getElementById('form').addEventListener('submit', (event) => {
                 event.preventDefault(); // prevent form submit
                 const form = event.target;
@@ -126,6 +144,9 @@
 
                     if (!passwordRegex.test(customer.password))
                         throw {input: "password", message: "Your password has to be between 5 and 20 characters.\nIt should have at least 1 uppercase letter, 1 lowercase letter, 1 digit, and 1 special character."}
+                    
+                    if (customer.password !== form.validatePassword.value.trim())
+                        throw {input: "validatePassword", message: "Your password has to match"}
 
                     if (!phoneRegex.test(customer.phone))
                         throw {input: "phone", message: "Your phone is not valid."}
@@ -142,7 +163,7 @@
                     if (!zipRegex.test(customer.zip))
                         throw {input: "zip", message: "Your zip is not valid.\nIt should be a number"}
 
-                    create_customer(customer)
+                    create_customer_xml(customer)
                     .then(response => {
                         switch (response.status) {
                             case response.status >= 500:
@@ -152,7 +173,7 @@
                                 break;
                             case 403:
                                 throw {status: 403, message: "The email is already taken, wanna try to log in?"}
-                            case response.status > 400 && response.status < 500:
+                            case response.status >= 400 && response.status < 500:
                                 throw {status: response.status, message: "Something was wrong"}
                             default:
                                 break;
