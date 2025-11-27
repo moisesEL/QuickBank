@@ -204,24 +204,50 @@ template.innerHTML = `
         border-radius: 0 0 8px 8px;
     }
 
-    @media screen and (max-width: 600px) {
+    @media screen and (max-width: 900px) {
+        body {
+            border-size: border-box;
+            width:100%;
+        }
         header {
-            width: calc(100% - 40px);
-            padding: 15px 20px 10px 20px;
+            flex-direction: column;
+            gap: 10px;
+            justify-content: space-around;
+            height: max-content;
+            padding: 10px;
+            width: calc(100vw - 20px);
         }
-        #logoText {
-            font-size: 1.5em;
+        #rightContainer {
+            flex-direction: column;
+            gap: 10px;
+            padding: 10px 5px;
+            width: calc(100vw - 10px);
         }
-        #logoIcon {
-            height: 38px;
-        }
-        #loginContainer a {
-            font-size: 1em;
-            padding: 4px 3px;
-            width: min-content;
-            border-radius: 10px;
+        #loginContainer {
+            flex-direction: column;
+            padding: 5px;
+            gap: 10px;
         }
     }
+
+    // @media screen and (max-width: 600px) {
+    //     header {
+    //         width: calc(100% - 40px);
+    //         padding: 15px 20px 10px 20px;
+    //     }
+    //     #logoText {
+    //         font-size: 1.5em;
+    //     }
+    //     #logoIcon {
+    //         height: 38px;
+    //     }
+    //     #loginContainer a {
+    //         font-size: 1em;
+    //         padding: 4px 3px;
+    //         width: min-content;
+    //         border-radius: 10px;
+    //     }
+    // }
 
 </style>
 <header>
