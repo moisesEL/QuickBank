@@ -209,6 +209,8 @@ template.innerHTML = `
             width: calc(100% - 40px);
             padding: 15px 20px 10px 20px;
         }
+
+    
         #logoText {
             font-size: 1.5em;
         }
@@ -221,6 +223,31 @@ template.innerHTML = `
             width: min-content;
             border-radius: 10px;
         }
+    }
+
+    @media screen and (max-width: 1024px) {
+
+    #toggle-theme-button {
+        display: none;
+    }
+    header {
+        display: grid;
+        width: calc(100% - 40px);
+        padding: 15px 20px 10px 20px;
+        height: 120px;
+        }
+
+    #loginContainer {
+        display: grid;
+        padding-bottom: 10px;
+        padding-top: 5px;
+        gap: 5px;
+    }
+
+    #loginContainer a {
+        font-size: 12px;
+    }
+
     }
 
 </style>
