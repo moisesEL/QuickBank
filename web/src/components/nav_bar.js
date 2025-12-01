@@ -276,7 +276,7 @@ class NavBar extends HTMLElement {
             </div>
         </div>`;
 
-        if (sessionStorage.getItem('customer.email')) {
+        if (sessionStorage.getItem('customer.id')) {
             this.rightContainer.insertBefore(dropDownMenu.content.cloneNode(true), this.rightContainer.firstElementChild)
             this.initializeDropdown();
         }
