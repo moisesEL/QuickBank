@@ -1,5 +1,5 @@
-const template = document.createElement("template");
-template.innerHTML = `
+const navBarTemplate = document.createElement("template");
+navBarTemplate.innerHTML = `
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Kode+Mono&display=swap');
@@ -240,7 +240,7 @@ class NavBar extends HTMLElement {
     constructor() {
         super();
         this.root = this.attachShadow({mode: "open"});
-        this.root.appendChild(template.content.cloneNode(true))
+        this.root.appendChild(navBarTemplate.content.cloneNode(true))
         this.rightContainer = this.root.querySelector("#rightContainer")
         this.toggleThemeButton = this.root.querySelector("#toggle-theme-button");
         this.toggleThemeIcon = this.root.querySelector("#toggle-theme-icon");

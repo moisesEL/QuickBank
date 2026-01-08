@@ -20,20 +20,18 @@
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Kode+Mono&display=swap" rel="stylesheet">
         <!-- Custom navBar -->
-        <script type="module" src="/QuickBank/src/components/nav_bar.js"></script>
+        <script src="/QuickBank/src/components/nav_bar.js"></script>
 
         <!-- Checks if user is logged in, if not, redirects to Index -->
-        <script>
-            if (!sessionStorage.getItem('customer.id')) window.location.replace("/QuickBank");
-        </script>
+        <script>if (!sessionStorage.getItem('customer.id')) window.location.replace("/QuickBank");</script>
 
         <!-- Custom Google icon import for password component -->
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
         <!-- Custom password input -->
-        <script type="module" src="../components/custom_password.js"></script>
+        <script src="../components/custom_password.js"></script>
 
         <!-- Footer -->
-        <script type= "module" src="/QuickBank/src/components/footer.js"></script>   
+        <script src="/QuickBank/src/components/footer.js"></script>   
     </head>
     <body>
         <nav-bar></nav-bar>

@@ -1,8 +1,7 @@
-const template = document.createElement("template");
-template.innerHTML = `
+const footerTemplate = document.createElement("template");
+footerTemplate.innerHTML = `
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Kode+Mono&display=swap');
-
     footer {
         color: var(--white);
         background-color: var(--footer-background);
@@ -12,9 +11,7 @@ template.innerHTML = `
         border-top: 1px solid var(--border-color);
         width: 100%;
         box-sizing: border-box;
-
     }
-
 </style>
 
 <footer>
@@ -26,7 +23,7 @@ class Footer extends HTMLElement {
     constructor() {
         super();
        this.root = this.attachShadow({mode: "open"});
-        this.root.appendChild(template.content.cloneNode(true))
+        this.root.appendChild(footerTemplate.content.cloneNode(true))
     }
 }
 
