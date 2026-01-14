@@ -34,7 +34,7 @@
         <script src="/QuickBank/src/components/footer.js"></script>
 
         <script type="module">
-        import build_accounts_table from "../util/build_accounts_table.js";
+        import build_shortened_accounts_table from "../util/build_shortened_accounts_table.js";
         window.addEventListener("DOMContentLoaded", () => {
             let customer = {
                 firstName: sessionStorage.getItem('customer.firstName'),
@@ -58,7 +58,7 @@
             document.getElementById("customerZip").value = customer.zip;
             document.getElementById("customerCity").value = customer.city;
 
-            build_accounts_table(customer.id);
+            build_shortened_accounts_table(customer.id);
         })
         </script>
     </head>
@@ -119,16 +119,17 @@
             <div id="rightDiv">
                 <h1>Accounts:</h1>
                 <table id="accountsTable">
+                    <caption style="text-align: start;">Accounts</caption>
                     <thead>
-                        <tr>
-                            <td>ID</td>
-                            <td>type</td>
-                            <td>description</td>
-                            <td>balance</td>
-                            <td>creditLine</td>
-                            <td>beginBalance</td>
-                            <td>beginBalanceTimestamp</td>
-                        </tr>
+                        <th scope="col">
+                            <button>Type</button>
+                        </th>
+                        <th scope="col">
+                            <button>Description</button>
+                        </th>
+                        <th scope="col">
+                            <button>Balance</button>
+                        </th>
                     </thead>
                     <tbody><!--Auto populated content--></tbody>
                 </table>

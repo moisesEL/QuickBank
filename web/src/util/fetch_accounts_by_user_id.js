@@ -1,7 +1,6 @@
 import { Account } from "./model.js";
 
 /**
- * 
  * @param { number } userId 
  * @returns { Account[] }
  */
@@ -14,8 +13,6 @@ async function fetch_accounts_by_user_id(userId) {
     });
     const data = await response.json();
     const accounts = data.map(account => new Account(account.id, account.type, account.description, account.balance, account.creditLine, account.beginBalance, account.beginBalanceTimestamp));
-    console.log("accounts: ", accounts);
-    console.log("type of accounts: ", typeof(accounts));
     return accounts;
 }
 
