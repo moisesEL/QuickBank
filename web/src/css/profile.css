@@ -1,3 +1,7 @@
+* {
+    box-sizing: border-box;
+}
+
 body h1 h2 h3 h4 {
     margin: 0px 0px 0px 0px !important;
 }
@@ -100,18 +104,27 @@ body h1 h2 h3 h4 {
     background-color: var(--third-background);
 }
 
+#accountsTable th {
+    justify-content: flex-start;
+}
+
+#accountsTable input {
+    width: 100%;
+}
+
 #accountsTable button {
     text-decoration: underline;
     border: none;
     padding: 2px;
+    cursor: pointer;
+}
+
+#accountsTable > caption > a {
+    font-size: xx-large;
 }
 
 #rightDiv td {
-    border: 2px;
-    border-radius: 6px;
-    border: 1px solid yellow;
-    border-collapse: separate;
-    border-spacing: 0rem 1rem;
+    border: 1px solid black;
 }
 
 @media screen and (max-width: 900px) {

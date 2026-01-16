@@ -8,6 +8,18 @@ class Account {
         this.beginBalance = beginBalance;
         this.beginBalanceTimestamp = beginBalanceTimestamp;
     }
+
+    toJSON() {
+        return {
+            id: this.id,
+            type: this.type,
+            description: this.description,
+            balance: this.balance,
+            creditLine: this.creditLine,
+            beginBalance: this.beginBalance,
+            beginBalanceTimestamp: this.beginBalanceTimestamp
+        }
+    }
 }
 
 export {

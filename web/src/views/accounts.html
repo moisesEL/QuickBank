@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="icon" type="image/x-icon" href="/QuickBank/src/assets/Favicon.ico">
+        <title>Profile</title>
+        
+        <!-- Alternative styles -->
+        <link rel="stylesheet" href="/QuickBank/src/css/light_theme.css" id="main-style" title="Light Mode">
+        <link rel='alternate stylesheet' href='/QuickBank/src/css/dark_theme.css' title="Dark Mode" disabled>
+        
+        <!-- Main style first -->
+        <link rel="stylesheet" href="/QuickBank/src/css/main.css">
+        <!-- Personal style -->
+        <link rel='stylesheet' href='/QuickBank/src/css/profile.css'>
+
+        <!-- Custom Google font import for navbar -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Kode+Mono&display=swap" rel="stylesheet">
+        <!-- Custom navBar -->
+        <script src="/QuickBank/src/components/nav_bar.js"></script>
+
+        <!-- Checks if user is logged in, if not, redirects to Index -->
+        <script>if (!sessionStorage.getItem('customer.id')) window.location.replace("/QuickBank");</script>
+
+        <!-- Custom Google icon import for password component -->
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <!-- Custom password input -->
+        <script src="../components/custom_password.js"></script>
+
+        <!-- Footer -->
+        <script src="/QuickBank/src/components/footer.js"></script>
+
+        <script type="module">
+        import build_accounts_table from "../util/build_accounts_table.js";
+        window.addEventListener("DOMContentLoaded", () => {
+            let customer = {
+                firstName: sessionStorage.getItem('customer.firstName'),
+                middleInitial: sessionStorage.getItem('customer.middleInitial'),
+                lastName: sessionStorage.getItem('customer.lastName'),
+                email: sessionStorage.getItem('customer.email'),
+                city: sessionStorage.getItem('customer.city'),
+                id: sessionStorage.getItem('customer.id'),
+                password: sessionStorage.getItem('customer.password'),
+                phone: sessionStorage.getItem('customer.phone'),
+                state: sessionStorage.getItem('customer.state'),
+                street: sessionStorage.getItem('customer.street'),
+                zip: sessionStorage.getItem('customer.zip'),
+            }
+            build_accounts_table(customer.id);
+            console.log(document.querySelector("#accountsTable").lastElementChild.firstElementChild.firstElementChild.firstElementChild);
+            console.log("Width: ", window.getComputedStyle(document.querySelector("#accountsTable tbody tr td input")[0]).getPropertyValue("width"));
+        })
+        </script>
+    </head>
+    <body>
+        <nav-bar></nav-bar>
+        <main id="mainWrapper">
+            <table id="accountsTable">
+                <caption style="text-align: start;"><h1>Accounts</h1></caption>
+                <thead>
+                    <th scope="col">
+                        <button>Id</button>
+                    </th>
+                    <th scope="col">
+                        <button>Type</button>
+                    </th>
+                    <th scope="col">
+                        <button>Description</button>
+                    </th>
+                    <th scope="col">
+                        <button>Balance</button>
+                    </th>
+                    <th scope="col">
+                        <button>Credit line</button>
+                    </th>
+                    <th scope="col">
+                        <button>Begin balance</button>
+                    </th>
+                    <th scope="col">
+                        <button>Begin balance date</button>
+                    </th>
+                </thead>
+                <tbody><!--Auto populated content--></tbody>
+            </table>
+        </main>
+    <main-footer></main-footer>    
+    </body>
+</html>

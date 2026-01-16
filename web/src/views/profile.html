@@ -57,7 +57,6 @@
             document.getElementById("customerPhone").value = customer.phone;
             document.getElementById("customerZip").value = customer.zip;
             document.getElementById("customerCity").value = customer.city;
-
             build_shortened_accounts_table(customer.id);
         })
         </script>
@@ -117,9 +116,9 @@
                 </div>
             </div>
             <div id="rightDiv">
-                <h1>Accounts:</h1>
+                
                 <table id="accountsTable">
-                    <caption style="text-align: start;">Accounts</caption>
+                    <caption style="text-align: start;"><a href="/QuickBank/src/views/accounts.html">Accounts</a></caption>
                     <thead>
                         <th scope="col">
                             <button>Type</button>
