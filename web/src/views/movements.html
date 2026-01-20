@@ -4,7 +4,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="icon" type="image/x-icon" href="/QuickBank/src/assets/Favicon.ico">
-        <title>Profile</title>
+        <title>Movements</title>
         
         <!-- Alternative styles -->
         <link rel="stylesheet" href="/QuickBank/src/css/light_theme.css" id="main-style" title="Light Mode">
@@ -37,23 +37,35 @@
         <nav-bar></nav-bar>
         <main id="mainWrapper">
             <div id="leftDiv">
-                <h1 id="leftDivTitle">Profile: Name</h1>
+                <h1 id="leftDivTitle">Transactions</h1>
                 <div id="informationWrapper">
-                    <h3>Transactions</h3>
+                    <h3>Balance: xxx </h3>
                     <div id="personalInformationWrapper">
+                        <div class="tableContainer">
+                            <div class="table-card">
+                                <table id="securityWrapper" aria-label="User Movements">
+                                    <thead>
+                                        <tr>
+                                        <th scope="col">Time and datess</th>
+                                        <th scope="col">Description</th>
+                                        <th scope="col">Amount</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
 
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
                     <hr>
                     <div id="securityWrapper">
                         <h3>Security: </h3>
                         <a id="changePasswordButton" href="/QuickBank/src/views/profile.html">Profile</a>
-                                                <a id="changePasswordButton" href="/QuickBank/src/views/accounts.html">Accounts</a>
+                        <a id="changePasswordButton" href="/QuickBank/src/views/accounts.html">Accounts</a>
 
                     </div>
                 </div>
-            </div>
-            <div id="rightDiv">
-                <h1>Balance: XXX bitcoins</h1>
             </div>
         </main>
     <main-footer></main-footer>    

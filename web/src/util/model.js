@@ -1,16 +1,3 @@
-class movement {
-    constructor(id, balance, amount, description, timestamp) {
-        this.id = id;
-        this.balance = balance;
-        this.amount = amount;
-        this.description = description;
-        this.timestamp = timestamp;
-        
-
-    }
-
-
-}
 class Account {
     constructor(id, type, description, balance, creditLine, beginBalance, beginBalanceTimestamp) {
         this.id = id;
@@ -35,6 +22,30 @@ class Account {
     }
 }
 
+class Movements {
+    constructor(id, balance, amount, description, timestamp) {
+        this.id = id;
+        this.balance = balance;
+        this.amount = amount;
+        this.description = description;
+        this.timestamp = timestamp;
+        
+
+    }
+
+    toJSON(){
+        return {
+            id: this.id,
+            balance: this.balance,
+            amount: this.amount,
+            description: this.description,
+            timestamp: this.timestamp
+        };
+    }
+
+}
+
 export {
-    Account
+    Account,
+    Movements
 };
