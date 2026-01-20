@@ -1,3 +1,7 @@
+* {
+    box-sizing: border-box;
+}
+
 body h1 h2 h3 h4 {
     margin: 0px 0px 0px 0px !important;
 }
@@ -45,7 +49,7 @@ body h1 h2 h3 h4 {
     margin-left: 4px;
 }
 
-input {
+#leftDiv input {
     background: none;
     border: none;
     border-radius: 0px;
@@ -83,12 +87,44 @@ input {
 }
 
 #rightDiv {
-    height: 100px;
-    display: flex;
+    max-height: 100%;
+    padding: 100px;
+    display: grid;
+    grid-template-rows: min-content 1fr;
+    grid-template-columns: 1fr;
     justify-content: center;
     align-items: center;
-    border-radius: 100px;
+    border-radius: 30px;
     box-shadow: 0px 1px 10px grey;
+    overflow-y: auto;
+}
+
+#accountsTable {
+    display: table;
+    background-color: var(--third-background);
+}
+
+#accountsTable th {
+    justify-content: flex-start;
+}
+
+#accountsTable input {
+    width: 100%;
+}
+
+#accountsTable button {
+    text-decoration: underline;
+    border: none;
+    padding: 2px;
+    cursor: pointer;
+}
+
+#accountsTable > caption > a {
+    font-size: xx-large;
+}
+
+#rightDiv td {
+    border: 1px solid black;
 }
 
 @media screen and (max-width: 900px) {

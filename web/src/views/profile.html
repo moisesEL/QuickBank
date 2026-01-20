@@ -31,7 +31,35 @@
         <script src="../components/custom_password.js"></script>
 
         <!-- Footer -->
-        <script src="/QuickBank/src/components/footer.js"></script>   
+        <script src="/QuickBank/src/components/footer.js"></script>
+
+        <script type="module">
+        import build_shortened_accounts_table from "../util/build_shortened_accounts_table.js";
+        window.addEventListener("DOMContentLoaded", () => {
+            let customer = {
+                firstName: sessionStorage.getItem('customer.firstName'),
+                middleInitial: sessionStorage.getItem('customer.middleInitial'),
+                lastName: sessionStorage.getItem('customer.lastName'),
+                email: sessionStorage.getItem('customer.email'),
+                city: sessionStorage.getItem('customer.city'),
+                id: sessionStorage.getItem('customer.id'),
+                password: sessionStorage.getItem('customer.password'),
+                phone: sessionStorage.getItem('customer.phone'),
+                state: sessionStorage.getItem('customer.state'),
+                street: sessionStorage.getItem('customer.street'),
+                zip: sessionStorage.getItem('customer.zip'),
+            }
+            document.getElementById("customerFirstName").value = customer.firstName;
+            document.getElementById("customerMiddleInitial").value = customer.middleInitial;
+            document.getElementById("customerLastName").value = customer.lastName;
+            document.getElementById("customerPassword").value = customer.password;
+            document.getElementById("customerEmail").value = customer.email;
+            document.getElementById("customerPhone").value = customer.phone;
+            document.getElementById("customerZip").value = customer.zip;
+            document.getElementById("customerCity").value = customer.city;
+            build_shortened_accounts_table(customer.id);
+        })
+        </script>
     </head>
     <body>
         <nav-bar></nav-bar>
@@ -89,32 +117,24 @@
                 </div>
             </div>
             <div id="rightDiv">
-                <h1>Balance: XXX bitcoins</h1>
+                
+                <table id="accountsTable">
+                    <caption style="text-align: start;"><a href="/QuickBank/src/views/accounts.html">Accounts</a></caption>
+                    <thead>
+                        <th scope="col">
+                            <button>Type</button>
+                        </th>
+                        <th scope="col">
+                            <button>Description</button>
+                        </th>
+                        <th scope="col">
+                            <button>Balance</button>
+                        </th>
+                    </thead>
+                    <tbody><!--Auto populated content--></tbody>
+                </table>
             </div>
         </main>
     <main-footer></main-footer>    
     </body>
-    <script>
-        let customer = {
-            firstName: sessionStorage.getItem('customer.firstName'),
-            middleInitial: sessionStorage.getItem('customer.middleInitial'),
-            lastName: sessionStorage.getItem('customer.lastName'),
-            email: sessionStorage.getItem('customer.email'),
-            city: sessionStorage.getItem('customer.city'),
-            id: sessionStorage.getItem('customer.id'),
-            password: sessionStorage.getItem('customer.password'),
-            phone: sessionStorage.getItem('customer.phone'),
-            state: sessionStorage.getItem('customer.state'),
-            street: sessionStorage.getItem('customer.street'),
-            zip: sessionStorage.getItem('customer.zip'),
-        }
-        document.getElementById("customerFirstName").value = customer.firstName;
-        document.getElementById("customerMiddleInitial").value = customer.middleInitial;
-        document.getElementById("customerLastName").value = customer.lastName;
-        document.getElementById("customerPassword").value = customer.password;
-        document.getElementById("customerEmail").value = customer.email;
-        document.getElementById("customerPhone").value = customer.phone;
-        document.getElementById("customerZip").value = customer.zip;
-        document.getElementById("customerCity").value = customer.city;
-    </script>
 </html>
