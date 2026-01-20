@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 class movement {
     constructor(id, balance, amount, description, timestamp) {
         this.id = id;
@@ -12,7 +11,6 @@ class movement {
 
 
 }
-=======
 class Account {
     constructor(id, type, description, balance, creditLine, beginBalance, beginBalanceTimestamp) {
         this.id = id;
@@ -40,4 +38,3 @@ class Account {
 export {
     Account
 };
->>>>>>> feature_account
