@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es"> 
 <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,6 +13,7 @@
         <!-- Main style first -->
         <link rel="stylesheet" href="/QuickBank/src/css/main.css">
         <!-- Personal style -->
+        <link rel='stylesheet' href='/QuickBank/src/css/profile.css'>
         <link rel='stylesheet' href='/QuickBank/src/css/customer.css'>
 
         <!-- Custom Google font import for navbar -->
@@ -32,74 +33,78 @@
 
         <!-- Footer -->
         <script src="/QuickBank/src/components/footer.js"></script> 
-             <!--
+             
         <script>
         sessionStorage.setItem("customer.id", "102263301");
         sessionStorage.setItem("customer.email", "jsmith@enterprise.net");
-    </script> -->
+    </script> 
     
     </head>
     <body>
         <nav-bar></nav-bar>
         <main id="mainWrapper">
+            <div id="leftDiv">
+                <h1 id="leftDivTitle">Customer</h1>
+                <div id="informationWrapper">
+                    <h3>Personal information</h3>
+                    <div id="personalInformationWrapper">
+                    <table id="accountsTable">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>First</th>
+                                <th>Last</th>
+                                <th>Init</th>
+                                <th>Street</th>
+                                <th>City</th>
+                                <th>State</th>
+                                <th>Zip</th>
+                                <th>Phone</th>
+                                <th>Email</th>
+                                <th>Password</th>
+                            </tr>
+                        </thead>
+                        <tbody id="usersTabletbody"></tbody>
+                    </table>
+                </div>
+                    <br>
+                    <div id="securityWrapper">
+                        <button id="btnCreate">Crear</button>
+                        <button id="btnEdit">Editar</button>
+                        <button id="btnDelete">Eliminar</button>
+                
+                    </div>
+                </div>
+            </div>
+            <hr>
+        
+            <section id="formSection" style="display:none;">
+                <h3 id="formTitle">Crear usuario</h3>
 
-<h2>Customer</h2>
+                <form id="userForm">
+                    <input name="firstName" placeholder="First name" required>
+                    <input name="lastName" placeholder="Last name" required>
+                    <input name="middleInitial" placeholder="Middle initial" maxlength="1">
 
-<table>
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>First</th>
-            <th>Last</th>
-            <th>MiddleInitial</th>
-            <th>Street</th>
-            <th>City</th>
-            <th>State</th>
-            <th>Zip</th>
-            <th>Phone</th>
-            <th>Email</th>
-            <th>Password</th>
-        </tr>
-    </thead>
-    <tbody id="usersTabletbody"></tbody>
-</table>
+                    <input name="street" placeholder="Street" required>
+                    <input name="city" placeholder="City" required>
+                    <input name="state" placeholder="State" required>
+                    <input name="zip" placeholder="Zip" required>
+                    <input name="phone" placeholder="Phone" required>
 
-<br>
+                    <input name="email" type="email" placeholder="Email" required>
 
-<button id="btnCreate">Crear</button>
-<button id="btnEdit">Editar</button>
-<button id="btnDelete">Eliminar</button>
+                    <button type="submit">Guardar</button>
+                    <button type="button" id="btnCancel">Cancelar</button>
+                </form>
+                </div>
+            </section>
 
-<hr>
+            
+            </main>
+        <main-footer></main-footer>
 
-<section id="formSection" style="display:none;">
-    <div id="informationWrapper"></div>
-    <h3 id="formTitle">Crear usuario</h3>
-
-    <form id="userForm">
-        <input name="firstName" placeholder="First name" required>
-        <input name="lastName" placeholder="Last name" required>
-        <input name="middleInitial" placeholder="Middle initial" maxlength="1">
-
-        <input name="street" placeholder="Street" required>
-        <input name="city" placeholder="City" required>
-        <input name="state" placeholder="State" required>
-        <input name="zip" placeholder="Zip" required>
-        <input name="phone" placeholder="Phone" required>
-
-        <input name="email" type="email" placeholder="Email" required>
-
-        <button type="submit">Guardar</button>
-        <button type="button" id="btnCancel">Cancelar</button>
-    </form>
-    </div>
-</section>
-
-</main>
-
-<main-footer></main-footer>
-
-<script src="../util/model.js"></script>
-<script src="../util/customer.js"></script>
+    <script src="../util/model.js"></script>
+    <script src="../util/customer.js"></script>
 </body>
 </html>
