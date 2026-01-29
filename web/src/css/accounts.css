@@ -1,0 +1,40 @@
+* {
+    box-sizing: border-box;
+}
+main {
+    padding: 5% 15%;
+    min-height: 100vh;
+}
+
+#accountsTable {
+    background-color: rgb(79, 145, 250);
+    padding: 10px;
+    border-top: 10px;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: min-content 1fr;
+}
+
+button {
+    padding: 2px;
+    width: 100%;
+    height: min-content;
+}
+
+.row {
+    display: grid;
+    width: 100%;
+    grid-template-columns: repeat(8, 1fr);
+}
+
+.row div {
+    width: 100%;
+}
+
+.row button, .row p, .row input {
+    border: 1px black solid;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2px 4px;
+}
