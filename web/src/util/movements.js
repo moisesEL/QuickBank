@@ -19,7 +19,6 @@ export async function renderMovements() {
         const movements = await response.json();
         tableBody.innerHTML = "";
 
-        // Ordenamos: el más reciente arriba para ver el cambio rápido
         movements.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
 
         movements.forEach(m => {
@@ -45,7 +44,7 @@ export async function renderMovements() {
     } catch (error) { console.error("Error al renderizar:", error); }
 }
 
-/* 2. CREAR MOVIMIENTO Y ACTUALIZAR CUENTA */
+/* CREAR MOVIMIENTO Y ACTUALIZAR CUENTA */
 async function saveMovementInline() {
     const amountInput = document.getElementById("newAmount");
     const descriptionSelect = document.getElementById("newDescription");
@@ -59,12 +58,12 @@ async function saveMovementInline() {
 
     try {
         const accountData = getAccountData();
-        // Calculamos el balance según el tipo de operación
+        // retirar o depositar
         const newBalance = (description === "Deposit") 
             ? accountData.balance + amount 
             : accountData.balance - amount;
 
-        // 1. Crear el objeto de movimiento (POST)
+        // (POST)  crear movimiento
         const movObj = new Movements(null, newBalance, amount, description, new Date().toISOString());
         const resMov = await fetch(`${SERVICE_URL_MOV}${encodeURIComponent(accountData.id)}`, {
             method: "POST",
@@ -74,7 +73,7 @@ async function saveMovementInline() {
 
         if (!resMov.ok) throw new Error("Server error creating movement");
 
-        // 2. Actualizar el saldo global de la cuenta (PUT)
+        // (PUT) actualizar cuents
         accountData.balance = newBalance;
         const resAcc = await fetch(SERVICE_URL_ACC, {
             method: "PUT",
@@ -84,14 +83,12 @@ async function saveMovementInline() {
 
         if (resAcc.ok) {
             sessionStorage.setItem("account", JSON.stringify(accountData));
-            amountInput.value = ""; // Limpiar el input
-            await renderMovements(); // Refrescar la tabla automáticamente
+            await renderMovements(); // cargara la tabla automáticamente
             alert("Transaction successful!");
         }
     } catch (err) { alert(err.message); }
 }
 
-/* 3. LISTENER DEL BOTÓN DE LA FILA */
 export function setupInlineListeners() {
     const btn = document.getElementById("btnConfirmMovement");
     if (btn) {
