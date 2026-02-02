@@ -8,9 +8,11 @@ main {
 
 #accountsTable {
     background-color: rgb(79, 145, 250);
-    padding: 15px;
+    padding: 40px;
     width: 100%;
+    min-height: 100vh;
     display: grid;
+    grid-template-rows: min-content 1fr;
     grid-template-columns: 1fr;
     border-top-left-radius: 15px;
     border-top-right-radius: 15px;
@@ -26,7 +28,7 @@ main {
 }
 
 .row > div {
-    background-color: white;
+    background-color: var(--primary-background);
     padding: 12px 8px;
     border-right: 1px solid #9d9d9d;
     border-left: 1px solid #9d9d9d;
@@ -53,15 +55,28 @@ main {
     justify-content: center;
 }
 
+#tableHeader {
+    height: min-content;
+}
+
+#tableBody {
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: start;
+}
+
 /* Header specific styling */
 #tableHeader .row > div {
-    background-color: #f0f0f0;
+    background-color: var(--primary-background);
+    color: var(--primary-text-color);
     font-weight: bold;
 }
 
-/* Body specific styling */
-#tableBody .row > div p, #tableBody .row > div input {
+/* Table body specific styling */
+#tableBody .row > div p, #tableBody .row > div input, #tableBody .row > div a {
     background-color: inherit;
+    color: inherit;
     width: 100%;
     height: 100%;
     display: flex;
@@ -69,19 +84,11 @@ main {
     align-items: center;
 }
 
-#tableBody .row > div p :hover, #tableBody .row > div input :hover {
-    background-color: rgb(208, 140, 57);
+a {
+    transition: none;
+    text-decoration: underline;
 }
 
-#tableBody .row:nth-child(even) div {
-    background-color: #efefef;
-}
-
-/* Remove double borders */
-.row:first-child > div:first-child {
-    border-left: none;
-}
-
-.row:last-child > div:last-child {
-    border-right: none;
+#tableBody .row div:hover,#tableBody .row div:focus{
+    background-color: var(--primary-btn-hover);
 }
