@@ -14,6 +14,7 @@
         <link rel="stylesheet" href="/QuickBank/src/css/main.css">
         <!-- Personal style -->
         <link rel='stylesheet' href='/QuickBank/src/css/profile.css'>
+        <link rel='stylesheet' href='/QuickBank/src/css/movements.css'>
 
         <!-- Custom Google font import for navbar -->
         <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -22,55 +23,64 @@
         <!-- Custom navBar -->
         <script src="/QuickBank/src/components/nav_bar.js"></script>
 
-        <!-- Checks if user is logged in, if not, redirects to Index -->
         <script>if (!sessionStorage.getItem('customer.id')) window.location.replace("/QuickBank");</script>
-
-        <!-- Custom Google icon import for password component -->
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-        <!-- Custom password input -->
         <script src="../components/custom_password.js"></script>
-
-        <!-- Footer -->
         <script src="/QuickBank/src/components/footer.js"></script>   
     </head>
-    <body>
-        <nav-bar></nav-bar>
-        <main id="mainWrapper">
-            <div id="leftDiv">
-                <h1 id="leftDivTitle">Transactions</h1>
-                <div id="informationWrapper">
-                    <h3>Balance: xxx </h3>
-                    <div id="personalInformationWrapper">
-                        <div class="tableContainer">
-                            <div class="table-card">
-                                <table id="securityWrapper" aria-label="User Movements">
-                                    <thead>
-                                        <tr>
-                                        <th scope="col">Time and datess</th>
-                                        <th scope="col">Description</th>
-                                        <th scope="col">Amount</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                    <hr>
-                    <div id="securityWrapper">
-                        <h3>Security: </h3>
-                        <a id="changePasswordButton" href="/QuickBank/src/views/profile.html">Profile</a>
-                        <a id="changePasswordButton" href="/QuickBank/src/views/accounts.html">Accounts</a>
-
+<body>
+    <nav-bar></nav-bar>
+    <main id="mainWrapper">
+        <div id="leftDiv">
+            <h1 id="leftDivTitle">Transactions</h1>
+            <div id="informationWrapper">
+                <h3>Balance: <span id="balanceDisplay">0.00 €</span></h3>
+                
+                <div class="tableContainer">
+                    <table id="movementsTable">
+                        <thead>
+                            <tr>
+                                <th>Timestamp</th>
+                                <th>Description</th>
+                                <th>Amount</th>
+                                <th>Balance</th>
+                                <th>Action</th>
+                            </tr>
+                            <tr class="input-row">
+                                <td>(Auto)</td>
+                                <td>
+                                    <select id="newDescription">
+                                        <option value="Deposit">Deposit</option>
+                                        <option value="Withdraw">Withdraw</option>
+                                    </select>
+                                </td>
+                                <td><input type="number" id="newAmount" placeholder="0.00" step="0.01"></td>
+                                <td>---</td>
+                                <td><button id="btnConfirmMovement">Confirm</button></td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            </tbody>
+                    </table>
+                </div>
+                <hr>
+                <div id="securitySection">
+                    <h3>Security:</h3>
+                    <div class="button-row">
+                        <a href="/QuickBank/src/views/profile.html" class="btn-red">Profile</a>
+                        <a href="/QuickBank/src/views/accounts.html" class="btn-red">Accounts</a>
                     </div>
                 </div>
             </div>
-        </main>
-    <main-footer></main-footer>    
-    </body>
-    <script>
-
-    </script>
+        </div>
+    </main>
+    <main-footer></main-footer>
+</body>
+<script type="module">
+    import { renderMovements, setupInlineListeners } from '../util/movements.js';
+    document.addEventListener("DOMContentLoaded", () => {
+        renderMovements();
+        setupInlineListeners();
+    });
+</script>
 </html>
