@@ -270,6 +270,9 @@ class NavBar extends HTMLElement {
                 <a href="/QuickBank/src/views/profile.html" class="dropdown-item">
                     <span>👤</span> Profile
                 </a>
+                <a href="/QuickBank/src/views/accounts.html" class="dropdown-item">
+                    <span>📊</span> Accounts
+                </a>
                 <button class="dropdown-item logout-btn">
                     <span>🚪</span> Logout
                 </button>
