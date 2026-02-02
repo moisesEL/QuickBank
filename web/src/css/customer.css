@@ -1,3 +1,39 @@
+
+#mainWrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+}
+
+/* Tabla arriba */
+#rightDiv {
+    order: 2;
+    height: auto;
+}
+
+/* Formulario y botones abajo */
+#leftDiv {
+    order: 1;
+}
+
+
+#accountsTable {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+#accountsTable th,
+#accountsTable td {
+    padding: 6px 10px;
+    border-bottom: 1px solid var(--border-color);
+    text-align: left;
+}
+
+/* fila seleccionada */
+#usersTabletbody tr.selected {
+    background-color: rgba(0, 0, 0, 0.08);
+}
+
 Button {
     display: flex;
     align-items: center;
@@ -5,4 +41,16 @@ Button {
     color: var(--primary-btn-color);
     background-color: var(--secondary-btn-background);
     height: min-content;
+}
+
+
+#userForm {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+/* botones del form ocupan todo */
+#userForm button {
+    grid-column: span 2;
 }
