@@ -84,10 +84,10 @@ navBarTemplate.innerHTML = `
     }
 
     #toggle-theme-button {
-        padding: 3px;
+        aspect-ratio: 1/1;
         width: min-content;
         height: min-content;
-        border-radius: 15px;
+        border-radius: 35px;
         cursor: pointer;
         color: purple;
         background: var(--toggle-background);
@@ -182,7 +182,7 @@ navBarTemplate.innerHTML = `
         color: var(--primary-text-color);
         background: none;
         border: none;
-        width: calc(100% - 32px);
+        width: 100%;
         cursor: pointer;
         font-size: 14px;
         transition: background-color 0.2s;
@@ -192,14 +192,8 @@ navBarTemplate.innerHTML = `
         background-color: var(--secondary-background);
     }
 
-    .logout-btn {
-        color: var(--error-border-color);
-        width: 100%;
-    }
-
-    .logout-btn:hover {
-        background-color: var(--error-border-color);
-        color: var(--primary-btn-color);
+    .accounts-btn {
+        border-radius: 0px;
     }
 
     .user-avatar {
@@ -307,7 +301,7 @@ class NavBar extends HTMLElement {
                 <a href="/QuickBank/src/views/profile.html" class="dropdown-item">
                     <span>👤</span> Profile
                 </a>
-                <a href="/QuickBank/src/views/accounts.html" class="dropdown-item">
+                <a href="/QuickBank/src/views/accounts.html" class="dropdown-item accounts-btn">
                     <span>📊</span> Accounts
                 </a>
                 <button class="dropdown-item logout-btn">

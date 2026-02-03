@@ -26,14 +26,12 @@
     width: 100%;
     gap: 0;
     background-color: #ddd;
-    border-bottom: 1px solid #9d9d9d;
 }
 
 .row > div {
     background-color: var(--primary-background);
     padding: 12px 8px;
-    border-right: 1px solid #9d9d9d;
-    border-left: 1px solid #9d9d9d;
+    border: 1px solid #9d9d9d;
     min-height: 44px;
     display: flex;
     align-items: center;

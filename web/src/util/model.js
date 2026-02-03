@@ -1,3 +1,19 @@
+class Customer {
+    constructor(email, firstName, middleInitial, lastName, password, street, city, state, zip, phone, id) {
+        this.email = email;
+        this.firstName = firstName;
+        this.middleInitial = middleInitial;
+        this.lastName = lastName;
+        this.password = password;
+        this.street = street;
+        this.city = city;
+        this.state = state;
+        this.zip = zip;
+        this.phone = phone;
+        this.id = id;
+    }
+}
+
 class Account {
     constructor(id, type, description, balance, creditLine, beginBalance, beginBalanceTimestamp) {
         this.id = id;
@@ -36,5 +52,6 @@ class Account {
 }
 
 export {
-    Account
+    Account,
+    Customer
 };
