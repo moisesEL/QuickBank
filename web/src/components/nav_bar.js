@@ -4,29 +4,46 @@ navBarTemplate.innerHTML = `
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Kode+Mono&display=swap');
 
+    * {
+        box-sizing: border-box;
+    }
+
     :host::before {
         content: '';
         display: block;
-        height: calc(50px + 20px + 5px);
-        width: 100%;
+        height: 75px;
+        width: 100vw;
     }
 
-    header {
+    nav {
         position: fixed;
         top: 0;
         left: 0;
         right: 0;
-        width: calc(100% - 120px);
-        height: 50px;
+        width: 100vw;
+        height: 75px;
         color: var(--primary-text-color);
         background-color: var(--primary-background);
-        display: flex;
-        justify-content: space-between;
         padding: 15px 60px 10px 60px;
         z-index: 100;
         font-family: 'Kode Mono', monospace;
         font-weight: 400;
         box-shadow: 0 2px 10px var(--navbar-shadow);
+    }
+
+    ul {
+        padding: 0px;
+        margin: 0px;
+        width: 100%;
+        list-style-type: none;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 10px;
+    }
+
+    #firstListedItem {
+        margin-right: auto;
     }
 
     a {
@@ -66,14 +83,6 @@ navBarTemplate.innerHTML = `
         height: 100%;
     }
 
-    #rightContainer {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        justify-items: center;
-        gap: 10px;
-    }
-
     #toggle-theme-button {
         padding: 3px;
         width: min-content;
@@ -87,6 +96,7 @@ navBarTemplate.innerHTML = `
     }
 
     #loginContainer {
+        width: 100%;
         display: flex;
         align-items: center;
         gap: 10px;
@@ -205,9 +215,21 @@ navBarTemplate.innerHTML = `
     }
 
     @media screen and (max-width: 600px) {
-        header {
-            width: calc(100% - 40px);
-            padding: 15px 20px 10px 20px;
+        nav {
+            padding: 7px 10px 5px 10px;
+            height: min-content;
+        }
+        ul {
+            flex-direction: column;
+            gap: 10px;
+        }
+        li {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
         }
         #logoText {
             font-size: 1.5em;
@@ -215,33 +237,46 @@ navBarTemplate.innerHTML = `
         #logoIcon {
             height: 38px;
         }
+        #loginContainer {
+            flex-direction: column;
+            gap: 10px;
+        }
         #loginContainer a {
             font-size: 1em;
             padding: 4px 3px;
             width: min-content;
             border-radius: 10px;
+
         }
+        :host::before {
+        height: ;
+        width: 100vw;
+    }
     }
 
 </style>
-<header>
-    <a id="logoContainer" href="/QuickBank">
-        <img id="logoIcon" src="/QuickBank/src/assets/Logo.png"/></image>
-        <h1 id="logoText">QuickBank</h1>
-    </a>
-    <div id="rightContainer">
-        <button id="toggle-theme-button">
-            <i class="material-icons" id="toggle-theme-icon">mode_night</i>
-        </button>
-    </div>
-</header>`;
+<nav aria-label="Main navigation">
+    <ul>
+        <li id="firstListedItem">
+            <a id="logoContainer" href="/QuickBank">
+                <img id="logoIcon" alt="Bitcoin Cat Logo" src="/QuickBank/src/assets/Logo.png"/></image>
+                <h1 id="logoText">QuickBank</h1>
+            </a>
+        </li>
+        <li>
+            <button id="toggle-theme-button">
+                <i class="material-icons" id="toggle-theme-icon">mode_night</i>
+            </button>
+        </li>
+    </ul>
+</nav>`;
 
 class NavBar extends HTMLElement {
     constructor() {
         super();
         this.root = this.attachShadow({mode: "open"});
         this.root.appendChild(navBarTemplate.content.cloneNode(true))
-        this.rightContainer = this.root.querySelector("#rightContainer")
+        this.ul = this.root.querySelector("ul")
         this.toggleThemeButton = this.root.querySelector("#toggle-theme-button");
         this.toggleThemeIcon = this.root.querySelector("#toggle-theme-icon");
         this.logoIcon = this.root.querySelector("#logoIcon");
@@ -250,17 +285,19 @@ class NavBar extends HTMLElement {
         this.checkTheme();
         const loginContainer = document.createElement("template");
         loginContainer.innerHTML = `
-        <div id="loginContainer">
-            <a id="signIn" href="/QuickBank/src/views/sign_in.html">
-                Sign in
-            </a>
-            <a id="signUp" href="/QuickBank/src/views/sign_up.html">
-                Sign up
-            </a>
-        </div>`;
+            <li>
+                <a id="signIn" href="/QuickBank/src/views/sign_in.html">
+                    Sign in
+                </a>
+            </li>
+            <li>
+                <a id="signUp" href="/QuickBank/src/views/sign_up.html">
+                    Sign up
+                </a>
+            </li>`;
         const dropDownMenu = document.createElement("template");
         dropDownMenu.innerHTML = `
-        <div class="dropdown-container">
+        <li class="dropdown-container">
             <button class="dropdown-button">
                 <span class="user-avatar">👤</span>
                 <span>${sessionStorage.getItem('customer.firstName') || 'User'}<span>
@@ -277,14 +314,14 @@ class NavBar extends HTMLElement {
                     <span>🚪</span> Logout
                 </button>
             </div>
-        </div>`;
+        </li>`;
 
         if (sessionStorage.getItem('customer.id')) {
-            this.rightContainer.insertBefore(dropDownMenu.content.cloneNode(true), this.rightContainer.firstElementChild)
+            this.ul.insertBefore(dropDownMenu.content.cloneNode(true), this.ul.lastElementChild)
             this.initializeDropdown();
         }
         else {
-            this.rightContainer.insertBefore(loginContainer.content.cloneNode(true), this.rightContainer.firstElementChild)
+            this.ul.insertBefore(loginContainer.content.cloneNode(true), this.ul.lastElementChild)
         }
 
         this.toggleThemeButton.addEventListener('click', () => this.toggleTheme())
