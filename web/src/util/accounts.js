@@ -1,4 +1,8 @@
-import { Account } from "./model.js"; 
+import { Account } from "./model.js";
+// GET /CRUDBankServerSide/webresources/account/customer/:idCustomer
+// GET /CRUDBankServerSide/webresources/account/:accountId
+// PUT /CRUDBankServerSide/webresources/account
+// DELETE /CRUDBankServerSide/webresources/account
 
 // Save customerId for server petitions
 let customerId = sessionStorage.getItem('customer.id')
@@ -20,9 +24,8 @@ window.addEventListener("DOMContentLoaded", () => {
         .then(() => {
             const addAccount = document.createElement("button");
             addAccount.innerText = "add account";
-            // Extracting tableBody from DOM
-            const tableBody = document.querySelector("#tableBody");
-            tableBody.appendChild(addAccount)
+            const mainWrapper = document.getElementById("mainWrapper");
+            mainWrapper.appendChild(addAccount)
         })
     } catch (error) {
         console.log(error.message);
@@ -56,25 +59,51 @@ function* account_row_generator(accounts) {
     const row = document.createElement("div");
     row.setAttribute("class", "row");
     row.setAttribute("role", "row");
-    ["id", "type", "description", "balance", "creditLine", "beginBalance", "beginBalanceTimestamp"].forEach(field => {
+    ["id", "type", "description", "balance", "creditLine", "beginBalance", "beginBalanceTimestamp", "actions"].forEach(field => {
         const cellContainer = document.createElement("div");
-        cellContainer.setAttribute("role", "cell container");
-        if (field === "id") {
+        cellContainer.setAttribute("role", "cell");
+        if (field === "actions") {
+            cellContainer.setAttribute("class", "actionsContainer");
+            const editButton = document.createElement("button");
+            editButton.setAttribute("class", "editButtons");
+            editButton.setAttribute("data-role", "edit");
+            const editIcon = document.createElement("i");
+            editIcon.setAttribute("class", "material-icons");
+            editIcon.innerText = "edit";
+            editButton.appendChild(editIcon)
+            cellContainer.appendChild(editButton);
+            const deleteButton = document.createElement("button");
+            deleteButton.setAttribute("class", "deleteButtons");
+            deleteButton.setAttribute("data-role", "delete");
+            const deleteIcon = document.createElement("i");
+            deleteIcon.setAttribute("class", "material-icons");
+            deleteIcon.innerText = "delete";
+            deleteButton.appendChild(deleteIcon)
+            cellContainer.appendChild(deleteButton);
+            row.appendChild(cellContainer);
+        }
+        else if (field === "id") {
             const cell = document.createElement("a");
             cell.setAttribute("href", `/QuickBank/src/views/movements.html?account=${account[field]}`)
             cell.setAttribute("data-role", field);
+            cell.setAttribute("title", `Movements of account: ${account[field]}`);
             cell.innerText = account[field];
             cellContainer.appendChild(cell);
             row.appendChild(cellContainer);
         }
         else {
             const cell = document.createElement("p");
-            cell.setAttribute("role", "cell");
             cell.setAttribute("data-role", field);
-            cell.innerText = account[field];
-            if (field !== "id" && field !== "beginBalance" && field !== "beginBalanceTimestamp") {
-                cell.addEventListener("dblclick", handleCellDoubleClick)
+            if (field === "beginBalanceTimestamp") {
+                cell.innerText = account[field]
+
             }
+            else
+                cell.innerText = account[field];
+            if (field === "description")
+                cell.addEventListener("dblclick", handleCellEdition)
+            else if (field === "creditLine" && account.type === "CREDIT")
+                cell.addEventListener("dblclick", handleCellEdition)
             cellContainer.appendChild(cell);
             row.appendChild(cellContainer);
         }
@@ -83,7 +112,11 @@ function* account_row_generator(accounts) {
     }
 }
 
-function handleCellDoubleClick(event) {
+/**
+ * 
+ * @param {} event 
+ */
+function handleCellEdition(event) {
     const cell = event.currentTarget;
     // Get the original cell value
     const originalValue = cell.innerText;
@@ -91,10 +124,18 @@ function handleCellDoubleClick(event) {
     // Get parent container
     const cellContainer = cell.parentNode;
 
+    // Get data-role from cell
+    const dataRole = cell.getAttribute("data-role");
+
     // Create input element
     const input = document.createElement('input');
-    input.setAttribute("data-role", cell.getAttribute("data-role"))
-    input.type = 'text';
+    input.setAttribute("data-role", dataRole)
+    if (dataRole === 'description') {
+        input.type = 'text';
+    }
+    else {
+        input.type = 'number';
+    }
     input.value = originalValue;
     input.className = 'edit-input';
     
@@ -144,11 +185,6 @@ function saveCellChanges(input, originalValue) {
         else account[cellElement.getAttribute("data-role")] = cellElement.innerText
     })
 
-    // TODO: Call to server
-    // GET /CRUDBankServerSide/webresources/account/customer/:idCustomer
-    // GET /CRUDBankServerSide/webresources/account/:accountId
-    // PUT /CRUDBankServerSide/webresources/account
-    // DELETE /CRUDBankServerSide/webresources/account
     fetch('/CRUDBankServerSide/webresources/account', {
         method: 'PUT',
         headers: {
@@ -167,7 +203,7 @@ function saveCellChanges(input, originalValue) {
         cellContainer.replaceChild(p, input);
         
         // Re-attach the double-click listener
-        p.addEventListener('dblclick', handleCellDoubleClick);
+        p.addEventListener('dblclick', handleCellEdition);
     })
     .catch(error => {
         console.log(error.message)
@@ -188,5 +224,5 @@ function cancelEdit(input, originalValue) {
     cellContainer.replaceChild(p, input);
     
     // Re-attach the double-click listener
-    p.addEventListener('dblclick', handleCellDoubleClick);
+    p.addEventListener('dblclick', handleCellEdition);
 }
