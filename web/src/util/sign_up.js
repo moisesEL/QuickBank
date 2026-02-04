@@ -16,22 +16,6 @@ class Customer {
     }
 }
 
-/**
- * 
- * @param { Customer } Customer object that encapsulates customer data 
- * @returns { Promise } Promise object that encapsulates server response
- */
-async function create_customer (customer) {
-    return await fetch(url, {
-        method: 'POST',
-        headers: {
-            "Accept": "application/json",
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(customer)
-    })
-}
-
 // When DOM is loaded, get form and add an event listener for submit to trigger a new customer creation
 window.addEventListener("DOMContentLoaded", () => {
 document.getElementById('form').addEventListener('submit', (event) => {
@@ -147,3 +131,19 @@ document.getElementById('form').addEventListener('submit', (event) => {
     }
     })
 })
+
+/**
+ * 
+ * @param { Customer } Customer object that encapsulates customer data 
+ * @returns { Promise } Promise object that encapsulates server response
+ */
+async function create_customer (customer) {
+    return await fetch(url, {
+        method: 'POST',
+        headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(customer)
+    })
+}

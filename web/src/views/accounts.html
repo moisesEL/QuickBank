@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -36,53 +36,39 @@
     <body>
         <nav-bar></nav-bar>
         <main id="mainWrapper">
-            <div role="table" aria-label="Sortable employee directory" aria-rowcount="5" aria-colcount="3" id="accountsTable">
-                <div role="rowgroup" id="tableHeader">
-                    <div class="row" role="row">
-                        <div role="columnheader">
-                            <button aria-label="Sort by id.">
-                            Id <!-- sortIcon -->
-                            </button>
+            <div role="table" aria-label="Navigatable Accounts Table" id="accountsTable">
+                <div role="rowgroup" aria-label="Table header" id="tableHeader">
+                    <div class="row" role="row" aria-label="Table Header Row">
+                        <div role="columnheader" aria-label="Id">
+                            Id
                         </div>
-                        <div role="columnheader">
-                            <button aria-label="Sort by type.">
-                            Type <!-- sortIcon -->
-                            </button>
+                        <div role="columnheader" aria-label="Type">
+                            Type
                         </div>
-                        <div role="columnheader">
-                            <button aria-label="Sort by description.">
-                            Description <!-- sortIcon -->
-                            </button>
+                        <div role="columnheader" aria-label="Description">
+                            Description
                         </div>
-                        <div role="columnheader">
-                            <button aria-label="Sort by balance.">
-                            Balance <!-- sortIcon -->
-                            </button>
+                        <div role="columnheader" aria-label="Balance">
+                            Balance
                         </div>
-                        <div role="columnheader">
-                            <button aria-label="Sort by credit line.">
-                            Credit line <!-- sortIcon -->
-                            </button>
+                        <div role="columnheader" aria-label="Credit line">
+                            Credit line
                         </div>
-                        <div role="columnheader">
-                            <button aria-label="Sort by begin balance.">
-                            Begin Balance <!-- sortIcon -->
-                            </button>
+                        <div role="columnheader" aria-label="Begin Balance">
+                            Begin Balance
                         </div>
-                        <div role="columnheader">
-                            <button aria-label="Sort by begin balance timestamp.">
-                            Begin balance timestamp <!-- sortIcon -->
-                            </button>
+                        <div role="columnheader" aria-label="Begin balance date">
+                            Begin balance date
+                        </div>
+                        <div role="columnheader" aria-label="Actions">
+                            Actions
                         </div>
                     </div>
                 </div>
-                <div role="rowgroup" id="tableBody">
-                    
-                </div>
+                <div role="rowgroup" id="tableBody" aria-label="Table body"></div>
             </div>
         </main>
         <main-footer></main-footer>    
     </body>
-    <!-- Main accounts Javascript file -->
     <script type="module" src="/QuickBank/src/util/accounts.js"></script>
 </html>
