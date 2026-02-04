@@ -48,7 +48,7 @@ input {
 }
 
 .input_error {
-    border: 2px solid red;
+    border: 2px solid var(--error-border-color);
 }
 
 label {
