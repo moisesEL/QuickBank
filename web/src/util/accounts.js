@@ -55,6 +55,7 @@ window.addEventListener("DOMContentLoaded", () => {
                     const cell = document.createElement("p");
                     cell.setAttribute("data-role", field);
                     cellContainer.appendChild(cell);
+                    cell.addEventListener("dblclick", handleCreateButton);
                 }
                 row.appendChild(cellContainer);
             })
@@ -214,21 +215,12 @@ function saveCellChanges(input, originalValue, account) {
         body: JSON.stringify(account)
     })
     .then(response => {
-        console.log(response.status)
-        // Create new p element with the updated value
-        const p = document.createElement('p');
-        p.setAttribute("data-role", input.getAttribute("data-role"))
-        p.textContent = newValue;
-        
-        // Replace input with p
-        cellContainer.replaceChild(p, input);
-        
-        // Re-attach the double-click listener
-        p.addEventListener('dblclick', (event) => {handleCellEdition(event, account)});
+        if (!response.ok) throw new Error(response.status);
+        location.reload();
     })
     .catch(error => {
-        console.log(error.message)
-        cancelEdit(input, originalValue);
+        console.log(error.message);
+        // TODO: DisplayError();
     })
 
 }
@@ -275,10 +267,109 @@ function formatAMPM(date) {
  * @param { Account } account
  */
 function handleEditButton(event, account) {
-    const editButton = event.currentTarget;
-    const row = editButton.closest(".row");
+    // Get target element
+    const eventButton = event.currentTarget;
 
-    console.log(row);
+    // On escape press, refresh webpage to close form and go back to starting point
+    document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') location.reload();
+    })
+
+    // Cancel button
+    const cancelButton = document.createElement("button");
+    cancelButton.setAttribute("class", "cancelButton");
+    cancelButton.setAttribute("data-role", "cancel");
+    // Cancel icon
+    const cancelIcon = document.createElement("i");
+    cancelIcon.setAttribute("class", "material-icons");
+    cancelIcon.innerText = "close";
+    cancelButton.appendChild(cancelIcon);
+
+    // Confirm button
+    const confirmButton = document.createElement("button");
+    confirmButton.setAttribute("class", "confirmButton");
+    confirmButton.setAttribute("data-role", "confirm");
+    // Confirm icon
+    const confirmIcon = document.createElement("i");
+    confirmIcon.setAttribute("class", "material-icons");
+    confirmIcon.innerText = "check";
+    confirmButton.appendChild(confirmIcon);
+
+    // Get the entire row
+    const row = eventButton.closest(".row");
+
+    // Replace row with a form
+    const form = document.createElement("form");
+    form.className = row.className;
+    form.setAttribute("role", "row");
+    form.setAttribute("id", "addAccountForm");
+
+    // Get all data-role elements and convert to inputs
+    const dataElements = row.querySelectorAll("[data-role]");
+    Array.from(dataElements).slice(0, -2).forEach(element => {
+        const container = document.createElement("div");
+        container.setAttribute("role", "cell");
+        
+        if (element.getAttribute("data-role") === "description") {
+            const input = document.createElement("input");
+            input.setAttribute("name", "description");
+            input.type = "text";
+            input.placeholder = "description...";
+            input.value = element.innerText;
+            container.appendChild(input);
+        }
+        else if (element.getAttribute("data-role") === "creditLine" && account.type === "CREDIT") {
+            const input = document.createElement("input");
+            input.setAttribute("name", "creditLine");
+            input.min = "0";
+            input.max = "1000000";
+            input.type = "number";
+            input.value = element.innerText;
+            container.appendChild(input);
+        }
+        else {
+            container.appendChild(element);
+        }
+        form.appendChild(container);
+    });
+
+    const container = document.createElement("div");
+    container.setAttribute("role", "cell");
+    container.setAttribute("class", "actionsContainer");
+    container.appendChild(confirmButton);
+    container.appendChild(cancelButton);
+    form.appendChild(container);
+
+    // Replace row with form
+    row.parentNode.replaceChild(form, row);
+
+    // Cancel button refreshes the page to avoid unnecesary coding
+    cancelButton.addEventListener("click", () => location.reload());
+
+    // Submit form
+    form.addEventListener("submit", (event) => {
+        event.preventDefault();
+        const form = event.currentTarget;
+        const formData = new FormData(form);
+        account.description = formData.get('description');
+        const creditLine = formData.get('creditLine');
+        if (creditLine) account.creditLine = creditLine;
+        fetch('/CRUDBankServerSide/webresources/account', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(account)
+        })
+        .then(response => {
+            if(!response.ok) throw new Error(response.status)
+            location.reload();
+        })
+        .catch(error => {
+            console.log(error.message)
+            // TODO: displayError();
+        })
+    });
 }
 
 /**
@@ -358,6 +449,11 @@ function handleDeleteButton(event, account) {
 function handleCreateButton(event) {
     // Get target element
     const eventButton = event.currentTarget;
+
+    // On escape press, refresh webpage to close form and go back to starting point
+    document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') location.reload();
+    })
 
     // Cancel button
     const cancelButton = document.createElement("button");
