@@ -21,7 +21,6 @@ body {
 
 h1, h2, h3, h4 {
     color: var(--primary-text-color);
-    
 }
 
 #form {
@@ -49,7 +48,7 @@ input {
 }
 
 .input_error {
-    border: 2px solid red;
+    border: 2px solid var(--error-border-color);
 }
 
 label {

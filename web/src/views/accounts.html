@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,7 +13,7 @@
         <!-- Main style first -->
         <link rel="stylesheet" href="/QuickBank/src/css/main.css">
         <!-- Personal style -->
-        <link rel='stylesheet' href='/QuickBank/src/css/profile.css'>
+        <link rel='stylesheet' href='/QuickBank/src/css/accounts.css'>
 
         <!-- Custom Google font import for navbar -->
         <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -32,60 +32,43 @@
 
         <!-- Footer -->
         <script src="/QuickBank/src/components/footer.js"></script>
-
-        <script type="module">
-        import build_accounts_table from "../util/build_accounts_table.js";
-        window.addEventListener("DOMContentLoaded", () => {
-            let customer = {
-                firstName: sessionStorage.getItem('customer.firstName'),
-                middleInitial: sessionStorage.getItem('customer.middleInitial'),
-                lastName: sessionStorage.getItem('customer.lastName'),
-                email: sessionStorage.getItem('customer.email'),
-                city: sessionStorage.getItem('customer.city'),
-                id: sessionStorage.getItem('customer.id'),
-                password: sessionStorage.getItem('customer.password'),
-                phone: sessionStorage.getItem('customer.phone'),
-                state: sessionStorage.getItem('customer.state'),
-                street: sessionStorage.getItem('customer.street'),
-                zip: sessionStorage.getItem('customer.zip'),
-            }
-            build_accounts_table(customer.id);
-            console.log(document.querySelector("#accountsTable").lastElementChild.firstElementChild.firstElementChild.firstElementChild);
-            console.log("Width: ", window.getComputedStyle(document.querySelector("#accountsTable tbody tr td input")[0]).getPropertyValue("width"));
-        })
-        </script>
     </head>
     <body>
         <nav-bar></nav-bar>
         <main id="mainWrapper">
-            <table id="accountsTable">
-                <caption style="text-align: start;"><h1>Accounts</h1></caption>
-                <thead>
-                    <th scope="col">
-                        <button>Id</button>
-                    </th>
-                    <th scope="col">
-                        <button>Type</button>
-                    </th>
-                    <th scope="col">
-                        <button>Description</button>
-                    </th>
-                    <th scope="col">
-                        <button>Balance</button>
-                    </th>
-                    <th scope="col">
-                        <button>Credit line</button>
-                    </th>
-                    <th scope="col">
-                        <button>Begin balance</button>
-                    </th>
-                    <th scope="col">
-                        <button>Begin balance date</button>
-                    </th>
-                </thead>
-                <tbody><!--Auto populated content--></tbody>
-            </table>
+            <div role="table" aria-label="Navigatable Accounts Table" id="accountsTable">
+                <div role="rowgroup" aria-label="Table header" id="tableHeader">
+                    <div class="row" role="row" aria-label="Table Header Row">
+                        <div role="columnheader" aria-label="Id">
+                            Id
+                        </div>
+                        <div role="columnheader" aria-label="Type">
+                            Type
+                        </div>
+                        <div role="columnheader" aria-label="Description">
+                            Description
+                        </div>
+                        <div role="columnheader" aria-label="Balance">
+                            Balance
+                        </div>
+                        <div role="columnheader" aria-label="Credit line">
+                            Credit line
+                        </div>
+                        <div role="columnheader" aria-label="Begin Balance">
+                            Begin Balance
+                        </div>
+                        <div role="columnheader" aria-label="Creation date">
+                            Creation date
+                        </div>
+                        <div role="columnheader" aria-label="Actions">
+                            Actions
+                        </div>
+                    </div>
+                </div>
+                <div role="rowgroup" id="tableBody" aria-label="Table body"></div>
+            </div>
         </main>
-    <main-footer></main-footer>    
+        <main-footer></main-footer>    
     </body>
+    <script type="module" src="/QuickBank/src/util/accounts.js"></script>
 </html>

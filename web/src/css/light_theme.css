@@ -1,27 +1,46 @@
 :root {
+    /* Text colors */
     --primary-text-color: black;
-    --primary-background: white;
+    --secondary-text-color: #202020;
     
+    /* Backgrounds */
+    --primary-background: white;
+    --secondary-background: #cccccc;
+    --third-background: rgb(213, 209, 204);
+    --form-background: #D9D9D9;
+    --footer-background: rgb(49, 49, 49);
+
+    /* Button colors */
     --primary-btn-color: white;
     --primary-btn-background: black;
     --secondary-btn-background: red;
     --primary-btn-hover: rgb(180, 180, 180);
-    --primary-login-btn-background: green;
+    --primary-login-btn-background: rgb(0, 100, 0);
     
-    --secondary-text-color: #666;
-    --secondary-background: #c8c8c8;
-    --third-background: rgb(213, 209, 204);
+    /* Borders */
     --border-color: rgba(255, 255, 255, 0.65);
-    --form-background: #D9D9D9;
+    
+    /* Accounts */
+    --accounts-header-color: white;
+    --accounts-header-background: #4219c8;
+    --accounts-background: #f5f5f5;
+    --accounts-text-color: #333333;
+    --accounts-border-color: #dddddd;
+    --accounts-header-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    
+    /* Errors */
+    --error-color: #991b1b;
+    --error-background: #fef2f2;
+    --error-border-color: #dc2626;
+    --error-icon: #b91c1c;
 
-    --error-border-color: red;
-
+    /* White? */
     --white: white;
-    --footer-background: rgb(49, 49, 49);
 
+    /* I got lost here */
     --navbar-shadow: rgba(0,0,0,0.5);
     --dropdown-content-shadow: rgba(0,0,0,0.1);
-
+    /* index.html card shadow */
     --index-card-shadow: rgba(0, 80,255, 0.4);
     --text-content-background: rgba(228, 238, 255, 0.678);
 }

@@ -8,7 +8,7 @@ body h1 h2 h3 h4 {
 
 #mainWrapper {
     background-color: var(--primary-background);
-    min-height: calc(100vh - 75px - 100px);
+    min-height: 100vh;
     line-height: 1.5; 
     padding: 50px;
     display: grid;
@@ -26,27 +26,25 @@ body h1 h2 h3 h4 {
     justify-content: center;
     justify-items: center;
     align-items: center;
+    box-shadow: 0px 1px 10px grey;
 }
 
 #informationWrapper {
-    height: 100%;
     width: 100%;
 }
 
-#informationWrapper h3,hr {
+#informationWrapper h3, hr {
     margin-left: 20px;
 }
 
-#informationWrapper > div > div {
+.infoContainer {
+    background-color: var(--third-background);
     margin: 20px;
     padding: 20px;
-    background-color: var(--third-background);
     border-radius: 5px;
-    height: min-content;
-}
-
-#informationWrapper > div > div > h4 {
-    margin-left: 4px;
+    height: max-content;
+    display: flex;
+    flex-direction: column;
 }
 
 #leftDiv input {
@@ -55,14 +53,7 @@ body h1 h2 h3 h4 {
     border-radius: 0px;
 }
 
-#personalInformationWrapper {
-    display: grid;
-    overflow: scroll;
-    grid-template-columns: auto auto;
-    grid-template-rows: auto auto;
-}
-
-#contactAndAddressWrapper {
+#personalInformationWrapper, #contactAndAddressWrapper {
     display: grid;
     overflow: scroll;
     grid-template-columns: auto auto;
@@ -82,49 +73,97 @@ body h1 h2 h3 h4 {
     align-items: center;
     padding: 5px 20px;
     color: var(--primary-btn-color);
-    background-color: var(--secondary-btn-background);
+    background-color: var(--primary-btn-background);
     height: min-content;
 }
 
 #rightDiv {
-    max-height: 100%;
     padding: 100px;
-    display: grid;
-    grid-template-rows: min-content 1fr;
-    grid-template-columns: 1fr;
-    justify-content: center;
-    align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 20px;
+    align-items: flex-start;
     border-radius: 30px;
     box-shadow: 0px 1px 10px grey;
     overflow-y: auto;
 }
 
-#accountsTable {
-    display: table;
-    background-color: var(--third-background);
+#total {
+    font-size: 1.2rem;
 }
 
-#accountsTable th {
-    justify-content: flex-start;
-}
-
-#accountsTable input {
-    width: 100%;
-}
-
-#accountsTable button {
+#accountsAnchor {
+    font-size: 2rem;
+    font-weight: 400;
     text-decoration: underline;
-    border: none;
-    padding: 2px;
-    cursor: pointer;
 }
 
-#accountsTable > caption > a {
-    font-size: xx-large;
+#accountsAnchor:hover {
+    text-decoration: none;
 }
 
-#rightDiv td {
-    border: 1px solid black;
+#accountsTable {
+    width: 100%;
+    display: grid;
+    grid-template-rows: min-content 1fr;
+    grid-template-columns: 1fr;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+}
+
+.row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    width: 100%;
+    gap: 0;
+    background-color: #ddd;
+}
+
+.row > div {
+    background-color: var(--primary-background);
+    padding: 12px 8px;
+    border: 1px solid #9d9d9d;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    word-break: break-word;
+    overflow: hidden;
+}
+
+#tableHeader {
+    height: min-content;
+}
+
+#tableBody {
+    height: min-content;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: start;
+}
+
+/* Header specific styling */
+#tableHeader .row > div {
+    background-color: var(--primary-background);
+    color: var(--primary-text-color);
+    font-weight: bold;
+}
+
+/* Table body specific styling */
+#tableBody .row > div p {
+    background-color: inherit;
+    color: inherit;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#tableBody .row div:hover, #tableBody .row div:focus {
+    background-color: var(--primary-btn-hover);
 }
 
 @media screen and (max-width: 900px) {
@@ -133,5 +172,10 @@ body h1 h2 h3 h4 {
         gap: 80px;
         display: flex;
         flex-direction: column;
+    }
+    #personalInformationWrapper, #contactAndAddressWrapper {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
     }
 }
