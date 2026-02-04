@@ -65,7 +65,7 @@ window.addEventListener("DOMContentLoaded", () => {
             tableBody.appendChild(row);
         })
     } catch (error) {
-        console.log(error.message);
+        displayError(`There was an error with the server. Try again later.`);
     }
 })
 
@@ -168,7 +168,10 @@ function handleCellEdition(event, account) {
     }
     else {
         input.type = 'number';
+        input.min = "0";
+        input.max = "1000000";
     }
+    input.placeholder = `${dataRole}...`;
     input.value = originalValue;
     input.className = 'edit-input';
     
@@ -182,49 +185,72 @@ function handleCellEdition(event, account) {
     input.addEventListener('keydown', (event) => {
         // Add event listener for saving on Enter
         if (event.key === 'Enter') {
-            saveCellChanges(input, originalValue, account);
+            saveCellChanges(input, account);
         }
         // Add event listener for canceling on escape
         if (event.key === 'Escape') {
-            cancelEdit(input, originalValue);
+            cancelCellEdit(input, originalValue, account);
         }
     });
     // Add event listener for canceling on blur
     input.addEventListener('blur', () => {
-        cancelEdit(input, originalValue);
+        cancelCellEdit(input, originalValue, account);
     });
 }
 
 /**
  * 
  * @param { HTMLInputElement } input 
- * @param { string } originalValue 
  * @param { Account } account
  */
-function saveCellChanges(input, originalValue, account) {
+function saveCellChanges(input, account) {
     // Extract new value from input
     const newValue = input.value;
-    // Get cell parent
-    const cellContainer = input.parentNode;
 
-    // Overwrite old value with new value from input
-    account[input.getAttribute("data-role")] = newValue;
-
-    // Petition to update an account on the server
-    fetch('/CRUDBankServerSide/webresources/account', {
-        method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(account)
-    })
-    .then(response => {
-        if (!response.ok) throw new Error(`There was an error editing your account. Try again later`);
-        else location.reload();
-    })
-    .catch(error => {
+    // Extract data-role from input
+    const dataRole = input.getAttribute("data-role");
+    
+    // Validations
+    try {
+        // Check if description has correct length
+        if (dataRole === 'description'){
+            if (newValue === 0)
+                throw new Error(`Your account description can't be empty`);
+            if (newValue > 60)
+                throw new Error(`Your account description can't have more than 60 characters`);
+        }
+        if (dataRole === 'creditLine') {
+            if (isNaN(parseFloat(newValue)))
+                throw new Error(`Your account's credit line has to be a number`);
+            // Check if credit line is not empty
+            if (newValue === 0)
+                throw new Error(`Your account's credit line can't be empty`);
+            // Check if credit line is not higher than balance.
+            if (newValue > account.balance)
+                throw new Error(`Your credit line can't be higher than your balance`);
+        }
+        
+        // If everything is correct. Overwrite old value with new value from input
+        account[dataRole] = newValue;
+        
+        // Petition to update an account on the server
+        fetch('/CRUDBankServerSide/webresources/account', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(account)
+        })
+        .then(response => {
+            if (!response.ok) throw new Error(`There was an error editing your account. Try again later`);
+            else location.reload();
+        })
+        .catch(error => {
+            displayError(error.message);
+        })
+    } catch (error) {
         displayError(error.message);
-    })
+    }
 }
 
 /**
@@ -233,7 +259,7 @@ function saveCellChanges(input, originalValue, account) {
  * @param { string } originalValue 
  * @param { Account } account
  */
-function cancelEdit(input, originalValue, account) {
+function cancelCellEdit(input, originalValue, account) {
     const cellContainer = input.parentNode;
     
     // Create new p element with the original value
@@ -327,6 +353,7 @@ function handleEditButton(event, account) {
             input.setAttribute("name", "creditLine");
             input.setAttribute("aria-label", "Credit line")
             input.setAttribute("data-role", "Credit line")
+            input.placeholder = "credit line...";
             input.min = "0";
             input.max = "1000000";
             input.type = "number";
@@ -360,22 +387,37 @@ function handleEditButton(event, account) {
         const form = event.currentTarget;
         const formData = new FormData(form);
         account.description = formData.get('description');
-        const creditLine = formData.get('creditLine');
-        if (creditLine) account.creditLine = creditLine;
-        fetch('/CRUDBankServerSide/webresources/account', {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(account)
-        })
-        .then(response => {
-            if(!response.ok) throw new Error(`There was an error editing your account. Try again later`);
-            else location.reload();
-        })
-        .catch(error => {
+        account.creditLine = formData.get('creditLine') || 0;
+        try {
+            // Check if description has correct length
+            if (account.description.length === 0)
+                throw new Error(`Your account description can't be empty`);
+            if (account.description.length > 60)
+                throw new Error(`Your account description can't have more than 60 characters`);
+
+            // Check if credit line is not empty
+            if (account.creditLine === 0)
+                throw new Error(`Your account's credit line can't be empty`);
+
+            // Check if credit line is not higher than balance.
+            if (account.creditLine > account.balance)
+                throw new Error(`Your credit line can't be higher than your balance`);
+
+            // If every validation goes through, update account.
+            fetch('/CRUDBankServerSide/webresources/account', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(account)
+            })
+            .then(response => {
+                if(!response.ok) throw new Error(`There was an error editing your account. Try again later`);
+                else location.reload();
+            })
+        } catch (error) {
             displayError(error.message);
-        })
+        }
     });
 }
 
@@ -551,7 +593,7 @@ function handleCreateButton(event) {
             const input = document.createElement("input");
             input.setAttribute("name", "balance");
             input.setAttribute("aria-label", "Balance");
-            input.placeholder = "Balance...";
+            input.placeholder = "balance...";
             input.min = "0";
             input.max = "1000000";
             input.type = "number";
@@ -564,7 +606,7 @@ function handleCreateButton(event) {
                 const input = document.createElement("input");
                 input.setAttribute("name", "creditLine");
                 input.setAttribute("aria-label", "Credit line");
-                input.placeholder = "Credit line...";
+                input.placeholder = "credit line...";
                 input.min = "0";
                 input.max = "1000000";
                 input.type = "number";
@@ -584,7 +626,7 @@ function handleCreateButton(event) {
                     const input = document.createElement("input");
                     input.setAttribute("name", "creditLine");
                     input.setAttribute("aria-label", "Credit line");
-                    input.placeholder = "Credit line...";
+                    input.placeholder = "credit line...";
                     input.min = "0";
                     input.max = "1000000";
                     input.type = "number";
@@ -601,19 +643,12 @@ function handleCreateButton(event) {
         }
         else if (element.getAttribute("data-role") === "beginBalance") {
             const p = document.createElement("p");
-            p.innerText = "Begin balance...";
-            p.style.cssText = 'color: #6c757d; opacity: 0.7; user-select: none; pointer-events: none;';
+            p.innerText = "0";
             const balance = form.querySelector("[name='balance']");
             balance.addEventListener("input", (event) => {
                 const balance = event.target.value;
-                if (balance == 0) {
-                    p.innerText = 'Begin balance...';
-                    p.style.cssText = 'color: #6c757d;opacity: 0.7; user-select: none; pointer-events: none;';
-                }
-                else {
-                    p.innerText = balance;
-                    p.style.cssText = 'color: var(--primary-text-color); opacity: 1; user-select: auto; pointer-events: auto;';
-                }
+                if (balance == 0) p.innerText = '0';
+                else p.innerText = balance;
             })
             container.appendChild(p);
         }
@@ -676,7 +711,7 @@ function handleCreateAccount(event) {
 
         // Check if credit line is not higher than balance.
         if (account.type === "CREDIT" && account.creditLine > account.balance)
-            throw new Error(`Your credit line cannot be lower than your balance`);
+            throw new Error(`Your credit line can't be higher than your balance`);
 
         fetch('/CRUDBankServerSide/webresources/account', {
             method: 'POST',
