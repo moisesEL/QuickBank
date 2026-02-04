@@ -5,17 +5,19 @@ import fetch_accounts_by_user_id from "./fetch_accounts_by_user_id.js";
 // GET /CRUDBankServerSide/webresources/account/:accountId
 // PUT /CRUDBankServerSide/webresources/account
 // DELETE /CRUDBankServerSide/webresources/account/:accountId
+// POST /CRUDBankServerSide/webresources/account
 
 // Save customer id for server petitions
 let customerId = sessionStorage.getItem('customer.id');
+
+// Extract tableBody from DOM
+const tableBody = document.querySelector("#tableBody");
 
 window.addEventListener("DOMContentLoaded", () => {
     try {
         // Server petition to bring all user's accounts
         fetch_accounts_by_user_id(customerId)
         .then(accounts => {
-            // Extracting tableBody from DOM
-            const tableBody = document.querySelector("#tableBody");
             // Generating each account row using a generator function
             const rowGenerator = account_row_generator(accounts);
             // Append each row to the tableBody
@@ -24,7 +26,39 @@ window.addEventListener("DOMContentLoaded", () => {
             }
         })
         .then(() => {
-            
+            // After table is populated, add an empty row for user to create new accounts
+            const row = document.createElement("div");
+            row.setAttribute("class", "row");
+            row.setAttribute("role", "row");
+            ["id", "type", "description", "balance", "creditLine", "beginBalance", "beginBalanceTimestamp", "actions"].forEach(field => {
+                // Create the cell container and give it the correct role of cell
+                const cellContainer = document.createElement("div");
+                cellContainer.setAttribute("role", "cell");
+                if (field === "actions") {
+                    cellContainer.setAttribute("class", "actionsContainer");
+                    // Create button
+                    const createButton = document.createElement("button");
+                    createButton.setAttribute("class", "createButton");
+                    createButton.setAttribute("data-role", "create");
+                    // Icon
+                    const createIcon = document.createElement("i");
+                    createIcon.setAttribute("class", "material-icons");
+                    createIcon.innerText = "add";
+                    // Appending everything to DOM
+                    createButton.appendChild(createIcon)
+                    cellContainer.appendChild(createButton);
+                    // Adding the event listeners
+                    createButton.addEventListener("click", handleCreateButton);
+                    createButton.addEventListener("keydown", (event) => {if (event.key === "Enter") handleCreateButton(event)});
+                }
+                else {
+                    const cell = document.createElement("p");
+                    cell.setAttribute("data-role", field);
+                    cellContainer.appendChild(cell);
+                }
+                row.appendChild(cellContainer);
+            })
+            tableBody.appendChild(row);
         })
     } catch (error) {
         console.log(error.message);
@@ -315,4 +349,167 @@ function handleDeleteButton(event, account) {
         })
         .catch(error => console.log(error));
     }
+}
+
+/**
+ * 
+ * @param { Event } event 
+ */
+function handleCreateButton(event) {
+    // Get target element
+    const eventButton = event.currentTarget;
+
+    // Cancel button
+    const cancelButton = document.createElement("button");
+    cancelButton.setAttribute("class", "cancelButton");
+    cancelButton.setAttribute("data-role", "cancel");
+    // Cancel icon
+    const cancelIcon = document.createElement("i");
+    cancelIcon.setAttribute("class", "material-icons");
+    cancelIcon.innerText = "close";
+    cancelButton.appendChild(cancelIcon);
+
+    // Confirm button
+    const confirmButton = document.createElement("button");
+    confirmButton.setAttribute("class", "confirmButton");
+    confirmButton.setAttribute("data-role", "confirm");
+    // Confirm icon
+    const confirmIcon = document.createElement("i");
+    confirmIcon.setAttribute("class", "material-icons");
+    confirmIcon.innerText = "check";
+    confirmButton.appendChild(confirmIcon);
+
+    // Get the entire row
+    const row = eventButton.closest(".row");
+
+    // Replace row with a form
+    const form = document.createElement("form");
+    form.className = row.className;
+    form.setAttribute("role", "row");
+    form.setAttribute("id", "addAccountForm");
+
+    // Get all data-role elements and convert to inputs
+    const dataElements = row.querySelectorAll("[data-role]");
+    Array.from(dataElements).slice(0, -1).forEach(element => {
+        const container = document.createElement("div");
+        container.setAttribute("role", "cell");
+        
+        if (element.getAttribute("data-role") === "id") {
+            const input = document.createElement("input");
+            input.setAttribute("name", "id")
+            input.type = "text";
+            input.readOnly = "true";
+            input.value = Math.floor(Math.random() * 10000000000);
+            container.appendChild(input)
+        }
+        else if (element.getAttribute("data-role") === "type") {
+            const select = document.createElement("select");
+            select.setAttribute("name", "type")
+            const optionStandard = document.createElement("option");
+            optionStandard.setAttribute("value", "STANDARD");
+            optionStandard.innerText = "STANDARD";
+            const optionCredit = document.createElement("option");
+            optionCredit.setAttribute("value", "CREDIT");
+            optionCredit.innerText = "CREDIT";
+            if (element.innerText === "CREDIT") select.tabIndex = 1;
+
+            // Appending to DOM
+            select.appendChild(optionStandard);
+            select.appendChild(optionCredit);
+            container.appendChild(select);
+        }
+        else if (element.getAttribute("data-role") === "beginBalanceTimestamp"){
+            const input = document.createElement("input");
+            input.setAttribute("name", "beginBalanceTimestamp");
+            input.type = "hidden";
+            const date = new Date();
+            input.value = date.toISOString();
+
+            const display = document.createElement("span");
+            display.innerText = `${formatAMPM(date)} - ${date.toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' })}`;
+            container.appendChild(input);
+            container.appendChild(display);
+        }
+        else if (element.getAttribute("data-role") === "description") {
+            const input = document.createElement("input");
+            input.setAttribute("name", "description");
+            input.type = "text";
+            input.placeholder = "description...";
+            container.appendChild(input);
+        }
+        else if (element.getAttribute("data-role") === "balance") {
+            const input = document.createElement("input");
+            input.setAttribute("name", "balance");
+            input.min = "0";
+            input.max = "1000000";
+            input.type = "number";
+            container.appendChild(input);
+        }
+        else if (element.getAttribute("data-role") === "creditLine") {
+            const input = document.createElement("input");
+            input.setAttribute("name", "creditLine");
+            input.min = "0";
+            input.max = "1000000";
+            input.type = "number";
+            container.appendChild(input);
+        }
+        else if (element.getAttribute("data-role") === "beginBalance") {
+            const input = document.createElement("input");
+            input.setAttribute("name", "beginBalance");
+            input.min = "0";
+            input.max = "1000000";
+            input.type = "number";
+            container.appendChild(input);
+        }
+        form.appendChild(container);
+    });
+
+    const container = document.createElement("div");
+    container.setAttribute("role", "cell");
+    container.setAttribute("class", "actionsContainer");
+    container.appendChild(confirmButton);
+    container.appendChild(cancelButton);
+    form.appendChild(container);
+
+    // Replace row with form
+    row.parentNode.replaceChild(form, row);
+
+    // Cancel button refreshes the page to avoid unnecesary coding
+    cancelButton.addEventListener("click", () => location.reload());
+
+    // Submit form
+    form.addEventListener("submit", handleFormSubmit);
+}
+
+/**
+ * 
+ * @param { Event } event
+*/
+function handleFormSubmit(event) {
+    event.preventDefault();
+    const form = event.target;
+    const formData = new FormData(form);
+    const account = new Account();
+
+    // Map form fields to account
+    account.id = formData.get('id');
+    account.type = formData.get('type');
+    account.description = formData.get('description');
+    account.balance = parseFloat(formData.get('balance') || 0);
+    account.creditLine = parseFloat(formData.get('creditLine') || 0);
+    account.beginBalance = parseFloat(formData.get('beginBalance') || 0);
+    account.beginBalanceTimestamp = formData.get('beginBalanceTimestamp');
+
+    fetch('/CRUDBankServerSide/webresources/account', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(account)
+    })
+    .then(response => {
+        if (!response.ok) throw new Error (response.status);
+        location.reload();
+    })
+    .catch(error => console.log(error.message))
 }
