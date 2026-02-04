@@ -25,6 +25,11 @@
 
         <script>if (!sessionStorage.getItem('customer.id')) window.location.replace("/QuickBank");</script>
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        
+
+        <script src="/QuickBank/src/util/model.js"></script>
+        <script type="module" src="/QuickBank/src/util/movements.js"></script>
+
         <script src="../components/custom_password.js"></script>
         <script src="/QuickBank/src/components/footer.js"></script>   
     </head>
@@ -32,14 +37,12 @@
     <nav-bar></nav-bar>
     <main id="mainWrapper">
         <div id="leftDiv">
-            <h1 id="leftDivTitle">Transactions</h1>
-            <div id="informationWrapper">
-                <h3>Balance: <span id="balanceDisplay">0.00 €</span></h3>
-                
+            <h1 id="leftDivTitle">Movements</h1>
+            <div id="informationWrapper">                
                 <div class="tableContainer">
                     <table id="movementsTable">
                         <thead>
-                            <tr>
+                            <tr class="rowheader">
                                 <th>Timestamp</th>
                                 <th>Description</th>
                                 <th>Amount</th>
@@ -47,20 +50,19 @@
                                 <th>Action</th>
                             </tr>
                             <tr class="input-row">
-                                <td>(Auto)</td>
+                                <td>Time</td>
                                 <td>
                                     <select id="newDescription">
                                         <option value="Deposit">Deposit</option>
-                                        <option value="Withdraw">Withdraw</option>
+                                        <option value="Payment">Payment</option>
                                     </select>
                                 </td>
-                                <td><input type="number" id="newAmount" placeholder="0.00" step="0.01"></td>
+                                <td><input type="number" id="newAmount" placeholder="0.00" step="0.01" required></td>
                                 <td>---</td>
                                 <td><button id="btnConfirmMovement">Confirm</button></td>
                             </tr>
                         </thead>
-                        <tbody>
-                            </tbody>
+                        <tbody><!-- Tabla generada--></tbody>
                     </table>
                 </div>
                 <hr>
@@ -76,11 +78,6 @@
     </main>
     <main-footer></main-footer>
 </body>
-<script type="module">
-    import { renderMovements, setupInlineListeners } from '../util/movements.js';
-    document.addEventListener("DOMContentLoaded", () => {
-        renderMovements();
-        setupInlineListeners();
-    });
-</script>
+
 </html>
+

@@ -11,16 +11,30 @@ class Account {
 
     toJSON() {
         return {
-            id: this.id,
-            type: this.type,
-            description: this.description,
             balance: this.balance,
-            creditLine: this.creditLine,
             beginBalance: this.beginBalance,
-            beginBalanceTimestamp: this.beginBalanceTimestamp
+            beginBalanceTimestamp: this.beginBalanceTimestamp,
+            creditLine: this.creditLine,
+            customers: [{
+                firstName: sessionStorage.getItem('customer.firstName'),
+                middleInitial: sessionStorage.getItem('customer.middleInitial'),
+                lastName: sessionStorage.getItem('customer.lastName'),
+                email: sessionStorage.getItem('customer.email'),
+                city: sessionStorage.getItem('customer.city'),
+                id: sessionStorage.getItem('customer.id'),
+                password: sessionStorage.getItem('customer.password'),
+                phone: sessionStorage.getItem('customer.phone'),
+                state: sessionStorage.getItem('customer.state'),
+                street: sessionStorage.getItem('customer.street'),
+                zip: sessionStorage.getItem('customer.zip'),
+            }],
+            description: this.description,
+            id: this.id,
+            type: this.type
         }
     }
 }
+
 
 class Movements {
     constructor(id, balance, amount, description, timestamp) {
