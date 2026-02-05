@@ -9,6 +9,7 @@ function sumAccountsBalances(toAppendOn) {
     // Create p element to attach to DOM
     const total = document.createElement("p");
     total.setAttribute("id", "total")
+    total.setAttribute("class", "totalBalance");
     total.style.fontSize = '1.2rem';
     total.innerHTML = `Your total account's balance is <strong>${sum}</strong>`;
     toAppendOn.appendChild(total);

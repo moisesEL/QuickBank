@@ -222,6 +222,20 @@ a {
     background-color: #28a745;
 }
 
+.balance::after,
+.beginBalance::after,
+.creditLine::after {
+    content: "€";
+    margin-left: 3px;
+    font-weight: 300;
+}
+
+.totalBalance::after {
+    content: "€";
+    margin-left: 3px;
+    font-weight: bold;
+}
+
 @media screen and (max-width: 900px) {
     #mainWrapper {
         margin: 2%;

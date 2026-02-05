@@ -159,6 +159,7 @@ function* shortened_account_row_generator(accounts) {
         }
         const cell = document.createElement("p");
         cell.setAttribute("data-role", field);
+        cell.setAttribute("class", field);
         cell.innerText = account[field];
 
         // Appending every element to the DOM
