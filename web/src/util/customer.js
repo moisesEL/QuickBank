@@ -10,7 +10,7 @@ const main = document.getElementById("mainWrapper");
 let selectedUser = null;
 
 /* =========================
-   MENSAJES ******
+   ****** MENSAJES ******
 ========================= */
 function displayError(message) {
     document.querySelectorAll('.error').forEach(element => element.remove());
