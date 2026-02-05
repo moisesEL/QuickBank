@@ -76,7 +76,14 @@ window.addEventListener("DOMContentLoaded", () => {
                 sessionStorage.setItem("customer.zip", data.zip);
                 sessionStorage.setItem("customer.password", data.password);
 
-                window.location.replace("/QuickBank/src/views/profile.html");
+               /* solo los admin entraran a customer los demas usuario iran a la pgina de profile */
+                 const email = sessionStorage.getItem("customer.email");
+
+                if (email.endsWith("@admin.com")) {
+                    window.location.href = "customer.html";
+                } else {
+                    window.location.href = "profile.html";
+                }
             })
             .catch(error => {
                 // Mostrar mensaje de error

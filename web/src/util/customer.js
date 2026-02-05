@@ -1,129 +1,201 @@
-// ...existing code...
-import { Customer } from "./model.js"; 
+import { Customer } from "./model.js";
 
 const SERVICE_URL = "/CRUDBankServerSide/webresources/customer";
+const tableBody = document.getElementById("tableBody");
+const forSection = document.getElementById("forSection"); 
+const form = document.getElementById("form"); 
+const title = document.getElementById("formTitle");
+const main = document.getElementById("mainWrapper");
 
 let selectedUser = null;
 
 /* =========================
-   GENERAR PASSWORD
+   MENSAJES ******
 ========================= */
-export function generatePassword(length = 8) {
-    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-    let Password = "";
-    for (let i = 0; i < length; i++) {
-        Password += chars.charAt(Math.floor(Math.random() * chars.length));
-    }
-    return Password;
+function displayError(message) {
+    document.querySelectorAll('.error').forEach(element => element.remove());
+    const error = document.createElement("span");
+    error.setAttribute("class", "error");
+    error.setAttribute("role", "alert");
+    error.setAttribute("aria-live", "assertive");
+    error.innerText = message;
+    alertContainer.appendChild(error);
 }
 
+function displaySuccess(message) {
+    document.querySelectorAll('.success').forEach(element => element.remove());
+    const success = document.createElement("span");
+    success.setAttribute("class", "success");
+    success.setAttribute("role", "alert");
+    success.setAttribute("aria-live", "assertive");
+    success.innerText = message;
+    alertContainer.appendChild(success);
+}
+
+function clearMessage() {
+    document.querySelectorAll('.error, .success').forEach(element => element.remove());
+}
 
 /* =========================
-   CARGAR USUARIOS
+   GENERAR PASSWORD
+========================= */
+function generatePassword(length = 8) {
+    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    let pwd = "";
+    for (let i = 0; i < length; i++) {
+        pwd += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return pwd;
+}
+
+/* =========================
+   CARGAR USUARIOS 
 ========================= */
 export async function loadUsers() {
+    tableBody.innerHTML = "";
+    clearMessage();
     try {
-        console.log("Buscando customers en:", SERVICE_URL);
-        const res = await fetch(SERVICE_URL, {
-            headers: { "Accept": "application/json" },
-            credentials: "same-origin" // conserva cookies/sesión si aplica
-        });
-        console.log("Respuesta fetch customers:", res.status, res.statusText);
+        const res = await fetch(SERVICE_URL, { headers: { "Accept": "application/json" } });
+        if (!res.ok) throw new Error("Error loading users. Try again."); 
+        const users = await res.json();
 
-        if (!res.ok) {
-            const txt = await res.text().catch(() => "<no body>");
-            console.error("Error HTTP al solicitar customers:", res.status, txt);
-            throw new Error(`HTTP ${res.status} - ${txt}`);
-        }
+        for (let i = 0; i < users.length; i++) {
+            const user = users[i];
+            const row = document.createElement("div");
+            row.className = "row";
+            row.setAttribute("role", "row");
 
-        let users;
-        try {
-            users = await res.json();
-        } catch (parseErr) {
-            console.error("No se pudo parsear JSON de customers:", parseErr);
-            throw new Error("Respuesta del servidor no es JSON válido.");
-        }
-
-        if (!Array.isArray(users)) {
-            console.warn("Se esperaba un array de usuarios, se recibió:", users);
-            users = users ? [users] : [];
-        }
-
-        const tbody = document.getElementById("usersTabletbody");
-        if (!tbody) {
-            console.error("No se encontró el elemento #usersTabletbody en el DOM.");
-            return;
-        }
-
-        tbody.innerHTML = "";
-
-        (users || []).forEach(user => {
-            const tr = document.createElement("tr");
-            tr.innerHTML = `
-                <td>${user.id}</td>
-                <td>${user.firstName}</td>
-                <td>${user.lastName}</td>
-                <td>${user.middleInitial || ""}</td>
-                <td>${user.street}</td>
-                <td>${user.city}</td>
-                <td>${user.state}</td>
-                <td>${user.zip}</td>
-                <td>${user.phone}</td>
-                <td>${user.email}</td>
-                <td>******</td>
+            row.innerHTML = `
+                <div role="cell">${user.id}</div>
+                <div role="cell">${user.firstName}</div>
+                <div role="cell">${user.lastName}</div>
+                <div role="cell">${user.middleInitial || ""}</div>
+                <div role="cell">${user.street}</div>
+                <div role="cell">${user.city}</div>
+                <div role="cell">${user.state}</div>
+                <div role="cell">${user.zip}</div>
+                <div role="cell">${user.phone}</div>
+                <div role="cell">${user.email}</div>
+                <div role="cell">******</div>
+                <div role="cell" class="actionsContainer">
+                    <button class="editButton" aria-label="Edit user">Edit</button>
+                    <button class="deleteButton" aria-label="Delete user">Delete</button>
+                </div>
             `;
-            tr.onclick = () => {
-                document.querySelectorAll("#usersTabletbody tr").forEach(r => r.classList.remove("selected"));
-                tr.classList.add("selected");
+
+            row.onclick = () => {
+                // Limpiamos selección anterior
+                const allRows = document.querySelectorAll(".row");
+                for (let j = 0; j < allRows.length; j++) {
+                    allRows[j].classList.remove("selected");
+                }
+                row.classList.add("selected");
                 selectedUser = user;
             };
-            tbody.appendChild(tr);
-        });
+
+            row.querySelector(".editButton").addEventListener("click", (e) => {
+                e.stopPropagation();
+                editUser(user);
+            });
+
+            row.querySelector(".deleteButton").addEventListener("click", (e) => {
+                e.stopPropagation();
+                deleteUser(user);
+            });
+
+            tableBody.appendChild(row);
+        }
+
+        // Fila vacía para create
+        const createRow = document.createElement("div");
+        createRow.className = "row";
+        createRow.setAttribute("role", "row");
+        createRow.innerHTML = `
+            <div role="cell"></div>
+            <div role="cell"></div>
+            <div role="cell"></div>
+            <div role="cell"></div>
+            <div role="cell"></div>
+            <div role="cell"></div>
+            <div role="cell"></div>
+            <div role="cell"></div>
+            <div role="cell"></div>
+            <div role="cell"></div>
+            <div role="cell"></div>
+            <div role="cell" class="actionsContainer">
+                <button class="createButton" aria-label="Create user">Create</button>
+            </div>
+        `;
+        createRow.querySelector(".createButton").addEventListener("click", handleCreateButton);
+        tableBody.appendChild(createRow);
+
     } catch (err) {
-        console.error("Error cargando usuarios:", err);
-        // Mensaje visible al usuario
-        alert("Error cargando usuarios: " + (err.message || err));
+        console.error(err);
+        displayError("Error loading users. Try again.");
     }
 }
-// ...existing code...
-const formSection = document.getElementById("formSection");
-const form = document.getElementById("userForm");
-const title = document.getElementById("formTitle");
 
-/* CREATE */
-document.getElementById("btnCreate").onclick = () => {
+/* =========================
+   FUNCIONES DE LOS  BOTONES
+========================= */
+function handleCreateButton() {
     selectedUser = null;
     form.reset();
-    title.textContent = "Crear usuario";
-    formSection.style.display = "block";
-};
+    title.textContent = "Create user";
+    forSection.style.display = "block";
+    form.elements["firstName"].focus();
+}
 
-/* EDIT */
-document.getElementById("btnEdit").onclick = () => {
-    if (!selectedUser) {
-        alert("Selecciona un usuario para editar");
+function editUser(user) {
+    selectedUser = user;
+    title.textContent = "Edit user";
+    const keys = Object.keys(user);
+    for (let i = 0; i < keys.length; i++) {
+        const key = keys[i];
+        if (form.elements[key]) {
+            form.elements[key].value = user[key];
+        }
+    }
+    forSection.style.display = "block";
+    form.elements["firstName"].focus(); 
+}
+
+function deleteUser(user) {
+    if (!user) {
+        displayError("Select a user to delete."); 
         return;
     }
-    title.textContent = "Editar usuario";
-    Object.keys(selectedUser).forEach(key => {
-        if (form.elements[key]) form.elements[key].value = selectedUser[key];
-    });
-    formSection.style.display = "block";
-};
+    if (user.email === sessionStorage.getItem("customer.email")) {
+        displayError("You cannot delete your own user.");
+        return;
+    }
+ 
+    fetch(`${SERVICE_URL}/${user.id}`, { method: "DELETE" })
+        .then(response => {
+            if (!response.ok) throw new Error("Error deleting user"); 
+            displaySuccess("User deleted successfully.");
+            selectedUser = null;
+            loadUsers();
+        })
+        .catch(err => {
+            console.error(err);
+            displayError("Error deleting user. Try again."); 
+        });
+}
 
-/* CANCEL */
-document.getElementById("btnCancel").onclick = () => {
-    formSection.style.display = "none";
+/* =========================
+   MANEJO DEL FORMULARIO
+========================= */
+document.getElementById("btnCancel").addEventListener("click", () => {
+    forSection.style.display = "none"; 
     selectedUser = null;
-};
+});
 
-/* SAVE (POST / PUT) */
-form.onsubmit = async e => {
+form.addEventListener("submit", async (e) => {
     e.preventDefault();
-    if (!confirm("¿Seguro que quieres guardar los cambios?")) return;
-
+    clearMessage();
     const formData = new FormData(form);
-    const password = generatePassword(); // password aleatoria
+    const password = generatePassword();
 
     const customer = new Customer(
         selectedUser ? selectedUser.id : null,
@@ -139,50 +211,29 @@ form.onsubmit = async e => {
         password
     );
 
-    const method = selectedUser ? "PUT" : "POST";
+    // Validaciones simples
+    if (!customer.firstName || !customer.lastName || !customer.street || !customer.city || !customer.state || !customer.zip || !customer.phone || !customer.email) {
+        displayError("All fields are required."); 
+        return;
+    }
 
     try {
+        const method = selectedUser ? "PUT" : "POST";
         const res = await fetch(SERVICE_URL, {
             method,
             headers: { "Content-Type": "application/json", "Accept": "application/json" },
             body: JSON.stringify(customer)
         });
-        if (!res.ok) throw new Error("Error al guardar el usuario");
-
-        alert("Usuario guardado correctamente");
-        formSection.style.display = "none";
+        if (!res.ok) throw new Error("Error saving user");
+        displaySuccess("User saved successfully."); 
+        forSection.style.display = "none"; 
         selectedUser = null;
         loadUsers();
     } catch (err) {
         console.error(err);
-        alert(err.message);
+        displayError("Error saving user. Try again."); 
     }
-};
-
-/* DELETE */
-document.getElementById("btnDelete").onclick = async () => {
-    if (!selectedUser) {
-        alert("Selecciona un usuario para eliminar");
-        return;
-    }
-    if (selectedUser.email === sessionStorage.getItem("customer.email")) {
-        alert("No puedes eliminar tu propio usuario");
-        return;
-    }
-    if (!confirm(`¿Seguro que quieres eliminar a ${selectedUser.email}?`)) return;
-
-    try {
-        const res = await fetch(`${SERVICE_URL}/${selectedUser.id}`, { method: "DELETE" });
-        if (!res.ok) throw new Error("Error al eliminar usuario");
-
-        alert("Usuario eliminado correctamente");
-        selectedUser = null;
-        loadUsers();
-    } catch (err) {
-        console.error(err);
-        alert(err.message);
-    }
-};
+});
 
 /* CARGAR INICIALMENTE */
 loadUsers();

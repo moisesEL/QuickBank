@@ -1,56 +1,350 @@
+/*asocioado a account con formulario*/
 
+/* Ajustes específicos para customer: layout y formulario *//*
 #mainWrapper {
+    padding: 3% 4% 1% 3%;
+    margin: 30px 2% 30px 2%;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
     display: flex;
-    flex-direction: column;
-    gap: 40px;
+    flex-direction: column; 
+    gap: 20px;
+    justify-content: flex-start;
+    align-items: center; 
+    box-shadow: 0px 1px 10px grey;
 }
 
-/* Tabla arriba */
-#rightDiv {
-    order: 2;
-    height: auto;
-}
-
-/* Formulario y botones abajo */
-#leftDiv {
-    order: 1;
-}
-
-
-#accountsTable {
+#alertContainer {
     width: 100%;
-    border-collapse: collapse;
+    text-align: center; 
 }
 
-#accountsTable th,
-#accountsTable td {
-    padding: 6px 10px;
-    border-bottom: 1px solid var(--border-color);
-    text-align: left;
+#contentWrapper {
+    display: flex;
+    flex-direction: row; 
+    gap: 20px;
+    width: 100%;
+    justify-content: flex-start;
+    align-items: flex-start;
 }
 
-/* fila seleccionada */
-#usersTabletbody tr.selected {
-    background-color: rgba(0, 0, 0, 0.08);
+#customersTable {
+    flex: 1;
+    min-height: 100vh;
+    display: grid;
+    grid-template-rows: min-content 1fr;
+    grid-template-columns: 1fr;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
 }
 
-Button {
+.row {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr); /* 12 columnas para customer (distintivo) *//*
+    width: 100%;
+    gap: 0;
+    background-color: var(--accounts-background);
+}
+
+/* Estilos para el formulario (a la derecha, compacto) *//*
+#forSection {
+    display: none;
+    width: 300px;
+    background-color: var(--secondary-background);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 1px 10px grey;
+}
+
+.form-buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.forSection-buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+/* Colores específicos: verde para Save/Create, rojo para Cancel/Delete *//*
+.createButton,
+.confirmButton {
+    background-color: #28a745; 
+}
+
+.cancelButton,
+.deleteButton {
+    background-color: #dc3545; 
+}
+
+
+@media screen and (max-width: 900px) {
+    #mainWrapper {
+        margin: 2%;
+    }
+    .row {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        padding-bottom: 15px;
+    }
+    #tableBody .row {
+        padding-bottom: 15px;
+        margin-bottom: 15px;
+        border-bottom: 2px dashed grey;
+    }
+    #tableHeader {
+        display: none;
+    }
+
+    .row > div {
+        display:flex;
+        flex-direction: column;
+        gap: 2px;
+    }
+
+    .row > div > p {
+        min-height: 20px;
+    }
+
+    .title {
+        font-weight: bold;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+}
+
+*/
+
+
+/* CSS independiente, customer.css formilario*/
+
+/* Layout principal: apilar elementos verticalmente */
+#mainWrapper {
+    padding: 3% 4% 1% 3%;
+    margin: 30px 2% 30px 2%;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    display: flex;
+    flex-direction: column; /* Apilar elementos verticalmente */
+    gap: 20px;
+    justify-content: flex-start;
+    align-items: center; /* Centrar horizontalmente */
+    box-shadow: 0px 1px 10px grey;
+}
+
+#alertContainer {
+    width: 100%;
+    text-align: center; /* Centrar alertas arriba */
+}
+
+#contentWrapper {
+    display: flex;
+    flex-direction: row; /* Tabla izquierda, formulario derecha */
+    gap: 20px;
+    width: 100%;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+
+#customersTable {
+    flex: 1; /* Toma espacio restante */
+    min-height: 100vh;
+    display: grid;
+    grid-template-rows: min-content 1fr;
+    grid-template-columns: 1fr;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+}
+
+.row {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr); /* 12 columnas para customer */
+    width: 100%;
+    gap: 0;
+    background-color: var(--secondary-background); /* De main.css */
+}
+
+.row > div {
+    background-color: var(--secondary-background); /* De main.css */
+    padding: 12px 8px;
+    border: 1px solid rgba(155, 155, 155, 0.4);
+    min-height: 44px;
     display: flex;
     align-items: center;
-    padding: 5px 20px;
-    color: var(--primary-btn-color);
-    background-color: var(--secondary-btn-background);
+    justify-content: center;
+    word-break: break-word;
+    overflow: hidden;
+}
+
+/* Header de tabla */
+#tableHeader, #tableHeader .row {
     height: min-content;
+    border-top-left-radius: 30px;
+    border-top-right-radius: 30px;
 }
 
+#tableHeader .row > div {
+    color: var(--accounts-header-color);
+    background: var(--accounts-header-background);
+    font-weight: 600;
+}
 
-#userForm {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+#tableHeader .row > div:first-child {
+    border-top-left-radius: 30px;
+}
+#tableHeader .row > div:last-child {
+    border-top-right-radius: 30px;
+}
+
+/* Body de tabla */
+#tableBody {
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: start;
+}
+
+#tableBody .row > div p,
+#tableBody .row > div input,
+#tableBody .row > div a {
+    background-color: inherit;
+    color: inherit;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+a {
+    transition: none;
+    text-decoration: underline;
+}
+
+#tableBody .row div:hover,
+#tableBody .row div:focus {
+    background-color: var(--primary-btn-hover);
+}
+
+.actionsContainer {
+    display: flex;
     gap: 10px;
+    justify-content: center;
+    align-items: center;
 }
 
-/* botones del form ocupan todo */
-#userForm button {
-    grid-column: span 2;
+.editButton,
+.deleteButton,
+.createButton,
+.cancelButton,
+.confirmButton {
+    color: var(--white); 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 5px;
+    border-radius: 25px;
+    cursor: pointer;
+    border: none;
+    font-size: 0.9rem;
 }
+
+.editButton:hover,
+.deleteButton:hover,
+.createButton:hover,
+.cancelButton:hover,
+.confirmButton:hover {
+    opacity: 0.5;
+}
+
+/* Colores específicos: verde para Save/Create, rojo para Cancel/Delete */
+.createButton,
+.confirmButton {
+    background-color: #28a745; 
+}
+
+.cancelButton,
+.deleteButton {
+    background-color: #dc3545; 
+}
+
+/* Estilos para el formulario (a la derecha, compacto) */
+#forSection {
+    display: none;
+    width: 300px;
+    background-color: var(--secondary-background); 
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 1px 10px grey;
+}
+
+.form-buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+/* Alertas */
+.error {
+    color: var(--primary-text-color); 
+    background-color: var(--primary-background);
+    padding: 10px;
+    font-weight: 700;
+    font-size: 1.2rem;
+    border: 3px solid var(--error-border-color); 
+    text-align: center;
+}
+
+.success {
+    color: var(--primary-text-color); 
+    background-color: var(--primary-background); 
+    padding: 10px;
+    font-weight: 700;
+    font-size: 1.2rem;
+    border: 3px solid green;
+    text-align: center;
+}
+
+/* Responsividad: en pantallas pequeñas, apilar tabla arriba y formulario abajo */
+@media screen and (max-width: 900px) {
+    #mainWrapper {
+        margin: 2%;
+    }
+    .row {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        padding-bottom: 15px;
+    }
+    #tableBody .row {
+        padding-bottom: 15px;
+        margin-bottom: 15px;
+        border-bottom: 2px dashed grey;
+    }
+    #tableHeader {
+        display: none;
+    }
+
+    .row > div {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+    }
+
+    .row > div > p {
+        min-height: 20px;
+    }
+
+    .title {
+        font-weight: bold;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+}
+
