@@ -272,12 +272,17 @@ class NavBar extends HTMLElement {
         voidBox.style = "content: '';display: block;width: 100%;";
         voidBox.style.height = getComputedStyle(this.nav).height;
         this.root.insertBefore(voidBox, this.nav);
-        window.addEventListener("DOMContentLoaded", () => {
-            voidBox.style.height = getComputedStyle(this.nav).height;
-        });
-        window.addEventListener("resize", () => {
-            voidBox.style.height = getComputedStyle(this.nav).height;
-        });
+        
+        const updateVoidBoxHeight = () => {
+            // I need to use requestAnimationFrame because otherwise I would be
+            // calculating the height when the expandable navigation modal isn't
+            // still hidden, thus giving me the wrong height.
+            requestAnimationFrame(() => {
+                requestAnimationFrame(() => {
+                    voidBox.style.height = getComputedStyle(this.nav).height;
+                });
+            });
+        };
 
         const loginContainer = document.createElement("template");
         loginContainer.innerHTML = `
@@ -321,6 +326,14 @@ class NavBar extends HTMLElement {
         }
 
         this.toggleThemeButton.addEventListener('click', () => this.toggleTheme())
+
+        // Update height after everything is added to DOM
+        updateVoidBoxHeight();
+
+        // Update on window events
+        window.addEventListener("DOMContentLoaded", updateVoidBoxHeight);
+        window.addEventListener("resize", updateVoidBoxHeight);
+        window.addEventListener("load", updateVoidBoxHeight);
     }
 
     checkTheme() {
