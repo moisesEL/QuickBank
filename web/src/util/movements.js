@@ -110,8 +110,20 @@ export async function renderMovements() {
 
        const movements = await GetMovements(accountId);
        tableBody.innerHTML = "";
+       console.log(fullAccount.type); 
 
-       movements.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+        document.getElementById("typeAccount").textContent = fullAccount.type;
+        document.getElementById("balance").textContent = fullAccount.balance;
+
+       if (fullAccount.type === "CREDIT") {
+            document.getElementById("creditLine").textContent = fullAccount.creditLine;
+       } else {
+            document.getElementById("creditContainer").style.display = "none";
+
+       }
+
+
+        movements.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
 
        const rowGenerator = movementRowGenerator(movements);
        for (const row of rowGenerator) {
@@ -138,6 +150,11 @@ async function saveMovementInline() {
    if (isNaN(amount)) {
        alert("Introduce un valor numérico válido");
        return;
+   }
+
+   if (description === "Payment" && accountData.balance < amount) {
+      alert("Saldo negativo error");
+      return;
    }
 
 
