@@ -8,7 +8,6 @@ navBarTemplate.innerHTML = `
     box-sizing: border-box;
 }
 
-
 nav {
     position: fixed;
     top: 0;
@@ -270,9 +269,12 @@ class NavBar extends HTMLElement {
     connectedCallback () {
         this.checkTheme();
         const voidBox = document.createElement("div");
-        voidBox.style = "content: '';display: block;width: 100%;"
+        voidBox.style = "content: '';display: block;width: 100%;";
         voidBox.style.height = getComputedStyle(this.nav).height;
         this.root.insertBefore(voidBox, this.nav);
+        window.addEventListener("DOMContentLoaded", () => {
+            voidBox.style.height = getComputedStyle(this.nav).height;
+        });
         window.addEventListener("resize", () => {
             voidBox.style.height = getComputedStyle(this.nav).height;
         });

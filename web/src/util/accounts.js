@@ -37,6 +37,31 @@ window.addEventListener("DOMContentLoaded", () => {
                 // Create the cell container and give it the correct role of cell
                 const cellContainer = document.createElement("div");
                 cellContainer.setAttribute("role", "cell");
+                switch (field) {
+                    case "id":
+                        cellContainer.setAttribute("data-title", "Id");
+                        break;
+                    case "type":
+                        cellContainer.setAttribute("data-title", "Type");
+                        break;
+                    case "description":
+                        cellContainer.setAttribute("data-title", "Description");
+                        break;
+                    case "balance":
+                        cellContainer.setAttribute("data-title", "Balance");
+                        break;
+                    case "creditLine":
+                        cellContainer.setAttribute("data-title", "Credit line");
+                        break;
+                    case "beginBalance":
+                        cellContainer.setAttribute("data-title", "Begin balance");
+                        break;
+                    case "beginBalanceTimestamp":
+                        cellContainer.setAttribute("data-title", "Creation date");
+                        break;
+                    default:
+                        break;
+                }
                 if (field === "actions") {
                     cellContainer.setAttribute("class", "actionsContainer");
                     // Create button
@@ -64,8 +89,51 @@ window.addEventListener("DOMContentLoaded", () => {
             })
             tableBody.appendChild(row);
         })
+        .then(() => {
+            // Create mini titles in case width less than 900px
+            if (window.innerWidth < 900) {
+                const tableBody = document.querySelectorAll("#tableBody .row");
+                Array.from(tableBody).forEach(row => {
+                    Array.from(row.childNodes).forEach(cellContainer => {
+                        if (!cellContainer.querySelector(".title")) {
+                            const dataTitle = cellContainer.getAttribute("data-title");
+                            if (dataTitle) {
+                                const title = document.createElement("p");
+                                title.setAttribute("class", "title");
+                                title.innerText = dataTitle;
+                                cellContainer.insertBefore(title, cellContainer.firstElementChild);
+                            }
+                        }
+                    })
+                })
+            }
+        })
     } catch (error) {
         displayError(`There was an error with the server. Try again later.`);
+    }
+})
+
+window.addEventListener("resize", () => {
+    if (window.innerWidth >= 900) {
+        const titles = document.querySelectorAll(".title");
+        if (titles.length) Array.from(titles).forEach(element => element.remove());
+    }
+    // Create mini titles in case width less than 900px
+    else {
+        const tableBody = document.querySelectorAll("#tableBody .row");
+        Array.from(tableBody).forEach(row => {
+            Array.from(row.childNodes).forEach(cellContainer => {
+                if (!cellContainer.querySelector(".title")) {
+                    const dataTitle = cellContainer.getAttribute("data-title");
+                    if (dataTitle) {
+                        const title = document.createElement("p");
+                        title.setAttribute("class", "title");
+                        title.innerText = dataTitle;
+                        cellContainer.insertBefore(title, cellContainer.firstElementChild);
+                    }
+                }
+            })
+        })
     }
 })
 
@@ -83,6 +151,31 @@ function* account_row_generator(accounts) {
         // Create the cell container and give it the correct role of cell
         const cellContainer = document.createElement("div");
         cellContainer.setAttribute("role", "cell");
+        switch (field) {
+            case "id":
+                cellContainer.setAttribute("data-title", "Id");
+                break;
+            case "type":
+                cellContainer.setAttribute("data-title", "Type");
+                break;
+            case "description":
+                cellContainer.setAttribute("data-title", "Description");
+                break;
+            case "balance":
+                cellContainer.setAttribute("data-title", "Balance");
+                break;
+            case "creditLine":
+                cellContainer.setAttribute("data-title", "Credit line");
+                break;
+            case "beginBalance":
+                cellContainer.setAttribute("data-title", "Begin balance");
+                break;
+            case "beginBalanceTimestamp":
+                cellContainer.setAttribute("data-title", "Creation date");
+                break;
+            default:
+                break;
+        }
         if (field === "actions") {
             cellContainer.setAttribute("class", "actionsContainer");
 
@@ -538,6 +631,32 @@ function handleCreateButton(event) {
     Array.from(dataElements).slice(0, -1).forEach(element => {
         const container = document.createElement("div");
         container.setAttribute("role", "cell");
+        const field = element.getAttribute("data-role");
+        switch (field) {
+            case "id":
+                container.setAttribute("data-title", "Id");
+                break;
+            case "type":
+                container.setAttribute("data-title", "Type");
+                break;
+            case "description":
+                container.setAttribute("data-title", "Description");
+                break;
+            case "balance":
+                container.setAttribute("data-title", "Balance");
+                break;
+            case "creditLine":
+                container.setAttribute("data-title", "Credit line");
+                break;
+            case "beginBalance":
+                container.setAttribute("data-title", "Begin balance");
+                break;
+            case "beginBalanceTimestamp":
+                container.setAttribute("data-title", "Creation date");
+                break;
+            default:
+                break;
+        }
         
         if (element.getAttribute("data-role") === "id") {
             const input = document.createElement("input");
@@ -737,9 +856,13 @@ function handleCreateAccount(event) {
 function displayError(message) {
     // Clear all errors
     document.querySelectorAll('.error').forEach(element => element.remove());
-
-    const error = document.createElement("span");
-    error.setAttribute("class", "error");
-    error.innerText = message;
-    main.insertBefore(error, main.firstElementChild);
+    if (window.innerWidth < 900) {
+        alert(message);
+    }
+    else {
+        const error = document.createElement("span");
+        error.setAttribute("class", "error");
+        error.innerText = message;
+        main.insertBefore(error, main.firstElementChild);
+    }
 }
