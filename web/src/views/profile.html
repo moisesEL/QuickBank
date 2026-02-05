@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -20,20 +20,19 @@
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Kode+Mono&display=swap" rel="stylesheet">
         <!-- Custom navBar -->
-        <script type="module" src="/QuickBank/src/components/nav_bar.js"></script>
+        <script src="/QuickBank/src/components/nav_bar.js"></script>
 
         <!-- Checks if user is logged in, if not, redirects to Index -->
-        <script>
-            if (!sessionStorage.getItem('customer.id')) window.location.replace("/QuickBank");
-        </script>
+        <script>if (!sessionStorage.getItem('customer.id')) window.location.replace("/QuickBank");</script>
 
         <!-- Custom Google icon import for password component -->
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
         <!-- Custom password input -->
-        <script type="module" src="../components/custom_password.js"></script>
+        <script src="../components/custom_password.js"></script>
 
         <!-- Footer -->
-        <script type= "module" src="/QuickBank/src/components/footer.js"></script>   
+        <script src="/QuickBank/src/components/footer.js"></script>
+
     </head>
     <body>
         <nav-bar></nav-bar>
@@ -41,81 +40,78 @@
             <div id="leftDiv">
                 <h1 id="leftDivTitle">Profile</h1>
                 <div id="informationWrapper">
-                    <h3>Personal information</h3>
+                    <h2>Personal information</h2>
                     <div id="personalInformationWrapper">
-                        <div>
-                            <h4>Name</h4>
-                            <input type="text" id="customerFirstName" disabled>
+                        <div class="infoContainer">
+                            <label for="firstName">Name</label>
+                            <input type="text" id="firstName" name="firstName" disabled>
                         </div>
-                        <div>
-                            <h4>Middle Initial</h4>
-                            <input type="text" id="customerMiddleInitial" disabled>
+                        <div class="infoContainer">
+                            <label for="middleInitial">Middle Initial</label>
+                            <input type="text" id="middleInitial" name="middleInitial" disabled>
                         </div>
-                        <div>
-                            <h4>Last Name</h4>
-                            <input type="text" id="customerLastName" disabled>
+                        <div class="infoContainer">
+                            <label for="lastName">Last Name</label>
+                            <input type="text" id="lastName" name="lastName" disabled>
                         </div>
-                        <div>
-                            <h4>Password</h4>
+                        <div class="infoContainer">
+                            <label for="password">Password</label>
                             <custom-password>
-                                <input type="password" id="customerPassword" placeholder="******" disabled>
+                                <input type="password" id="password" name="password" placeholder="******" disabled>
                             </custom-password>
                         </div>
                     </div>
                     <hr>
-                    <h3>Contact and Address</h3>
+                    <h2>Contact and Address</h2>
                     <div id="contactAndAddressWrapper">
-                        <div>
-                            <h4>Email</h4>
-                            <input type="text" id="customerEmail" disabled>
+                        <div class="infoContainer">
+                            <label for="email">Email</label>
+                            <input type="text" id="email" name="email" disabled>
                         </div>
-                        <div>
-                            <h4>Phone</h4>
-                            <input type="text" id="customerPhone" disabled>
+                        <div class="infoContainer">
+                            <label for="phone">Phone</label>
+                            <input type="text" id="phone" name="phone" disabled>
                         </div>
-                        <div>
-                            <h4>Zip</h4>
-                            <input type="text" id="customerZip" disabled>
+                        <div class="infoContainer">
+                            <label for="zip">Zip</label>
+                            <input type="text" id="zip" name="zip" disabled>
                         </div>
-                        <div>
-                            <h4>City</h4>
-                            <input type="text" id="customerCity" disabled>
+                        <div class="infoContainer">
+                            <label for="city">City</label>
+                            <input type="text" id="city" name="city" disabled>
                         </div>
                     </div>
                     <hr>
                     <div id="securityWrapper">
-                        <h3>Security: </h3>
+                        <h2>Security: </h2>
                         <a id="changePasswordButton" href="/QuickBank/src/views/change_password.html">Change password</a>
                     </div>
                 </div>
             </div>
             <div id="rightDiv">
-                <h1>Balance: XXX bitcoins</h1>
+                <a href="/QuickBank/src/views/accounts.html" id="accountsAnchor">Accounts</a>
+                <div role="table" aria-label="Navigatable Accounts Table" id="accountsTable">
+                    <div role="rowgroup" aria-label="Table header" id="tableHeader">
+                        <div class="row" role="row" aria-label="Table Header Row">
+                            <div role="columnheader" aria-label="Type">
+                                Type
+                            </div>
+                            <div role="columnheader" aria-label="Description">
+                                Description
+                            </div>
+                            <div role="columnheader" aria-label="Balance">
+                                Balance
+                            </div>
+                            <div role="columnheader" aria-label="Credit line">
+                                Credit line
+                            </div>
+                        </div>
+                    </div>
+                    <div role="rowgroup" id="tableBody" aria-label="Table body"></div>
+            </div>
             </div>
         </main>
-    <main-footer></main-footer>    
+        <main-footer></main-footer>    
     </body>
-    <script>
-        let customer = {
-            firstName: sessionStorage.getItem('customer.firstName'),
-            middleInitial: sessionStorage.getItem('customer.middleInitial'),
-            lastName: sessionStorage.getItem('customer.lastName'),
-            email: sessionStorage.getItem('customer.email'),
-            city: sessionStorage.getItem('customer.city'),
-            id: sessionStorage.getItem('customer.id'),
-            password: sessionStorage.getItem('customer.password'),
-            phone: sessionStorage.getItem('customer.phone'),
-            state: sessionStorage.getItem('customer.state'),
-            street: sessionStorage.getItem('customer.street'),
-            zip: sessionStorage.getItem('customer.zip'),
-        }
-        document.getElementById("customerFirstName").value = customer.firstName;
-        document.getElementById("customerMiddleInitial").value = customer.middleInitial;
-        document.getElementById("customerLastName").value = customer.lastName;
-        document.getElementById("customerPassword").value = customer.password;
-        document.getElementById("customerEmail").value = customer.email;
-        document.getElementById("customerPhone").value = customer.phone;
-        document.getElementById("customerZip").value = customer.zip;
-        document.getElementById("customerCity").value = customer.city;
-    </script>
-</html>
+    <script type="module" src="../util/profile.js"></script>
+    </html>

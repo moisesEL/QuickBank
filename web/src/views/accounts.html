@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="icon" type="image/x-icon" href="/QuickBank/src/assets/Favicon.ico">
+        <title>Profile</title>
+        
+        <!-- Alternative styles -->
+        <link rel="stylesheet" href="/QuickBank/src/css/light_theme.css" id="main-style" title="Light Mode">
+        <link rel='alternate stylesheet' href='/QuickBank/src/css/dark_theme.css' title="Dark Mode" disabled>
+        
+        <!-- Main style first -->
+        <link rel="stylesheet" href="/QuickBank/src/css/main.css">
+        <!-- Personal style -->
+        <link rel='stylesheet' href='/QuickBank/src/css/accounts.css'>
+
+        <!-- Custom Google font import for navbar -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Kode+Mono&display=swap" rel="stylesheet">
+        <!-- Custom navBar -->
+        <script src="/QuickBank/src/components/nav_bar.js"></script>
+
+        <!-- Checks if user is logged in, if not, redirects to Index -->
+        <script>if (!sessionStorage.getItem('customer.id')) window.location.replace("/QuickBank");</script>
+
+        <!-- Custom Google icon import for password component -->
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <!-- Custom password input -->
+        <script src="../components/custom_password.js"></script>
+
+        <!-- Footer -->
+        <script src="/QuickBank/src/components/footer.js"></script>
+    </head>
+    <body>
+        <nav-bar></nav-bar>
+        <main id="mainWrapper">
+            <div role="table" aria-label="Navigatable Accounts Table" id="accountsTable">
+                <div role="rowgroup" aria-label="Table header" id="tableHeader">
+                    <div class="row" role="row" aria-label="Table Header Row">
+                        <div role="columnheader" aria-label="Id">
+                            Id
+                        </div>
+                        <div role="columnheader" aria-label="Type">
+                            Type
+                        </div>
+                        <div role="columnheader" aria-label="Description">
+                            Description
+                        </div>
+                        <div role="columnheader" aria-label="Balance">
+                            Balance
+                        </div>
+                        <div role="columnheader" aria-label="Credit line">
+                            Credit line
+                        </div>
+                        <div role="columnheader" aria-label="Begin Balance">
+                            Begin Balance
+                        </div>
+                        <div role="columnheader" aria-label="Creation date">
+                            Creation date
+                        </div>
+                        <div role="columnheader" aria-label="Actions">
+                            Actions
+                        </div>
+                    </div>
+                </div>
+                <div role="rowgroup" id="tableBody" aria-label="Table body"></div>
+            </div>
+        </main>
+        <main-footer></main-footer>    
+    </body>
+    <script type="module" src="/QuickBank/src/util/accounts.js"></script>
+</html>

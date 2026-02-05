@@ -5,8 +5,8 @@
 // then wrap each SINGULAR password input between the custom-password element.
 // Example: <custom-password> <input type="password" name="password"> </custom-password>
 
-const template = document.createElement("template");
-template.innerHTML = `
+const customPasswordTemplate = document.createElement("template");
+customPasswordTemplate.innerHTML = `
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <style>
         div {
@@ -40,7 +40,7 @@ class Password extends HTMLElement {
     constructor() {
         super();
         this.root = this.attachShadow({mode: "open"})
-        this.root.appendChild(template.content.cloneNode(true))
+        this.root.appendChild(customPasswordTemplate.content.cloneNode(true))
     }
     
     connectedCallback() {
