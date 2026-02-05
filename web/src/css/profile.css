@@ -1,14 +1,17 @@
+* {
+    box-sizing: border-box;
+}
+
 body h1 h2 h3 h4 {
     margin: 0px 0px 0px 0px !important;
 }
 
 #mainWrapper {
     background-color: var(--primary-background);
-    min-height: calc(100vh - 75px - 100px);
+    min-height: 100vh;
     line-height: 1.5; 
     padding: 50px;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+    display: flex;
     gap: 80px;
 }
 
@@ -17,48 +20,39 @@ body h1 h2 h3 h4 {
     background-color: var(--secondary-background);
     display: grid;
     padding: 40px;
-    grid-template-rows: 1fr 9fr;
+    grid-template-rows: min-content 9fr;
     grid-template-columns: 1fr;
     justify-content: center;
     justify-items: center;
     align-items: center;
+    box-shadow: 0px 1px 10px grey;
 }
 
 #informationWrapper {
-    height: 100%;
     width: 100%;
 }
 
-#informationWrapper h3,hr {
+#informationWrapper h3, hr {
     margin-left: 20px;
 }
 
-#informationWrapper > div > div {
+.infoContainer {
+    background-color: var(--third-background);
     margin: 20px;
     padding: 20px;
-    background-color: var(--third-background);
     border-radius: 5px;
-    height: min-content;
+    height: max-content;
+    display: flex;
+    flex-direction: column;
 }
 
-#informationWrapper > div > div > h4 {
-    margin-left: 4px;
-}
-
-input {
+#leftDiv input {
     background: none;
     border: none;
     border-radius: 0px;
 }
 
-#personalInformationWrapper {
-    display: grid;
-    overflow: scroll;
-    grid-template-columns: auto auto;
-    grid-template-rows: auto auto;
-}
-
-#contactAndAddressWrapper {
+#personalInformationWrapper, #contactAndAddressWrapper {
     display: grid;
     overflow: scroll;
     grid-template-columns: auto auto;
@@ -78,24 +72,167 @@ input {
     align-items: center;
     padding: 5px 20px;
     color: var(--primary-btn-color);
-    background-color: var(--secondary-btn-background);
+    background-color: var(--primary-btn-background);
     height: min-content;
 }
 
 #rightDiv {
-    height: 100px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 20px;
+    align-items: flex-start;
+    border-radius: 30px;
+    box-shadow: 0px 1px 10px grey;
+    overflow-y: auto;
+}
+
+#total {
+    font-size: 1.2rem;
+}
+
+#accountsAnchor {
+    font-size: 2rem;
+    font-weight: 400;
+    text-decoration: underline;
+}
+
+#accountsAnchor:hover {
+    text-decoration: none;
+}
+
+#accountsTable {
+    width: 100%;
+    display: grid;
+    grid-template-rows: min-content 1fr;
+    grid-template-columns: 1fr;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+}
+
+/* Table body specific styling */
+#tableBody .row > div p,
+#tableBody .row > div input,
+#tableBody .row > div a {
+    background-color: inherit;
+    color: inherit;
+    width: 100%;
+    height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
-    border-radius: 100px;
-    box-shadow: 0px 1px 10px grey;
 }
 
-@media screen and (max-width: 900px) {
+#tableBody .row div:hover,
+#tableBody .row div:focus {
+    background-color: var(--primary-btn-hover);
+}
+
+.row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    width: 100%;
+    gap: 0;
+    background-color: #ddd;
+}
+
+.row > div {
+    background-color: var(--accounts-background);
+    padding: 12px 8px;
+    border: 1px solid rgba(155, 155, 155, 0.4);
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    word-break: break-word;
+    overflow: hidden;
+}
+
+#tableHeader, #tableHeader .row {
+    height: min-content;
+    border-top-left-radius: 30px;
+    border-top-right-radius: 30px;
+    text-transform: uppercase;
+}
+
+#tableBody {
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: start;
+}
+
+/* Header specific styling */
+#tableHeader .row > div {
+    color: var(--accounts-header-color);
+    background: var(--accounts-header-background);
+    font-weight: 600;
+}
+
+/* Rounding borders */
+#tableHeader .row > div:first-child {
+    border-top-left-radius: 30px;
+}
+#tableHeader .row > div:last-child {
+    border-top-right-radius: 30px;
+}
+
+/* Table body specific styling */
+#tableBody .row > div p {
+    background-color: inherit;
+    color: inherit;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#tableBody .row div:hover, #tableBody .row div:focus {
+    background-color: var(--primary-btn-hover);
+}
+
+@media screen and (max-width: 1200px) {
     #mainWrapper {
         padding: 20px;
         gap: 80px;
         display: flex;
         flex-direction: column;
+    }
+    #personalInformationWrapper, #contactAndAddressWrapper {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+    .row {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        padding-bottom: 15px;
+    }
+    #tableBody .row {
+        padding-bottom: 15px;
+        margin-bottom: 15px;
+        border-bottom: 2px dashed grey;
+    }
+    #tableHeader {
+        display: none;
+    }
+
+    .row > div {
+        display:flex;
+        flex-direction: column;
+        gap: 2px;
+    }
+
+    .row > div > p {
+        min-height: 20px;
+    }
+
+    .title {
+        font-weight: bold;
+        text-transform: uppercase;
+        letter-spacing: 1px;
     }
 }

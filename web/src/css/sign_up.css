@@ -1,3 +1,7 @@
+* {
+    box-sizing: border-box;
+}
+
 main {
     display: flex;
     flex-direction: column;
@@ -22,18 +26,17 @@ main {
 
 #rightDiv {
     padding: 50px 200px;
-    width: calc(100% - 400px);
     display: flex;
     flex-direction: column;
     gap: 10px;
     justify-content: center;
     align-items: center;
     align-content: center;
+    width: 100%;
 }
 
 #form {
     border: 2px solid #D9D9D9;
-    width: calc(100% - 60px);
 }
 
 #form > div {
@@ -59,11 +62,9 @@ main {
 @media screen and (max-width: 700px) {
     #rightDiv {
         padding: 20px 50px;
-        width: calc(100% - 100px);
     }
 
     #form {
         padding: 10px;
-        width: calc(100% - 20px);
     }
 }

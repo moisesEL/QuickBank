@@ -1,27 +1,46 @@
 :root {
+    /* Text colors */
     --primary-text-color: white;
-    --primary-background: #0f172a;
+    --secondary-text-color: #cbd5e1;
     
+    /* Backgrounds */
+    --primary-background: #0f172a;
+    --secondary-background: #1e293b;
+    --third-background: #475569;
+    --form-background: rgba(30, 41, 59, 0.85);
+    --footer-background: rgb(20, 20, 20);
+    
+    /* Button colors */
     --primary-btn-color: black;
     --primary-btn-background: #e2e8f0;
     --secondary-btn-background: red;
     --primary-btn-hover: rgba(0, 0, 0, 0.75);
     --primary-login-btn-background: #10b981;
-    
-    --secondary-text-color: #cbd5e1;
-    --secondary-background: #1e293b;
-    --third-background: #475569;
-    --border-color: rgba(255, 255, 255, 0.2);
-    --form-background: rgba(30, 41, 59, 0.85);
 
-    --error-border-color: red;
+    /* Borders */
+    --border-color: rgba(255, 255, 255, 0.2);
+
+    /* Accounts */
+    --accounts-header-color: #ffffff;
+    --accounts-header-background: #2a0f8c;
+    --accounts-background: #121212;
+    --accounts-text-color: #e0e0e0;
+    --accounts-border-color: #444444;
+    --accounts-header-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
     
+    /* Errors */
+    --error-color: #991b1b;
+    --error-background: #fef2f2;
+    --error-border-color: #dc2626;
+    --error-icon: #b91c1c;
+
+    /* White? */
     --white: white;
-    --footer-background: rgb(20, 20, 20);
     
+    /* I got lost here */
     --navbar-shadow: rgba(255, 255, 255, 0.5);
     --dropdown-content-shadow: rgba(255, 255, 255, 0.1);
-
+    /* index.html card shadow */
     --index-card-shadow: rgba(42, 94, 207, 0.4);
     --text-content-background: rgba(31, 56, 182, 0.678);
 }
