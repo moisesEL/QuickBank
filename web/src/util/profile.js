@@ -1,5 +1,6 @@
 import fetch_accounts_by_user_id from "./fetch_accounts_by_user_id.js";
 import { Customer } from "./model.js";
+import sumAccountsBalances from "./sumAccountsBalances.js";
 
 window.addEventListener("DOMContentLoaded", () => {
     let customer = new Customer (
@@ -28,20 +29,12 @@ window.addEventListener("DOMContentLoaded", () => {
     try {
         build_shortened_accounts_table(customer.id)
         .then(() => {
-            // Get all balance cells
-            const arrBalances = document.querySelectorAll("[data-role='balance']");
-            // Sum each account's balance
-            const sum = Array.from(arrBalances).reduce((acc, element) => acc + parseInt(element.innerText), 0);
-            // Create p element to attach to DOM
-            const total = document.createElement("p");
-            total.setAttribute("id", "total")
-            total.innerHTML = `Your total account's balance is <strong>${sum}</strong>`;
-            const rightDiv = document.getElementById("rightDiv");
-            rightDiv.appendChild(total);
+            const rightDiv = document.getElementById("rightDiv")
+            sumAccountsBalances(rightDiv);
         })
         .then(() => {
-            // Create mini titles in case width less than 900px
-            if (window.innerWidth < 1200) {
+            // Create mini titles in case width less than 1100px
+            if (window.innerWidth < 1100) {
                 const tableBody = document.querySelectorAll("#tableBody .row");
                 Array.from(tableBody).forEach(row => {
                     Array.from(row.childNodes).forEach(cellContainer => {
@@ -64,11 +57,11 @@ window.addEventListener("DOMContentLoaded", () => {
 })
 
 window.addEventListener("resize", () => {
-    if (window.innerWidth >= 1200) {
+    if (window.innerWidth >= 1100) {
         const titles = document.querySelectorAll(".title");
         if (titles.length) Array.from(titles).forEach(element => element.remove());
     }
-    // Create mini titles in case width less than 1200px
+    // Create mini titles in case width less than 1100px
     else {
         const tableBody = document.querySelectorAll("#tableBody .row");
         Array.from(tableBody).forEach(row => {
@@ -95,9 +88,43 @@ window.addEventListener("resize", () => {
 async function build_shortened_accounts_table(userId) {
     const accounts = await fetch_accounts_by_user_id(userId);
     const tbody = document.querySelector("#tableBody");
-    const rowGenerator = shortened_account_row_generator(accounts);
-    for (const row of rowGenerator) {
-        tbody.appendChild(row);
+    if (accounts.length > 0) {
+        const rowGenerator = shortened_account_row_generator(accounts);
+        for (const row of rowGenerator) {
+            tbody.appendChild(row);
+        }
+    }
+    else {
+        const emptyRow = document.createElement("div");
+        emptyRow.setAttribute("class", "row");
+        emptyRow.setAttribute("role", "row");
+        ["type", "description", "balance", "creditLine"].forEach(field => {
+            // Create the cell container and give it the correct role of cell
+            const cellContainer = document.createElement("div");
+            cellContainer.setAttribute("role", "cell");
+            switch (field) {
+                case "type":
+                    cellContainer.setAttribute("data-title", "Type");
+                    break;
+                case "description":
+                    cellContainer.setAttribute("data-title", "Description");
+                    break;
+                case "balance":
+                    cellContainer.setAttribute("data-title", "Balance");
+                    break;
+                case "creditLine":
+                    cellContainer.setAttribute("data-title", "Credit line");
+                    break;
+                default:
+                    break;
+            }
+            const cell = document.createElement("p");
+            cell.setAttribute("data-role", field);
+            // Appending every element to the DOM
+            cellContainer.appendChild(cell);
+            emptyRow.appendChild(cellContainer);
+        })
+        tbody.appendChild(emptyRow);
     }
 }
 

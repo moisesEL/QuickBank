@@ -61,6 +61,7 @@ select {
 #mainWrapper {
     padding: 2% 3% 1% 3%;
     margin: 30px 10% 30px 10%;
+    min-height: 100vh;
     border-radius: 20px;
     display: flex;
     flex-direction: column;
@@ -81,7 +82,6 @@ select {
 
 #accountsTable {
     width: 100%;
-    min-height: 100vh;
     display: grid;
     grid-template-rows: min-content 1fr;
     grid-template-columns: 1fr;
@@ -94,7 +94,7 @@ select {
     grid-template-columns: repeat(8, 1fr);
     width: 100%;
     gap: 0;
-    background-color: var(--accounts-background);
+    background-color: inherit;
 }
 
 .row > div {
@@ -121,6 +121,7 @@ select {
     flex-direction: column;
     justify-content: start;
     align-items: start;
+    background-color: inherit;
 }
 
 /* Header specific styling */
@@ -130,12 +131,18 @@ select {
     font-weight: 600;
 }
 
-/* Rounding borders */
+/*  Rounding borders  */
 #tableHeader .row > div:first-child {
     border-top-left-radius: 30px;
 }
 #tableHeader .row > div:last-child {
     border-top-right-radius: 30px;
+}
+#tableBody .row:last-child > div:first-child {
+    border-bottom-left-radius: 30px;
+}
+#tableBody .row:last-child > div:last-child {
+    border-bottom-right-radius: 30px;
 }
 
 #addAccountForm div {
@@ -242,6 +249,19 @@ a {
 
     .row > div > p {
         min-height: 20px;
+    }
+
+    .actionsContainer {
+        flex-direction: row !important;
+        gap: 10px !important;
+    }
+
+    /* Removing borders on mobile version */
+    #tableBody .row:last-child > div:first-child {
+        border-bottom-left-radius: 0px;
+    }
+    #tableBody .row:last-child > div:last-child {
+        border-bottom-right-radius: 0px;
     }
 
     .title {

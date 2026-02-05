@@ -1,5 +1,6 @@
 import { Account } from "./model.js";
 import fetch_accounts_by_user_id from "./fetch_accounts_by_user_id.js";
+import sumAccountsBalances from "./sumAccountsBalances.js";
 
 // GET all acounts /CRUDBankServerSide/webresources/account/customer/:idCustomer
 // GET account /CRUDBankServerSide/webresources/account/:accountId
@@ -88,6 +89,7 @@ window.addEventListener("DOMContentLoaded", () => {
                 row.appendChild(cellContainer);
             })
             tableBody.appendChild(row);
+            sumAccountsBalances(main);
         })
         .then(() => {
             // Create mini titles in case width less than 900px
@@ -474,7 +476,7 @@ function handleEditButton(event, account) {
     // Cancel button refreshes the page to avoid unnecesary coding
     cancelButton.addEventListener("click", () => location.reload());
 
-    // Submit form
+    // Submit account edition form
     form.addEventListener("submit", (event) => {
         event.preventDefault();
         const form = event.currentTarget;
@@ -489,11 +491,11 @@ function handleEditButton(event, account) {
                 throw new Error(`Your account description can't have more than 60 characters`);
 
             // Check if credit line is not empty
-            if (account.creditLine === 0)
+            if (account.type === "CREDIT" && account.creditLine === 0)
                 throw new Error(`Your account's credit line can't be empty`);
 
             // Check if credit line is not higher than balance.
-            if (account.creditLine > account.balance)
+            if (account.type === "CREDIT" && account.creditLine > account.balance)
                 throw new Error(`Your credit line can't be higher than your balance`);
 
             // If every validation goes through, update account.
@@ -631,33 +633,12 @@ function handleCreateButton(event) {
     Array.from(dataElements).slice(0, -1).forEach(element => {
         const container = document.createElement("div");
         container.setAttribute("role", "cell");
-        const field = element.getAttribute("data-role");
-        switch (field) {
-            case "id":
-                container.setAttribute("data-title", "Id");
-                break;
-            case "type":
-                container.setAttribute("data-title", "Type");
-                break;
-            case "description":
-                container.setAttribute("data-title", "Description");
-                break;
-            case "balance":
-                container.setAttribute("data-title", "Balance");
-                break;
-            case "creditLine":
-                container.setAttribute("data-title", "Credit line");
-                break;
-            case "beginBalance":
-                container.setAttribute("data-title", "Begin balance");
-                break;
-            case "beginBalanceTimestamp":
-                container.setAttribute("data-title", "Creation date");
-                break;
-            default:
-                break;
+        container.setAttribute("data-title", element.parentNode.getAttribute("data-title"));
+        // If we are in a mobile view, also bring the cell titles.
+        if (window.innerWidth < 900) {
+            const leftSibling = element.previousSibling;
+            container.appendChild(leftSibling);
         }
-        
         if (element.getAttribute("data-role") === "id") {
             const input = document.createElement("input");
             input.setAttribute("name", "id")
@@ -790,14 +771,14 @@ function handleCreateButton(event) {
     cancelButton.addEventListener("click", () => location.reload());
 
     // Submit form
-    form.addEventListener("submit", handleCreateAccount);
+    form.addEventListener("submit", handleCreateSubmit);
 }
 
 /**
  * 
  * @param { Event } event
 */
-function handleCreateAccount(event) {
+function handleCreateSubmit(event) {
     event.preventDefault();
     const form = event.target;
     const formData = new FormData(form);
