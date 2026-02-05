@@ -1,5 +1,6 @@
 import { Account } from "./model.js";
 import fetch_accounts_by_user_id from "./fetch_accounts_by_user_id.js";
+import sumAccountsBalances from "./sumAccountsBalances.js";
 
 // GET all acounts /CRUDBankServerSide/webresources/account/customer/:idCustomer
 // GET account /CRUDBankServerSide/webresources/account/:accountId
@@ -88,6 +89,52 @@ window.addEventListener("DOMContentLoaded", () => {
                 row.appendChild(cellContainer);
             })
             tableBody.appendChild(row);
+
+            // Extract container after table to append the total balance to it
+            const secondContainer = document.getElementById("secondContainer")
+            sumAccountsBalances(secondContainer, 'before');
+
+            /*  h5p Code  */
+            const helpButton = document.getElementById('helpButton');
+            let h5pInstance = null;
+
+            // When helpButton is pressed, initialize h5p container and display video
+            helpButton.addEventListener("click", () => {
+                const modal = document.getElementById('h5p-container');
+                
+                // Initialize H5P only once
+                if (!h5pInstance) {
+                    const options = {
+                        h5pJsonPath: '/QuickBank/src/assets/h5p/h5p-content',
+                        frameJs: '/QuickBank/src/assets/h5p/h5p-player/frame.bundle.js',
+                        frameCss: '/QuickBank/src/assets/h5p/h5p-player/styles/h5p.css',
+                        librariesPath: '/QuickBank/src/assets/h5p/h5p-libraries'
+                    };
+                    h5pInstance = new H5PStandalone.H5P(modal, options);
+                }
+                
+                // Show modal
+                modal.style.display = "flex";
+                document.body.style.overflow = "hidden";
+            });
+
+            // Close modal when clicking outside the video
+            document.addEventListener('click', (event) => {
+                const modal = document.getElementById('h5p-container');
+                if (event.target === modal) {
+                    modal.style.display = "none";
+                    document.body.style.overflow = "auto";
+                }
+            });
+
+            // Close modal with ESC key
+            document.addEventListener('keydown', (event) => {
+                const modal = document.getElementById('h5p-container');
+                if (event.key === 'Escape' && modal.style.display === 'flex') {
+                    modal.style.display = "none";
+                    document.body.style.overflow = "auto";
+                }
+            });
         })
         .then(() => {
             // Create mini titles in case width less than 900px
@@ -208,6 +255,7 @@ function* account_row_generator(accounts) {
         else if (field === "id") {
             const cell = document.createElement("a");
             cell.setAttribute("href", `/QuickBank/src/views/movements.html?account=${account[field]}`)
+            cell.setAttribute("class", field);
             cell.setAttribute("data-role", field);
             cell.setAttribute("title", `Movements of account: ${account[field]}`);
             cell.innerText = account[field];
@@ -217,6 +265,7 @@ function* account_row_generator(accounts) {
         else {
             const cell = document.createElement("p");
             cell.setAttribute("data-role", field);
+            cell.setAttribute("class", field);
             if (field === "beginBalanceTimestamp") {
                 const date = new Date(account[field]);
                 cell.innerText = `${formatAMPM(date)} - ${date.toLocaleDateString('en-US',
@@ -256,6 +305,7 @@ function handleCellEdition(event, account) {
     const input = document.createElement('input');
     input.setAttribute("data-role", dataRole)
     input.setAttribute("aria-label", dataRole)
+    input.setAttribute("class", cell.getAttribute("class"));
     if (dataRole === 'description') {
         input.type = 'text';
     }
@@ -358,6 +408,7 @@ function cancelCellEdit(input, originalValue, account) {
     // Create new p element with the original value
     const p = document.createElement('p');
     p.setAttribute("data-role", input.getAttribute("data-role"));
+    p.setAttribute("class", input.getAttribute("class"));
     p.innerText = originalValue;
     
     // Replace input with p
@@ -430,12 +481,14 @@ function handleEditButton(event, account) {
     Array.from(dataElements).slice(0, -2).forEach(element => {
         const container = document.createElement("div");
         container.setAttribute("role", "cell");
+        container.setAttribute("data-title", element.parentNode.getAttribute("data-title"));
         
         if (element.getAttribute("data-role") === "description") {
             const input = document.createElement("input");
             input.setAttribute("name", "description");
             input.setAttribute("aria-label", "Description")
             input.setAttribute("data-role", "Description")
+            input.setAttribute("class", element.getAttribute("class"))
             input.type = "text";
             input.placeholder = "description...";
             input.value = element.innerText;
@@ -446,6 +499,7 @@ function handleEditButton(event, account) {
             input.setAttribute("name", "creditLine");
             input.setAttribute("aria-label", "Credit line")
             input.setAttribute("data-role", "Credit line")
+            input.setAttribute("class", element.getAttribute("class"))
             input.placeholder = "credit line...";
             input.min = "0";
             input.max = "1000000";
@@ -474,7 +528,7 @@ function handleEditButton(event, account) {
     // Cancel button refreshes the page to avoid unnecesary coding
     cancelButton.addEventListener("click", () => location.reload());
 
-    // Submit form
+    // Submit account edition form
     form.addEventListener("submit", (event) => {
         event.preventDefault();
         const form = event.currentTarget;
@@ -489,11 +543,11 @@ function handleEditButton(event, account) {
                 throw new Error(`Your account description can't have more than 60 characters`);
 
             // Check if credit line is not empty
-            if (account.creditLine === 0)
+            if (account.type === "CREDIT" && account.creditLine === 0)
                 throw new Error(`Your account's credit line can't be empty`);
 
             // Check if credit line is not higher than balance.
-            if (account.creditLine > account.balance)
+            if (account.type === "CREDIT" && account.creditLine > account.balance)
                 throw new Error(`Your credit line can't be higher than your balance`);
 
             // If every validation goes through, update account.
@@ -578,7 +632,7 @@ function handleDeleteButton(event, account) {
             });
         })
         .then(response => {
-            if (response.ok) deleteButton.closest(".row").remove();
+            if (response.ok) location.reload();
         })
         .catch(error => displayError(error.message));
     }
@@ -631,37 +685,17 @@ function handleCreateButton(event) {
     Array.from(dataElements).slice(0, -1).forEach(element => {
         const container = document.createElement("div");
         container.setAttribute("role", "cell");
-        const field = element.getAttribute("data-role");
-        switch (field) {
-            case "id":
-                container.setAttribute("data-title", "Id");
-                break;
-            case "type":
-                container.setAttribute("data-title", "Type");
-                break;
-            case "description":
-                container.setAttribute("data-title", "Description");
-                break;
-            case "balance":
-                container.setAttribute("data-title", "Balance");
-                break;
-            case "creditLine":
-                container.setAttribute("data-title", "Credit line");
-                break;
-            case "beginBalance":
-                container.setAttribute("data-title", "Begin balance");
-                break;
-            case "beginBalanceTimestamp":
-                container.setAttribute("data-title", "Creation date");
-                break;
-            default:
-                break;
+        container.setAttribute("data-title", element.parentNode.getAttribute("data-title"));
+        // If we are in a mobile view, also bring the cell titles.
+        if (window.innerWidth < 900) {
+            const leftSibling = element.previousSibling;
+            container.appendChild(leftSibling);
         }
-        
         if (element.getAttribute("data-role") === "id") {
             const input = document.createElement("input");
             input.setAttribute("name", "id")
             input.setAttribute("aria-label", "Id");
+            input.setAttribute("class", "id");
             input.type = "hidden";
             input.value = Math.floor(Math.random() * 10000000000);
             const p = document.createElement("p");
@@ -672,6 +706,7 @@ function handleCreateButton(event) {
         else if (element.getAttribute("data-role") === "type") {
             const select = document.createElement("select");
             select.setAttribute("aria-label", "type");
+            select.setAttribute("class", "type");
             select.innerText = "type";
             select.setAttribute("name", "type")
             const optionStandard = document.createElement("option");
@@ -691,6 +726,7 @@ function handleCreateButton(event) {
             const input = document.createElement("input");
             input.setAttribute("name", "beginBalanceTimestamp");
             input.setAttribute("aria-label", "Begin balance timestamp");
+            input.setAttribute("class", "beginBalanceTimestamp");
             input.type = "hidden";
             const date = new Date();
             input.value = date.toISOString();
@@ -704,6 +740,7 @@ function handleCreateButton(event) {
             const input = document.createElement("input");
             input.setAttribute("name", "description");
             input.setAttribute("aria-label", "Description");
+            input.setAttribute("class", "description");
             input.type = "text";
             input.placeholder = "description...";
             container.appendChild(input);
@@ -712,6 +749,7 @@ function handleCreateButton(event) {
             const input = document.createElement("input");
             input.setAttribute("name", "balance");
             input.setAttribute("aria-label", "Balance");
+            input.setAttribute("class", "balance");
             input.placeholder = "balance...";
             input.min = "0";
             input.max = "1000000";
@@ -725,6 +763,7 @@ function handleCreateButton(event) {
                 const input = document.createElement("input");
                 input.setAttribute("name", "creditLine");
                 input.setAttribute("aria-label", "Credit line");
+                input.setAttribute("class", "creditLine");
                 input.placeholder = "credit line...";
                 input.min = "0";
                 input.max = "1000000";
@@ -735,6 +774,7 @@ function handleCreateButton(event) {
             else {
                 const p = document.createElement("p");
                 p.setAttribute("name", "creditLine")
+                p.setAttribute("class", "creditLine");
                 p.innerText = '0';
                 container.appendChild(p)
             }
@@ -745,6 +785,7 @@ function handleCreateButton(event) {
                     const input = document.createElement("input");
                     input.setAttribute("name", "creditLine");
                     input.setAttribute("aria-label", "Credit line");
+                    input.setAttribute("class", "creditLine");
                     input.placeholder = "credit line...";
                     input.min = "0";
                     input.max = "1000000";
@@ -755,6 +796,7 @@ function handleCreateButton(event) {
                 else {
                     const p = document.createElement("p");
                     p.setAttribute("name", "creditLine")
+                    p.setAttribute("class", "creditLine");
                     p.innerText = '0';
                     toReplace.parentNode.replaceChild(p, toReplace);
                 }
@@ -762,6 +804,7 @@ function handleCreateButton(event) {
         }
         else if (element.getAttribute("data-role") === "beginBalance") {
             const p = document.createElement("p");
+            p.setAttribute("class", "beginBalance");
             p.innerText = "0";
             const balance = form.querySelector("[name='balance']");
             balance.addEventListener("input", (event) => {
@@ -790,14 +833,14 @@ function handleCreateButton(event) {
     cancelButton.addEventListener("click", () => location.reload());
 
     // Submit form
-    form.addEventListener("submit", handleCreateAccount);
+    form.addEventListener("submit", handleCreateSubmit);
 }
 
 /**
  * 
  * @param { Event } event
 */
-function handleCreateAccount(event) {
+function handleCreateSubmit(event) {
     event.preventDefault();
     const form = event.target;
     const formData = new FormData(form);
