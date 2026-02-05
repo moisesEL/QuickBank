@@ -89,7 +89,52 @@ window.addEventListener("DOMContentLoaded", () => {
                 row.appendChild(cellContainer);
             })
             tableBody.appendChild(row);
-            sumAccountsBalances(main);
+
+            // Extract container after table to append the total balance to it
+            const secondContainer = document.getElementById("secondContainer")
+            sumAccountsBalances(secondContainer, 'before');
+
+            /*  h5p Code  */
+            const helpButton = document.getElementById('helpButton');
+            let h5pInstance = null;
+
+            // When helpButton is pressed, initialize h5p container and display video
+            helpButton.addEventListener("click", () => {
+                const modal = document.getElementById('h5p-container');
+                
+                // Initialize H5P only once
+                if (!h5pInstance) {
+                    const options = {
+                        h5pJsonPath: '/QuickBank/src/assets/h5p/h5p-content',
+                        frameJs: '/QuickBank/src/assets/h5p/h5p-player/frame.bundle.js',
+                        frameCss: '/QuickBank/src/assets/h5p/h5p-player/styles/h5p.css',
+                        librariesPath: '/QuickBank/src/assets/h5p/h5p-libraries'
+                    };
+                    h5pInstance = new H5PStandalone.H5P(modal, options);
+                }
+                
+                // Show modal
+                modal.style.display = "flex";
+                document.body.style.overflow = "hidden";
+            });
+
+            // Close modal when clicking outside the video
+            document.addEventListener('click', (event) => {
+                const modal = document.getElementById('h5p-container');
+                if (event.target === modal) {
+                    modal.style.display = "none";
+                    document.body.style.overflow = "auto";
+                }
+            });
+
+            // Close modal with ESC key
+            document.addEventListener('keydown', (event) => {
+                const modal = document.getElementById('h5p-container');
+                if (event.key === 'Escape' && modal.style.display === 'flex') {
+                    modal.style.display = "none";
+                    document.body.style.overflow = "auto";
+                }
+            });
         })
         .then(() => {
             // Create mini titles in case width less than 900px

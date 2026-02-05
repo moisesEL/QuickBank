@@ -32,6 +32,9 @@
 
         <!-- Footer -->
         <script src="/QuickBank/src/components/footer.js"></script>
+
+        <script src="/QuickBank/src/assets/h5p/h5p-player/main.bundle.js"></script>
+        <script type="module" src="/QuickBank/src/util/accounts.js"></script>
     </head>
     <body>
         <nav-bar></nav-bar>
@@ -67,8 +70,12 @@
                 </div>
                 <div role="rowgroup" id="tableBody" aria-label="Table body"></div>
             </div>
+            <div id="secondContainer">
+                <!-- Boton de ayuda -->
+                <button id="helpButton">Help</button>
+                <div id="h5p-container" class="h5p-container"></div>
+            </div>
         </main>
         <main-footer></main-footer>    
     </body>
-    <script type="module" src="/QuickBank/src/util/accounts.js"></script>
 </html>

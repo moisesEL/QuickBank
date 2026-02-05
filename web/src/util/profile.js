@@ -30,7 +30,7 @@ window.addEventListener("DOMContentLoaded", () => {
         build_shortened_accounts_table(customer.id)
         .then(() => {
             const rightDiv = document.getElementById("rightDiv")
-            sumAccountsBalances(rightDiv);
+            sumAccountsBalances(rightDiv, 'after');
         })
         .then(() => {
             // Create mini titles in case width less than 1100px

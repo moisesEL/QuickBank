@@ -1,7 +1,8 @@
 /**
  * @param { HTMLElement } toAppendOn The HTML element you want to append the total account's balances
+ * @param { string } order The order in which you want to append the total balance. 'before' or 'after'
  */
-function sumAccountsBalances(toAppendOn) {
+function sumAccountsBalances(toAppendOn, order) {
     // Get all balance cells
     const arrBalances = document.querySelectorAll("[data-role='balance']");
     // Sum each account's balance
@@ -12,7 +13,12 @@ function sumAccountsBalances(toAppendOn) {
     total.setAttribute("class", "totalBalance");
     total.style.fontSize = '1.2rem';
     total.innerHTML = `Your total account's balance is <strong>${sum}</strong>`;
-    toAppendOn.appendChild(total);
+    if (order === 'before') {
+        toAppendOn.insertBefore(total, toAppendOn.firstElementChild);
+    }
+    else {
+        toAppendOn.appendChild(total);
+    }
 }
 
 export default sumAccountsBalances;
