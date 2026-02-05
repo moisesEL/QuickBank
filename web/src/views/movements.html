@@ -1,83 +1,86 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
     <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="icon" type="image/x-icon" href="/QuickBank/src/assets/Favicon.ico">
-        <title>Movements</title>
-        
-        <!-- Alternative styles -->
-        <link rel="stylesheet" href="/QuickBank/src/css/light_theme.css" id="main-style" title="Light Mode">
-        <link rel='alternate stylesheet' href='/QuickBank/src/css/dark_theme.css' title="Dark Mode" disabled>
-        
-        <!-- Main style first -->
-        <link rel="stylesheet" href="/QuickBank/src/css/main.css">
-        <!-- Personal style -->
-        <link rel='stylesheet' href='/QuickBank/src/css/profile.css'>
-        <link rel='stylesheet' href='/QuickBank/src/css/movements.css'>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="/QuickBank/src/assets/Favicon.ico">
+    <title>Movements - QuickBank</title>
 
-        <!-- Custom Google font import for navbar -->
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Kode+Mono&display=swap" rel="stylesheet">
-        <!-- Custom navBar -->
-        <script src="/QuickBank/src/components/nav_bar.js"></script>
+    <!-- Alternative styles -->
+    <link rel="stylesheet" href="/QuickBank/src/css/light_theme.css" id="main-style" title="Light Mode">
+    <link rel='alternate stylesheet' href='/QuickBank/src/css/dark_theme.css' title="Dark Mode" disabled>
+   
+    <!-- Main style first -->
+    <link rel="stylesheet" href="/QuickBank/src/css/main.css">
+    <!-- Personal style -->
+    <link rel='stylesheet' href='/QuickBank/src/css/movements.css'>
 
-        <script>if (!sessionStorage.getItem('customer.id')) window.location.replace("/QuickBank");</script>
-        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-        
+     <!-- Custom Google font import for navbar -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kode+Mono&display=swap" rel="stylesheet">
+    <!-- Custom navBar -->
+    <script src="/QuickBank/src/components/nav_bar.js"></script>
 
-        <script src="/QuickBank/src/util/model.js"></script>
-        <script type="module" src="/QuickBank/src/util/movements.js"></script>
+    <script>if (!sessionStorage.getItem('customer.id')) window.location.replace("/QuickBank");</script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
-        <script src="../components/custom_password.js"></script>
-        <script src="/QuickBank/src/components/footer.js"></script>   
-    </head>
+
+    <script src="/QuickBank/src/util/model.js"></script>
+    <script type="module" src="/QuickBank/src/util/movements.js"></script>
+
+    <script src="../components/custom_password.js"></script>
+    <script src="/QuickBank/src/components/footer.js"></script>
+</head>
+
 <body>
     <nav-bar></nav-bar>
     <main id="mainWrapper">
-        <div id="leftDiv">
+        <section id="leftDiv" aria-label="Movements">
             <h1 id="leftDivTitle">Movements</h1>
-            <div id="informationWrapper">                
+            <div id="informationWrapper">
                 <div class="tableContainer">
-                    <table id="movementsTable">
+                    <table id="movementsTable" aria-label="Movements history">
                         <thead>
+
                             <tr class="rowheader">
-                                <th>Timestamp</th>
-                                <th>Description</th>
-                                <th>Amount</th>
-                                <th>Balance</th>
-                                <th>Action</th>
+                                <th scope="col">Timestamp</th>
+                                <th scope="col">Description</th>
+                                <th scope="col">Amount</th>
+                                <th scope="col">Balance</th>
+                                <th scope="col">Action</th>
                             </tr>
                             <tr class="input-row">
-                                <td>Time</td>
+                                <td>Auto</td>
                                 <td>
-                                    <select id="newDescription">
+                                    <select id="newDescription" aria-label="Select movement type">
                                         <option value="Deposit">Deposit</option>
                                         <option value="Payment">Payment</option>
                                     </select>
                                 </td>
-                                <td><input type="number" id="newAmount" placeholder="0.00" step="0.01" required></td>
-                                <td>---</td>
-                                <td><button id="btnConfirmMovement">Confirm</button></td>
+                                <td>
+                                    <input type="number" id="newAmount" placeholder="0.00" step="0.01" required aria-label="Enter movement amount">
+                                </td>
+                                <td><span aria-hidden="true">---</span></td>
+                                <td>
+                                    <button id="btnConfirmMovement" class="btn-confirm">Confirm</button>
+                                </td>
                             </tr>
                         </thead>
-                        <tbody><!-- Tabla generada--></tbody>
+                        <tbody id="tableBody"> <!-- Tabla generada--></tbody>
                     </table>
                 </div>
-                <hr>
-                <div id="securitySection">
-                    <h3>Security:</h3>
-                    <div class="button-row">
-                        <a href="/QuickBank/src/views/profile.html" class="btn-red">Profile</a>
-                        <a href="/QuickBank/src/views/accounts.html" class="btn-red">Accounts</a>
-                    </div>
+                <div class="delete-action-container">
+                    <button id="btnDeleteLastMovement" class="btn-delete">
+                        <span class="material-icons" aria-hidden="true">delete_sweep</span>
+                        Delete last movement
+                    </button>
+                </div>
                 </div>
             </div>
-        </div>
+        </section>
     </main>
     <main-footer></main-footer>
 </body>
 
 </html>
-
