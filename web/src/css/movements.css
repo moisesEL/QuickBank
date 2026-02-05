@@ -1,125 +1,195 @@
 #mainWrapper {
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    padding: 60px 20px;
-    background-color: var(--primary-background);
-    min-height: 100vh;
+   display: flex;
+   justify-content: center;
+   align-items: flex-start;
+   padding: 60px 20px;
+   background-color: var(--primary-background);
+   min-height: 100vh;
 }
 
 #leftDiv {
-    width: 95%; 
-    max-width: 1300px;
-    background-color: var(--primary-background);
-    padding: 50px;
-    border-radius: 25px;
-    box-shadow: 0px 1px 10px grey;}
+   width: 95%;
+   max-width: 1300px;
+   background-color: var(--primary-background);
+   padding: 50px;
+   border-radius: 25px;
+   box-shadow: 0px 1px 10px grey;
+}
 
 #leftDiv input {
-    background: none;
-    
-
+   background: none;
+   color: var(--primary-text-color);
 }
 
-#leftDivTitle {
-    width: 100%; 
-    margin-bottom: 40px !important;
-    font-size: 2.5rem;
-    color: var(--primary-text-color);
-    font-family: 'Kode Mono', monospace;
-    border-bottom: 3px solid #3b60d1;
-    display: inline-block;
-    padding-bottom: 10px;
-}
+
 
 .tableContainer {
-    width: 100%;
-    background: white;
-    border-radius: 15px;
-    overflow: hidden;
-    box-shadow: 0px 4px 15px rgba(0,0,0,0.05);
+   width: 100%;
+   background: var(--accounts-background);
+   border-radius: 30px;
+   overflow: hidden;
 }
 
 #movementsTable {
-    width: 100%;
-    border-collapse: collapse;
+   width: 100%;
+   border-collapse: collapse;
 }
 
 .rowheader {
-    background-color: #3b60d1;
-    color: white;
+   background-color: var(--accounts-header-background); 
+   color: var(--accounts-header-color);
 }
 
 .rowheader th {
-    padding: 20px; 
-    font-size: 1rem;
+   padding: 20px;
+   font-size: 1rem;
+   text-transform: uppercase;
+   letter-spacing: 1px;
+   border: 1px solid rgba(155, 155, 155, 0.4);
+}
+
+.rowheader th:first-child { border-top-left-radius: 30px; }
+.rowheader th:last-child { border-top-right-radius: 30px; }
+
+#movementsTable td {
+   padding: 18px;
+   border: 1px solid rgba(155, 155, 155, 0.4); 
+   text-align: center;
+   font-size: 1.05rem;
+   color: var(--primary-text-color);
+   background-color: var(--accounts-background); 
+}
+
+#movementsTable tbody tr:last-child td:first-child { border-bottom-left-radius: 30px; }
+#movementsTable tbody tr:last-child td:last-child { border-bottom-right-radius: 30px; }
+
+#movementsTable td:nth-child(3),
+#movementsTable td:nth-child(4) {
+   text-align: right;
+   padding-right: 40px;
+}
+
+.input-row {
+   background-color: var(--third-background) !important;
+}
+
+.input-row td {
+   background-color: var(--third-background) !important;
+   border: 1px solid rgba(155, 155, 155, 0.4);
+}
+
+.input-row input, .input-row select {
+   padding: 12px;
+   border: 1px solid var(--primary-text-color);
+   border-radius: 8px;
+   width: 100%;
+   font-size: 1rem;
+   background-color: var(--primary-background); 
+   color: var(--primary-text-color); 
+}
+
+.btn-confirm {
+   background-color: #28a745; 
+   color: white;
+   border: none;
+   padding: 12px;
+   border-radius: 100px;
+   cursor: pointer;
+   font-weight: bold;
+   transition: all 0.3s ease;
+
+   display: inline-flex;
+   align-items: center;
+}
+
+.btn-confirm:hover {
+   background-color: #218838;
+}
+
+.delete-action-container {
+   display: flex;
+   justify-content: right;
+   margin: 30px 0;
+}
+
+.btn-delete {
+   background-color: var(--secondary-background); 
+   color: #dc3545;
+   border: 2px solid #dc3545;
+   padding: 12px;
+   border-radius: 10px;
+   cursor: pointer;
+   display: inline-flex;
+   align-items: center;
+   font-weight: bold;
+}
+
+.btn-delete:hover, .btn-delete:focus {
+   background-color: #dc3545;
+   color: white;
+   border-width: 2px;
+}
+
+.section-label {
+   text-align: center;
+   color: var(--primary-text-color);
+   opacity: 0.7;
+   font-weight: bold;
+   text-transform: uppercase;
+   font-size: 0.8rem;
+   margin-bottom: 15px;
+}
+
+#informationAccount {
+    display: flex;
+    justify-content: space-around; 
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+    
+    max-width: 850px; 
+    margin: 0 auto 40px auto; 
+    padding: 25px;
+    background-color: var(--third-background); 
+    border: 1px solid grey;
+    border-radius: 20px;
+}
+
+#informationAccount > div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 5px 15px;
+}
+
+#informationAccount > div {
+    font-size: 0.75rem;
+    color: var(--primary-text-color);
     text-transform: uppercase;
     letter-spacing: 1px;
 }
 
-#movementsTable td {
-    padding: 18px;
-    border-bottom: 1px solid #f0f0f0;
-    text-align: center;
-    font-size: 1.05rem;
+#informationAccount span {
+    font-size: 1.2rem;
+    color: var(--primary-text-color);
+    font-weight: 600;
+    margin-top: 5px;
 }
 
-.input-row {
-    background-color: #f8faff !important;
+#balanceTotal {
+    color: #2ecc71 !important; 
+    font-weight: 600;
+    font-size: 1.4rem !important;
 }
 
-.input-row input, .input-row select {
-    padding: 12px;
-    border: 1px solid #d1d1d1;
-    border-radius: 8px;
-    width: 100%;
-    font-size: 1rem;
+@media screen and (max-width: 900px) {
+    #informationAccount {
+        flex-direction: column;
+        max-width: 95%;
+    }
+    #informationAccount > div {
+        border-bottom: 1px solid grey;
+        width: 100%;
+        padding: 10px 0;
+    }
 }
-
-.btn-confirm {
-    background-color: #28a745;
-    color: white;
-    border: none;
-    padding: 12px 25px;
-    border-radius: 10px;
-    cursor: pointer;
-    font-weight: bold;
-    transition: all 0.3s ease;
-}
-
-.btn-confirm:hover {
-    background-color: #218838;
-}
-
-.delete-action-container {
-    display: flex;
-    justify-content: right;
-    margin: 30px 0;
-}
-
-.btn-delete {
-    background-color: #fff;
-    color: red;
-    border: 2px solid red;
-    padding: 12px;
-    border-radius: 10px;
-    cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-    font-weight: bold;
-}
-
-.btn-delete:hover, .btn-delete:focus {
-    background-color: #fff5f5;
-    border-width: 3px;
-}
-.section-label {
-    text-align: center;
-    color: #888;
-    font-weight: bold;
-    text-transform: uppercase;
-    font-size: 0.8rem;
-    margin-bottom: 15px;
-}
-
-

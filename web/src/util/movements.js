@@ -206,6 +206,11 @@ async function deleteLastMovement() {
        const movements = await GetMovements(accountId);
        if (movements.length === 0) return alert("No hay movimientos para eliminar.");
 
+       // confirmación antes de borrar
+       if (!confirm("¿Deseas eliminar el último movimiento?")) {
+           return;
+       }
+
         // Guardamos el ultimo movimiento en una constante
        const lastMov = movements[(movements.length)-1];
        const accountData = JSON.parse(sessionStorage.getItem("account"));

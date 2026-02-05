@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
+
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/x-icon" href="/QuickBank/src/assets/Favicon.ico">
@@ -9,13 +10,13 @@
     <!-- Alternative styles -->
     <link rel="stylesheet" href="/QuickBank/src/css/light_theme.css" id="main-style" title="Light Mode">
     <link rel='alternate stylesheet' href='/QuickBank/src/css/dark_theme.css' title="Dark Mode" disabled>
-   
+
     <!-- Main style first -->
     <link rel="stylesheet" href="/QuickBank/src/css/main.css">
     <!-- Personal style -->
     <link rel='stylesheet' href='/QuickBank/src/css/movements.css'>
 
-     <!-- Custom Google font import for navbar -->
+    <!-- Custom Google font import for navbar -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Kode+Mono&display=swap" rel="stylesheet">
@@ -32,20 +33,19 @@
     <script src="../components/custom_password.js"></script>
     <script src="/QuickBank/src/components/footer.js"></script>
 </head>
-
 <body>
     <nav-bar></nav-bar>
     <main id="mainWrapper">
         <section id="leftDiv" aria-label="Movements">
-            <h1 id="leftDivTitle">Movements</h1>
-            <div id="informationWrapper">
-            <div>Type: <span id="typeAccount"></span></div>  
-            <div>Balance: <span id="balance"></span></div>    
-            <div id="creditContainer">Credit Line: <span id="creditLine"></span></div>   
-            <div id="balanceContainer">Available Balance: <span id="balanceTotal"></span></div>    
- 
+            <div id="principal">
+                <div id="informationAccount">
+                    <div>Type: <span id="typeAccount"></span></div>
+                    <div>Balance: <span id="balance"></span></div>
+                    <div id="creditContainer">Credit Line: <span id="creditLine"></span></div>
+                    <div id="balanceContainer">Available Balance: <span id="balanceTotal"></span></div>
+                </div>
 
-                        
+
                 <div class="tableContainer">
                     <table id="movementsTable" aria-label="Movements history">
                         <thead>
@@ -66,11 +66,12 @@
                                     </select>
                                 </td>
                                 <td>
-                                    <input type="number" id="newAmount" placeholder="0.00" step="0.01" required aria-label="Enter movement amount">
+                                    <input type="number" id="newAmount" placeholder="0.00" step="0.01" required
+                                        aria-label="Enter movement amount">
                                 </td>
                                 <td><span aria-hidden="true">---</span></td>
                                 <td>
-                                    <button id="btnConfirmMovement" class="btn-confirm">Confirm</button>
+                                    <button id="btnConfirmMovement" class="btn-confirm"><span class="material-icons">check</span></button>
                                 </td>
                             </tr>
                         </thead>
@@ -79,11 +80,11 @@
                 </div>
                 <div class="delete-action-container">
                     <button id="btnDeleteLastMovement" class="btn-delete">
-                        <span class="material-icons" aria-hidden="true">delete_sweep</span>
+                        <span class="material-icons" aria-hidden="true">delete</span>
                         Delete last movement
                     </button>
                 </div>
-                </div>
+            </div>
             </div>
         </section>
     </main>
