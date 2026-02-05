@@ -25,22 +25,67 @@ window.addEventListener("DOMContentLoaded", () => {
     document.getElementById("city").value = customer.city;
 
     // Shortened table population
-    build_shortened_accounts_table(customer.id)
-    .then(() => {
-        // Get all balance cells
-        const arrBalances = document.querySelectorAll("[data-role='balance']");
-        // Sum each account's balance
-        const sum = Array.from(arrBalances).reduce((acc, element) => acc + parseInt(element.innerText), 0);
-        // Create p element to attach to DOM
-        const total = document.createElement("p");
-        total.setAttribute("id", "total")
-        total.innerHTML = `Your total account's balance is <strong>${sum}</strong>`;
-        const rightDiv = document.getElementById("rightDiv");
-        rightDiv.appendChild(total);
-    })
-
+    try {
+        build_shortened_accounts_table(customer.id)
+        .then(() => {
+            // Get all balance cells
+            const arrBalances = document.querySelectorAll("[data-role='balance']");
+            // Sum each account's balance
+            const sum = Array.from(arrBalances).reduce((acc, element) => acc + parseInt(element.innerText), 0);
+            // Create p element to attach to DOM
+            const total = document.createElement("p");
+            total.setAttribute("id", "total")
+            total.innerHTML = `Your total account's balance is <strong>${sum}</strong>`;
+            const rightDiv = document.getElementById("rightDiv");
+            rightDiv.appendChild(total);
+        })
+        .then(() => {
+            // Create mini titles in case width less than 900px
+            if (window.innerWidth < 1200) {
+                const tableBody = document.querySelectorAll("#tableBody .row");
+                Array.from(tableBody).forEach(row => {
+                    Array.from(row.childNodes).forEach(cellContainer => {
+                        if (!cellContainer.querySelector(".title")) {
+                            const dataTitle = cellContainer.getAttribute("data-title");
+                            if (dataTitle) {
+                                const title = document.createElement("p");
+                                title.setAttribute("class", "title");
+                                title.innerText = dataTitle;
+                                cellContainer.insertBefore(title, cellContainer.firstElementChild);
+                            }
+                        }
+                    })
+                })
+            }
+        })
+    } catch (error) {
+        console.log(error);
+    }
 })
 
+window.addEventListener("resize", () => {
+    if (window.innerWidth >= 1200) {
+        const titles = document.querySelectorAll(".title");
+        if (titles.length) Array.from(titles).forEach(element => element.remove());
+    }
+    // Create mini titles in case width less than 1200px
+    else {
+        const tableBody = document.querySelectorAll("#tableBody .row");
+        Array.from(tableBody).forEach(row => {
+            Array.from(row.childNodes).forEach(cellContainer => {
+                if (!cellContainer.querySelector(".title")) {
+                    const dataTitle = cellContainer.getAttribute("data-title");
+                    if (dataTitle) {
+                        const title = document.createElement("p");
+                        title.setAttribute("class", "title");
+                        title.innerText = dataTitle;
+                        cellContainer.insertBefore(title, cellContainer.firstElementChild);
+                    }
+                }
+            })
+        })
+    }
+})
 
 /**
  * 
@@ -69,6 +114,22 @@ function* shortened_account_row_generator(accounts) {
         // Create the cell container and give it the correct role of cell
         const cellContainer = document.createElement("div");
         cellContainer.setAttribute("role", "cell");
+        switch (field) {
+            case "type":
+                cellContainer.setAttribute("data-title", "Type");
+                break;
+            case "description":
+                cellContainer.setAttribute("data-title", "Description");
+                break;
+            case "balance":
+                cellContainer.setAttribute("data-title", "Balance");
+                break;
+            case "creditLine":
+                cellContainer.setAttribute("data-title", "Credit line");
+                break;
+            default:
+                break;
+        }
         const cell = document.createElement("p");
         cell.setAttribute("data-role", field);
         cell.innerText = account[field];
@@ -76,35 +137,6 @@ function* shortened_account_row_generator(accounts) {
         // Appending every element to the DOM
         cellContainer.appendChild(cell);
         row.appendChild(cellContainer);
-        })
-    yield row;
-    }
-}
-
-function* account_row_generator(accounts) {
-    for (const account of accounts) {
-    const row = document.createElement("div");
-    row.setAttribute("class", "row");
-    row.setAttribute("role", "row");
-    ["id", "type", "description", "balance", "creditLine", "beginBalance", "beginBalanceTimestamp", "actions"].forEach(field => {
-        // Create the cell container and giving it the correct role of cell
-        const cellContainer = document.createElement("div");
-        cellContainer.setAttribute("role", "cell");
-            const cell = document.createElement("p");
-            cell.setAttribute("data-role", field);
-            if (field === "beginBalanceTimestamp") {
-                const date = new Date(account[field]);
-                cell.innerText = `${formatAMPM(date)} - ${date.toLocaleDateString('en-US',
-                { month: '2-digit', day: '2-digit', year: 'numeric' })}`;
-            }
-            else
-                cell.innerText = account[field];
-            if (field === "description")
-                cell.addEventListener("dblclick", (event) => {handleCellEdition(event, account)})
-            else if (field === "creditLine" && account.type === "CREDIT")
-                cell.addEventListener("dblclick", (event) => {handleCellEdition(event, account)})
-            cellContainer.appendChild(cell);
-            row.appendChild(cellContainer);
         })
     yield row;
     }

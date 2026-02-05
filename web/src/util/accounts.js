@@ -1,17 +1,20 @@
 import { Account } from "./model.js";
 import fetch_accounts_by_user_id from "./fetch_accounts_by_user_id.js";
 
-// GET /CRUDBankServerSide/webresources/account/customer/:idCustomer
-// GET /CRUDBankServerSide/webresources/account/:accountId
-// PUT /CRUDBankServerSide/webresources/account
-// DELETE /CRUDBankServerSide/webresources/account/:accountId
-// POST /CRUDBankServerSide/webresources/account
+// GET all acounts /CRUDBankServerSide/webresources/account/customer/:idCustomer
+// GET account /CRUDBankServerSide/webresources/account/:accountId
+// PUT account /CRUDBankServerSide/webresources/account
+// DELETE account /CRUDBankServerSide/webresources/account/:accountId
+// POST account /CRUDBankServerSide/webresources/account
 
 // Save customer id for server petitions
 let customerId = sessionStorage.getItem('customer.id');
 
 // Extract tableBody from DOM
 const tableBody = document.querySelector("#tableBody");
+
+// Extract main wrapper from DOM
+const main = document.getElementById("mainWrapper");
 
 window.addEventListener("DOMContentLoaded", () => {
     try {
@@ -34,6 +37,31 @@ window.addEventListener("DOMContentLoaded", () => {
                 // Create the cell container and give it the correct role of cell
                 const cellContainer = document.createElement("div");
                 cellContainer.setAttribute("role", "cell");
+                switch (field) {
+                    case "id":
+                        cellContainer.setAttribute("data-title", "Id");
+                        break;
+                    case "type":
+                        cellContainer.setAttribute("data-title", "Type");
+                        break;
+                    case "description":
+                        cellContainer.setAttribute("data-title", "Description");
+                        break;
+                    case "balance":
+                        cellContainer.setAttribute("data-title", "Balance");
+                        break;
+                    case "creditLine":
+                        cellContainer.setAttribute("data-title", "Credit line");
+                        break;
+                    case "beginBalance":
+                        cellContainer.setAttribute("data-title", "Begin balance");
+                        break;
+                    case "beginBalanceTimestamp":
+                        cellContainer.setAttribute("data-title", "Creation date");
+                        break;
+                    default:
+                        break;
+                }
                 if (field === "actions") {
                     cellContainer.setAttribute("class", "actionsContainer");
                     // Create button
@@ -61,8 +89,51 @@ window.addEventListener("DOMContentLoaded", () => {
             })
             tableBody.appendChild(row);
         })
+        .then(() => {
+            // Create mini titles in case width less than 900px
+            if (window.innerWidth < 900) {
+                const tableBody = document.querySelectorAll("#tableBody .row");
+                Array.from(tableBody).forEach(row => {
+                    Array.from(row.childNodes).forEach(cellContainer => {
+                        if (!cellContainer.querySelector(".title")) {
+                            const dataTitle = cellContainer.getAttribute("data-title");
+                            if (dataTitle) {
+                                const title = document.createElement("p");
+                                title.setAttribute("class", "title");
+                                title.innerText = dataTitle;
+                                cellContainer.insertBefore(title, cellContainer.firstElementChild);
+                            }
+                        }
+                    })
+                })
+            }
+        })
     } catch (error) {
-        console.log(error.message);
+        displayError(`There was an error with the server. Try again later.`);
+    }
+})
+
+window.addEventListener("resize", () => {
+    if (window.innerWidth >= 900) {
+        const titles = document.querySelectorAll(".title");
+        if (titles.length) Array.from(titles).forEach(element => element.remove());
+    }
+    // Create mini titles in case width less than 900px
+    else {
+        const tableBody = document.querySelectorAll("#tableBody .row");
+        Array.from(tableBody).forEach(row => {
+            Array.from(row.childNodes).forEach(cellContainer => {
+                if (!cellContainer.querySelector(".title")) {
+                    const dataTitle = cellContainer.getAttribute("data-title");
+                    if (dataTitle) {
+                        const title = document.createElement("p");
+                        title.setAttribute("class", "title");
+                        title.innerText = dataTitle;
+                        cellContainer.insertBefore(title, cellContainer.firstElementChild);
+                    }
+                }
+            })
+        })
     }
 })
 
@@ -80,12 +151,37 @@ function* account_row_generator(accounts) {
         // Create the cell container and give it the correct role of cell
         const cellContainer = document.createElement("div");
         cellContainer.setAttribute("role", "cell");
+        switch (field) {
+            case "id":
+                cellContainer.setAttribute("data-title", "Id");
+                break;
+            case "type":
+                cellContainer.setAttribute("data-title", "Type");
+                break;
+            case "description":
+                cellContainer.setAttribute("data-title", "Description");
+                break;
+            case "balance":
+                cellContainer.setAttribute("data-title", "Balance");
+                break;
+            case "creditLine":
+                cellContainer.setAttribute("data-title", "Credit line");
+                break;
+            case "beginBalance":
+                cellContainer.setAttribute("data-title", "Begin balance");
+                break;
+            case "beginBalanceTimestamp":
+                cellContainer.setAttribute("data-title", "Creation date");
+                break;
+            default:
+                break;
+        }
         if (field === "actions") {
             cellContainer.setAttribute("class", "actionsContainer");
 
             // Edit button
             const editButton = document.createElement("button");
-            editButton.setAttribute("class", "editButtons");
+            editButton.setAttribute("class", "editButton");
             editButton.setAttribute("data-role", "edit");
             const editIcon = document.createElement("i");
             editIcon.setAttribute("class", "material-icons");
@@ -97,7 +193,7 @@ function* account_row_generator(accounts) {
 
             // Delete button
             const deleteButton = document.createElement("button");
-            deleteButton.setAttribute("class", "deleteButtons");
+            deleteButton.setAttribute("class", "deleteButton");
             deleteButton.setAttribute("data-role", "delete");
             const deleteIcon = document.createElement("i");
             deleteIcon.setAttribute("class", "material-icons");
@@ -159,12 +255,16 @@ function handleCellEdition(event, account) {
     // Create input element
     const input = document.createElement('input');
     input.setAttribute("data-role", dataRole)
+    input.setAttribute("aria-label", dataRole)
     if (dataRole === 'description') {
         input.type = 'text';
     }
     else {
         input.type = 'number';
+        input.min = "0";
+        input.max = "1000000";
     }
+    input.placeholder = `${dataRole}...`;
     input.value = originalValue;
     input.className = 'edit-input';
     
@@ -178,51 +278,72 @@ function handleCellEdition(event, account) {
     input.addEventListener('keydown', (event) => {
         // Add event listener for saving on Enter
         if (event.key === 'Enter') {
-            saveCellChanges(input, originalValue, account);
+            saveCellChanges(input, account);
         }
         // Add event listener for canceling on escape
         if (event.key === 'Escape') {
-            cancelEdit(input, originalValue);
+            cancelCellEdit(input, originalValue, account);
         }
     });
     // Add event listener for canceling on blur
     input.addEventListener('blur', () => {
-        cancelEdit(input, originalValue);
+        cancelCellEdit(input, originalValue, account);
     });
 }
 
 /**
  * 
  * @param { HTMLInputElement } input 
- * @param { string } originalValue 
  * @param { Account } account
  */
-function saveCellChanges(input, originalValue, account) {
+function saveCellChanges(input, account) {
     // Extract new value from input
     const newValue = input.value;
-    // Get cell parent
-    const cellContainer = input.parentNode;
 
-    // Overwrite old value with new value from input
-    account[input.getAttribute("data-role")] = newValue;
-
-    // Petition to update an account on the server
-    fetch('/CRUDBankServerSide/webresources/account', {
-        method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(account)
-    })
-    .then(response => {
-        if (!response.ok) throw new Error(response.status);
-        location.reload();
-    })
-    .catch(error => {
-        console.log(error.message);
-        // TODO: DisplayError();
-    })
-
+    // Extract data-role from input
+    const dataRole = input.getAttribute("data-role");
+    
+    // Validations
+    try {
+        // Check if description has correct length
+        if (dataRole === 'description'){
+            if (newValue === 0)
+                throw new Error(`Your account description can't be empty`);
+            if (newValue > 60)
+                throw new Error(`Your account description can't have more than 60 characters`);
+        }
+        if (dataRole === 'creditLine') {
+            if (isNaN(parseFloat(newValue)))
+                throw new Error(`Your account's credit line has to be a number`);
+            // Check if credit line is not empty
+            if (newValue === 0)
+                throw new Error(`Your account's credit line can't be empty`);
+            // Check if credit line is not higher than balance.
+            if (newValue > account.balance)
+                throw new Error(`Your credit line can't be higher than your balance`);
+        }
+        
+        // If everything is correct. Overwrite old value with new value from input
+        account[dataRole] = newValue;
+        
+        // Petition to update an account on the server
+        fetch('/CRUDBankServerSide/webresources/account', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(account)
+        })
+        .then(response => {
+            if (!response.ok) throw new Error(`There was an error editing your account. Try again later`);
+            else location.reload();
+        })
+        .catch(error => {
+            displayError(error.message);
+        })
+    } catch (error) {
+        displayError(error.message);
+    }
 }
 
 /**
@@ -231,7 +352,7 @@ function saveCellChanges(input, originalValue, account) {
  * @param { string } originalValue 
  * @param { Account } account
  */
-function cancelEdit(input, originalValue, account) {
+function cancelCellEdit(input, originalValue, account) {
     const cellContainer = input.parentNode;
     
     // Create new p element with the original value
@@ -313,6 +434,8 @@ function handleEditButton(event, account) {
         if (element.getAttribute("data-role") === "description") {
             const input = document.createElement("input");
             input.setAttribute("name", "description");
+            input.setAttribute("aria-label", "Description")
+            input.setAttribute("data-role", "Description")
             input.type = "text";
             input.placeholder = "description...";
             input.value = element.innerText;
@@ -321,6 +444,9 @@ function handleEditButton(event, account) {
         else if (element.getAttribute("data-role") === "creditLine" && account.type === "CREDIT") {
             const input = document.createElement("input");
             input.setAttribute("name", "creditLine");
+            input.setAttribute("aria-label", "Credit line")
+            input.setAttribute("data-role", "Credit line")
+            input.placeholder = "credit line...";
             input.min = "0";
             input.max = "1000000";
             input.type = "number";
@@ -343,6 +469,8 @@ function handleEditButton(event, account) {
     // Replace row with form
     row.parentNode.replaceChild(form, row);
 
+    // Remove submit from cancelButton
+    cancelButton.type = 'button';
     // Cancel button refreshes the page to avoid unnecesary coding
     cancelButton.addEventListener("click", () => location.reload());
 
@@ -352,23 +480,37 @@ function handleEditButton(event, account) {
         const form = event.currentTarget;
         const formData = new FormData(form);
         account.description = formData.get('description');
-        const creditLine = formData.get('creditLine');
-        if (creditLine) account.creditLine = creditLine;
-        fetch('/CRUDBankServerSide/webresources/account', {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(account)
-        })
-        .then(response => {
-            if(!response.ok) throw new Error(response.status)
-            location.reload();
-        })
-        .catch(error => {
-            console.log(error.message)
-            // TODO: displayError();
-        })
+        account.creditLine = formData.get('creditLine') || 0;
+        try {
+            // Check if description has correct length
+            if (account.description.length === 0)
+                throw new Error(`Your account description can't be empty`);
+            if (account.description.length > 60)
+                throw new Error(`Your account description can't have more than 60 characters`);
+
+            // Check if credit line is not empty
+            if (account.creditLine === 0)
+                throw new Error(`Your account's credit line can't be empty`);
+
+            // Check if credit line is not higher than balance.
+            if (account.creditLine > account.balance)
+                throw new Error(`Your credit line can't be higher than your balance`);
+
+            // If every validation goes through, update account.
+            fetch('/CRUDBankServerSide/webresources/account', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(account)
+            })
+            .then(response => {
+                if(!response.ok) throw new Error(`There was an error editing your account. Try again later`);
+                else location.reload();
+            })
+        } catch (error) {
+            displayError(error.message);
+        }
     });
 }
 
@@ -388,8 +530,8 @@ function handleDeleteButton(event, account) {
             }
         })
         .then(response => {
-            if (response.ok) return response.json()
-            else throw new Error(response.status)
+            if (!response.ok) throw new Error(`There was an error deleting your account`)
+            else return response.json()
         })
         .then(data => {
             // Extract all the movements Ids into a simple array
@@ -438,7 +580,7 @@ function handleDeleteButton(event, account) {
         .then(response => {
             if (response.ok) deleteButton.closest(".row").remove();
         })
-        .catch(error => console.log(error));
+        .catch(error => displayError(error.message));
     }
 }
 
@@ -489,17 +631,48 @@ function handleCreateButton(event) {
     Array.from(dataElements).slice(0, -1).forEach(element => {
         const container = document.createElement("div");
         container.setAttribute("role", "cell");
+        const field = element.getAttribute("data-role");
+        switch (field) {
+            case "id":
+                container.setAttribute("data-title", "Id");
+                break;
+            case "type":
+                container.setAttribute("data-title", "Type");
+                break;
+            case "description":
+                container.setAttribute("data-title", "Description");
+                break;
+            case "balance":
+                container.setAttribute("data-title", "Balance");
+                break;
+            case "creditLine":
+                container.setAttribute("data-title", "Credit line");
+                break;
+            case "beginBalance":
+                container.setAttribute("data-title", "Begin balance");
+                break;
+            case "beginBalanceTimestamp":
+                container.setAttribute("data-title", "Creation date");
+                break;
+            default:
+                break;
+        }
         
         if (element.getAttribute("data-role") === "id") {
             const input = document.createElement("input");
             input.setAttribute("name", "id")
-            input.type = "text";
-            input.readOnly = "true";
+            input.setAttribute("aria-label", "Id");
+            input.type = "hidden";
             input.value = Math.floor(Math.random() * 10000000000);
-            container.appendChild(input)
+            const p = document.createElement("p");
+            p.innerText = input.value;
+            container.appendChild(input);
+            container.appendChild(p);
         }
         else if (element.getAttribute("data-role") === "type") {
             const select = document.createElement("select");
+            select.setAttribute("aria-label", "type");
+            select.innerText = "type";
             select.setAttribute("name", "type")
             const optionStandard = document.createElement("option");
             optionStandard.setAttribute("value", "STANDARD");
@@ -517,6 +690,7 @@ function handleCreateButton(event) {
         else if (element.getAttribute("data-role") === "beginBalanceTimestamp"){
             const input = document.createElement("input");
             input.setAttribute("name", "beginBalanceTimestamp");
+            input.setAttribute("aria-label", "Begin balance timestamp");
             input.type = "hidden";
             const date = new Date();
             input.value = date.toISOString();
@@ -529,6 +703,7 @@ function handleCreateButton(event) {
         else if (element.getAttribute("data-role") === "description") {
             const input = document.createElement("input");
             input.setAttribute("name", "description");
+            input.setAttribute("aria-label", "Description");
             input.type = "text";
             input.placeholder = "description...";
             container.appendChild(input);
@@ -536,26 +711,65 @@ function handleCreateButton(event) {
         else if (element.getAttribute("data-role") === "balance") {
             const input = document.createElement("input");
             input.setAttribute("name", "balance");
+            input.setAttribute("aria-label", "Balance");
+            input.placeholder = "balance...";
             input.min = "0";
             input.max = "1000000";
             input.type = "number";
+            input.value = "0";
             container.appendChild(input);
         }
         else if (element.getAttribute("data-role") === "creditLine") {
-            const input = document.createElement("input");
-            input.setAttribute("name", "creditLine");
-            input.min = "0";
-            input.max = "1000000";
-            input.type = "number";
-            container.appendChild(input);
+            const select = form.querySelector("[name='type']");
+            if (select.value === 'CREDIT') {
+                const input = document.createElement("input");
+                input.setAttribute("name", "creditLine");
+                input.setAttribute("aria-label", "Credit line");
+                input.placeholder = "credit line...";
+                input.min = "0";
+                input.max = "1000000";
+                input.type = "number";
+                input.value = "0";
+                container.appendChild(input);
+            }
+            else {
+                const p = document.createElement("p");
+                p.setAttribute("name", "creditLine")
+                p.innerText = '0';
+                container.appendChild(p)
+            }
+            select.addEventListener("change", (event) => {
+                const selection = event.target.value;
+                const toReplace = form.querySelector("[name='creditLine']");
+                if (selection === 'CREDIT') {
+                    const input = document.createElement("input");
+                    input.setAttribute("name", "creditLine");
+                    input.setAttribute("aria-label", "Credit line");
+                    input.placeholder = "credit line...";
+                    input.min = "0";
+                    input.max = "1000000";
+                    input.type = "number";
+                    input.value = "0";
+                    toReplace.parentNode.replaceChild(input, toReplace);
+                }
+                else {
+                    const p = document.createElement("p");
+                    p.setAttribute("name", "creditLine")
+                    p.innerText = '0';
+                    toReplace.parentNode.replaceChild(p, toReplace);
+                }
+            })
         }
         else if (element.getAttribute("data-role") === "beginBalance") {
-            const input = document.createElement("input");
-            input.setAttribute("name", "beginBalance");
-            input.min = "0";
-            input.max = "1000000";
-            input.type = "number";
-            container.appendChild(input);
+            const p = document.createElement("p");
+            p.innerText = "0";
+            const balance = form.querySelector("[name='balance']");
+            balance.addEventListener("input", (event) => {
+                const balance = event.target.value;
+                if (balance == 0) p.innerText = '0';
+                else p.innerText = balance;
+            })
+            container.appendChild(p);
         }
         form.appendChild(container);
     });
@@ -570,18 +784,20 @@ function handleCreateButton(event) {
     // Replace row with form
     row.parentNode.replaceChild(form, row);
 
+    // Remove submit from button
+    cancelButton.type = 'button';
     // Cancel button refreshes the page to avoid unnecesary coding
     cancelButton.addEventListener("click", () => location.reload());
 
     // Submit form
-    form.addEventListener("submit", handleFormSubmit);
+    form.addEventListener("submit", handleCreateAccount);
 }
 
 /**
  * 
  * @param { Event } event
 */
-function handleFormSubmit(event) {
+function handleCreateAccount(event) {
     event.preventDefault();
     const form = event.target;
     const formData = new FormData(form);
@@ -593,19 +809,60 @@ function handleFormSubmit(event) {
     account.description = formData.get('description');
     account.balance = parseFloat(formData.get('balance') || 0);
     account.creditLine = parseFloat(formData.get('creditLine') || 0);
-    account.beginBalance = parseFloat(formData.get('beginBalance') || 0);
+    account.beginBalance = account.balance;
     account.beginBalanceTimestamp = formData.get('beginBalanceTimestamp');
 
-    fetch('/CRUDBankServerSide/webresources/account', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(account)
-    })
-    .then(response => {
-        if (!response.ok) throw new Error (response.status);
-        location.reload();
-    })
-    .catch(error => console.log(error.message))
+    // Validations
+    try {
+        // Check if description has correct length
+        if (account.description.length === 0)
+            throw new Error(`Your account description can't be empty`);
+        if (account.description.length > 60)
+            throw new Error(`Your account description can't have more than 60 characters`);
+
+        // Check if balance is not empty
+        if (account.balance === 0)
+            throw new Error(`Your account balance can't be empty`);
+
+        // Check if credit line is not empty when account's type is CREDIT
+        if (account.type === "CREDIT" && account.creditLine === 0)
+            throw new Error(`Your account credit can't be empty if the account type is CREDIT`);
+
+        // Check if credit line is not higher than balance.
+        if (account.type === "CREDIT" && account.creditLine > account.balance)
+            throw new Error(`Your credit line can't be higher than your balance`);
+
+        fetch('/CRUDBankServerSide/webresources/account', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(account)
+        })
+        .then(response => {
+            if (!response.ok) throw new Error (`There was an error creating your account`);
+            else location.reload();
+        })
+        .catch(error => displayError(error.message))
+    } catch (error) {
+        displayError(error.message);
+    }
+}
+
+/**
+ * 
+ * @param { string } message
+ */
+function displayError(message) {
+    // Clear all errors
+    document.querySelectorAll('.error').forEach(element => element.remove());
+    if (window.innerWidth < 900) {
+        alert(message);
+    }
+    else {
+        const error = document.createElement("span");
+        error.setAttribute("class", "error");
+        error.innerText = message;
+        main.insertBefore(error, main.firstElementChild);
+    }
 }
