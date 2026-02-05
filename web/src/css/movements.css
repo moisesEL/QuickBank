@@ -1,0 +1,125 @@
+#mainWrapper {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 60px 20px;
+    background-color: var(--primary-background);
+    min-height: 100vh;
+}
+
+#leftDiv {
+    width: 95%; 
+    max-width: 1300px;
+    background-color: var(--primary-background);
+    padding: 50px;
+    border-radius: 25px;
+    box-shadow: 0px 1px 10px grey;}
+
+#leftDiv input {
+    background: none;
+    
+
+}
+
+#leftDivTitle {
+    width: 100%; 
+    margin-bottom: 40px !important;
+    font-size: 2.5rem;
+    color: var(--primary-text-color);
+    font-family: 'Kode Mono', monospace;
+    border-bottom: 3px solid #3b60d1;
+    display: inline-block;
+    padding-bottom: 10px;
+}
+
+.tableContainer {
+    width: 100%;
+    background: white;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0px 4px 15px rgba(0,0,0,0.05);
+}
+
+#movementsTable {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.rowheader {
+    background-color: #3b60d1;
+    color: white;
+}
+
+.rowheader th {
+    padding: 20px; 
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+#movementsTable td {
+    padding: 18px;
+    border-bottom: 1px solid #f0f0f0;
+    text-align: center;
+    font-size: 1.05rem;
+}
+
+.input-row {
+    background-color: #f8faff !important;
+}
+
+.input-row input, .input-row select {
+    padding: 12px;
+    border: 1px solid #d1d1d1;
+    border-radius: 8px;
+    width: 100%;
+    font-size: 1rem;
+}
+
+.btn-confirm {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.btn-confirm:hover {
+    background-color: #218838;
+}
+
+.delete-action-container {
+    display: flex;
+    justify-content: right;
+    margin: 30px 0;
+}
+
+.btn-delete {
+    background-color: #fff;
+    color: red;
+    border: 2px solid red;
+    padding: 12px;
+    border-radius: 10px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    font-weight: bold;
+}
+
+.btn-delete:hover, .btn-delete:focus {
+    background-color: #fff5f5;
+    border-width: 3px;
+}
+.section-label {
+    text-align: center;
+    color: #888;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    margin-bottom: 15px;
+}
+
+
