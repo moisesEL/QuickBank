@@ -106,6 +106,8 @@ export async function renderMovements() {
            headers: { 'Accept': 'application/json' }
        });
        const fullAccount = await accountResponse.json();
+          const disponibleTotal = fullAccount.balance + (fullAccount.creditLine || 0);
+
        sessionStorage.setItem("account", JSON.stringify(fullAccount));
 
        const movements = await GetMovements(accountId);
@@ -115,10 +117,15 @@ export async function renderMovements() {
         document.getElementById("typeAccount").textContent = fullAccount.type;
         document.getElementById("balance").textContent = fullAccount.balance;
 
+
        if (fullAccount.type === "CREDIT") {
             document.getElementById("creditLine").textContent = fullAccount.creditLine;
+            document.getElementById("balanceTotal").textContent = disponibleTotal;
+
+
        } else {
             document.getElementById("creditContainer").style.display = "none";
+             document.getElementById("balanceContainer").style.display = "none";
 
        }
 
@@ -145,6 +152,20 @@ async function saveMovementInline() {
    // const accountData = JSON.parse(sessionStorage.getItem("account")) || { id: accountId, balance: 100 };
 
    const accountData = JSON.parse(sessionStorage.getItem("account"))
+   // logica para cuentas de credito
+   const disponibleTotal = accountData.balance + (accountData.creditLine || 0);
+
+
+   if (accountData.type === "STANDARD" && description === "Payment" && accountData.balance < amount) {
+      alert("Error: Operación rechazada. Retire dinero disponible");
+      return;
+   }
+
+    if (accountData.type === "CREDIT" && description === "Payment" && amount > disponibleTotal) {
+       return alert("Error: Operación rechazada. Supera su límite de crédito disponible.");
+   }
+  
+
    if (amount <= 0) return alert("Valor no válido");
 
    if (isNaN(amount)) {
@@ -152,10 +173,6 @@ async function saveMovementInline() {
        return;
    }
 
-   if (description === "Payment" && accountData.balance < amount) {
-      alert("Saldo negativo error");
-      return;
-   }
 
 
    let newBalance;
