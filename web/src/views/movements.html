@@ -23,18 +23,19 @@
 
 
     <script src="/QuickBank/src/util/model.js"></script>
-        <script src="/QuickBank/src/assets/h5p/h5p-player/main.bundle.js"></script>
-<script src="/QuickBank/src/assets/h5p/h5p-player/h5p-standalone.min.js"></script>
+    <script src="/QuickBank/src/assets/h5p/h5p-player/main.bundle.js"></script>
+    <script src="/QuickBank/src/assets/h5p/h5p-player/h5p-standalone.min.js"></script>
 
-<script type="module" src="/QuickBank/src/util/movements.js"></script>
+    <script type="module" src="/QuickBank/src/util/movements.js"></script>
     <script src="/QuickBank/src/components/footer.js"></script>
 </head>
+
 <body>
     <nav-bar></nav-bar>
     <main id="mainWrapper">
-        <section id="leftDiv" aria-label="Movements">
+        <section id="leftDiv" aria-label="Movements History">
             <div id="principal">
-                <div id="informationAccount">
+                <div id="informationAccount" role="region" aria-live="polite" aria-label="Account Summary">
                     <div>Type: <span id="typeAccount"></span></div>
                     <div>Balance: <span id="balance"></span></div>
                     <div id="creditContainer">Credit Line: <span id="creditLine"></span></div>
@@ -45,7 +46,6 @@
                 <div class="tableContainer">
                     <table id="movementsTable" aria-label="Movements history">
                         <thead>
-
                             <tr class="rowheader">
                                 <th scope="col">Timestamp</th>
                                 <th scope="col">Description</th>
@@ -67,7 +67,9 @@
                                 </td>
                                 <td><span aria-hidden="true">---</span></td>
                                 <td>
-                                    <button id="btnConfirmMovement" class="btn-confirm"><span class="material-icons">check</span></button>
+                                    <button id="btnConfirmMovement" class="btn-confirm" aria-label="Confirm transaction">
+                                        <span class="material-icons" aria-hidden="true">check</span>
+                                    </button>
                                 </td>
                             </tr>
                         </thead>
@@ -75,15 +77,13 @@
                     </table>
                 </div>
                 <div class="container-actions">
-                                     <button id="helpButton">Help</button>
-                    <div id="h5p-container" class="h5p-container"></div>   
+                    <button id="helpButton" aria-haspopup="dialog" aria-controls="h5p-container">Help</button>
+                    <div id="h5p-container" class="h5p-container" role="dialog" aria-modal="true" aria-label="Help Video Player" aria-hidden="true"></div>
                     <button id="btnDeleteLastMovement" class="btn-delete">
                         <span class="material-icons" aria-hidden="true">delete</span>
                         Delete last movement
                     </button>
-
                 </div>
-            </div>
             </div>
         </section>
     </main>
