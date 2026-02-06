@@ -4,17 +4,17 @@ import sumAccountsBalances from "./sumAccountsBalances.js";
 
 window.addEventListener("DOMContentLoaded", () => {
     let customer = new Customer (
-        sessionStorage.getItem('customer.email'),
+        sessionStorage.getItem('customer.id'),
         sessionStorage.getItem('customer.firstName'),
-        sessionStorage.getItem('customer.middleInitial'),
         sessionStorage.getItem('customer.lastName'),
-        sessionStorage.getItem('customer.password'),
+        sessionStorage.getItem('customer.middleInitial'),
         sessionStorage.getItem('customer.street'),
         sessionStorage.getItem('customer.city'),
-        sessionStorage.getItem('custableBodytomer.state'),
+        sessionStorage.getItem('customer.state'),
         sessionStorage.getItem('customer.zip'),
         sessionStorage.getItem('customer.phone'),
-        sessionStorage.getItem('customer.id')
+        sessionStorage.getItem('customer.email'),
+        sessionStorage.getItem('customer.password'),
     )
     document.getElementById("firstName").value = customer.firstName;
     document.getElementById("middleInitial").value = customer.middleInitial;
