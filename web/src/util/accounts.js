@@ -105,7 +105,7 @@ window.addEventListener("DOMContentLoaded", () => {
                 // Initialize H5P only once
                 if (!h5pInstance) {
                     const options = {
-                        h5pJsonPath: '/QuickBank/src/assets/h5p/h5p-content',
+                        h5pJsonPath: '/QuickBank/src/assets/h5p/h5p-accounts',
                         frameJs: '/QuickBank/src/assets/h5p/h5p-player/frame.bundle.js',
                         frameCss: '/QuickBank/src/assets/h5p/h5p-player/styles/h5p.css',
                         librariesPath: '/QuickBank/src/assets/h5p/h5p-libraries'
@@ -568,68 +568,45 @@ function handleEditButton(event, account) {
  * @param { Account } account
  */
 function handleDeleteButton(event, account) {
-    const deleteButton = event.currentTarget;
-    if (confirm(`Are you sure you want to delete your account: ${account.description}(${account.id})`)) {
-        fetch(`/CRUDBankServerSide/webresources/movement/account/${account.id}`, {
-            method: 'GET',
+    fetch(`/CRUDBankServerSide/webresources/movement/account/${account.id}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        }
+    })
+    .then(response => {
+        if (!response.ok) throw new Error(`There was an error deleting your account`)
+        else return response.json()
+    })
+    .then(data => {
+        // Extract all the movements Ids into a simple array
+        let movementsIds = data.map(movement => movement.id);
+        
+        // If no movements, delete the account
+        if (movementsIds.length === 0) {
+            if (confirm(`Are you sure you want to delete your account: ${account.description}(${account.id}) ?`)) {
+                return Promise.resolve();
+            }
+        }
+        else {
+            throw new Error(`The account "${account.description}" cannot be deleted because it has movements. Remove all it's movements to be able to delete it.`)
+        }
+    })
+    .then(() => {
+        // Delete de account
+        return fetch(`/CRUDBankServerSide/webresources/account/${account.id}`, {
+            method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json'
             }
-        })
-        .then(response => {
-            if (!response.ok) throw new Error(`There was an error deleting your account`)
-            else return response.json()
-        })
-        .then(data => {
-            // Extract all the movements Ids into a simple array
-            let movementsIds = data.map(movement => movement.id);
-            
-            // If no movements, delete the account
-            if (movementsIds.length === 0) return Promise.resolve([]);
-            
-            // Create DELETE promises for each movement
-            const deletePromises = movementsIds.map(movementId => 
-                fetch(`/CRUDBankServerSide/webresources/movement/${movementId}`, {
-                    method: 'DELETE',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                }).then(response => {
-                    if (response.ok) {
-                        return { movementId, success: true };
-                    } else {
-                        return { movementId, success: false, status: response.status };
-                    }
-                }).catch(error => {
-                    return { movementId, success: false, error: error.message };
-                })
-            );
-            return Promise.all(deletePromises);
-        })
-        .then(deleteResults => {
-            // Check if all deletions were successful
-            const failedDeletions = deleteResults.filter(result => !result.success);
-            
-            if (failedDeletions.length > 0) {
-                alert("There was an error deleting the account's movements. Try again Later");
-                throw new Error("There was an error deleting the account's movements. Try again Later");
-            }
-            
-            // If there were no errors, delete the account
-            return fetch(`/CRUDBankServerSide/webresources/account/${account.id}`, {
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json'
-                }
-            });
-        })
-        .then(response => {
-            if (response.ok) location.reload();
-        })
-        .catch(error => displayError(error.message));
-    }
+        });
+    })
+    .then(response => {
+        if (response.ok) location.reload();
+    })
+    .catch(error => displayError(error.message));
 }
 
 /**
