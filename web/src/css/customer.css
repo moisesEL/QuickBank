@@ -1,0 +1,465 @@
+/*asocioado a account con formulario*/
+
+
+/* Ajustes específicos para customer*//*
+#mainWrapper {
+    padding: 3% 4% 1% 3%;
+    margin: 30px 2% 30px 2%;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    display: flex;
+    flex-direction: column; 
+    gap: 20px;
+    justify-content: flex-start;
+    align-items: center; 
+    box-shadow: 0px 1px 10px grey;
+}
+
+#alertContainer {
+    width: 100%;
+    text-align: center; 
+}
+
+#contentWrapper {
+    display: flex;
+    flex-direction: row; 
+    gap: 20px;
+    width: 100%;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+
+#customersTable {
+    flex: 1;
+    min-height: 100vh;
+    display: grid;
+    grid-template-rows: min-content 1fr;
+    grid-template-columns: 1fr;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+}
+
+.row {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    width: 100%;
+    gap: 0;
+    background-color: var(--accounts-background); 
+}
+
+/* Estilos para el formulario a la derecha *//*
+#forSection {
+    display: none;
+    width: 300px;
+    flex-shrink: 0; 
+    background-color: var(--form-background); 
+    border: 0.2px solid var(--border-color); 
+    border-radius: 8px; 
+    padding: 20px;
+    box-shadow: 0px 1px 10px grey;
+    backdrop-filter: blur(1.5px); 
+    transition: all 0.3s ease; 
+}
+
+.form-buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.forSection-buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+/* Colores específicos *//*
+.createButton,
+.confirmButton {
+    background-color: #28a745; 
+    color: var(--primary-btn-color); 
+    transition: all 0.3s ease; 
+}
+
+.cancelButton,
+.deleteButton {
+    background-color: #dc3545; 
+    color: var(--primary-btn-color);
+    transition: all 0.3s ease; 
+}
+
+/* Alertas *//*
+.error {
+    color: var(--error-color); 
+    background-color: var(--error-background); 
+    padding: 10px;
+    font-weight: 700;
+    font-size: 1.2rem;
+    border: 3px solid var(--error-border-color);
+    text-align: center;
+    transition: all 0.3s ease; 
+}
+
+.success {
+    color: green;
+    background-color: var(--form-background); 
+    padding: 10px;
+    font-weight: 700;
+    font-size: 1.2rem;
+    border: 3px solid green;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+@media screen and (max-width: 900px) {
+    #mainWrapper {
+        margin: 2%;
+    }
+    .row {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        padding-bottom: 15px;
+    }
+    #tableBody .row {
+        padding-bottom: 15px;
+        margin-bottom: 15px;
+        border-bottom: 2px dashed grey;
+    }
+    #tableHeader {
+        display: none;
+    }
+
+    .row > div {
+        display:flex;
+        flex-direction: column;
+        gap: 2px;
+    }
+
+    .row > div > p {
+        min-height: 20px;
+    }
+
+    .actionsContainer {
+        flex-direction: row !important; 
+        gap: 10px !important; 
+    }
+
+    .title {
+        font-weight: bold;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+}
+
+
+/* CSS independiente, customer.css formilario*/
+
+#mainWrapper {
+    padding: 3% 4% 1% 3%;
+    margin: 30px 2% 30px 2%;
+    min-height: 100vh;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column; 
+    gap: 20px;
+    justify-content: flex-start;
+    align-items: center; 
+    box-shadow: 0px 1px 10px grey;
+}
+
+#alertContainer {
+    width: 100%;
+    text-align: center; 
+}
+
+#contentWrapper {
+    display: flex;
+    flex-direction: row; 
+    gap: 20px;
+    width: 100%;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+
+#customersTable {
+
+    width: 100%;
+    flex: 1; 
+    min-height: 100vh;
+    display: grid;
+    grid-template-rows: min-content 1fr;
+    grid-template-columns: 1fr;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+}
+
+.row {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr); 
+    width: 100%;
+    gap: 0;
+    background-color: var(--accounts-background); 
+}
+
+.row > div {
+    background-color: var(--accounts-background); 
+    padding: 12px 8px;
+    border: 1px solid rgba(155, 155, 155, 0.4);
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    word-break: break-word;
+    overflow: hidden;
+    color: var(--accounts-text-color); 
+}
+
+/* Header de tabla */
+#tableHeader, #tableHeader .row {
+    height: min-content;
+    border-top-left-radius: 30px;
+    border-top-right-radius: 30px;
+}
+
+#tableHeader .row > div {
+    color: var(--accounts-header-color); 
+    background: var(--accounts-header-background); 
+    font-weight: 600;
+}
+
+#tableHeader .row > div:first-child {
+    border-top-left-radius: 30px;
+}
+#tableHeader .row > div:last-child {
+    border-top-right-radius: 30px;
+}
+
+/* Body de tabla */
+#tableBody {
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: start;
+}
+
+#tableBody .row > div p,
+#tableBody .row > div input,
+#tableBody .row > div a {
+    background-color: inherit;
+    color: inherit;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+#tableBody .row div:hover,
+#tableBody .row div:focus {
+    background-color: var(--third-background); 
+}
+
+.actionsContainer {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+}
+
+.editButton,
+.deleteButton,
+.createButton,
+.cancelButton,
+.confirmButton {
+    color: var(--primary-btn-color); 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 5px;
+    border-radius: 25px;
+    cursor: pointer;
+    border: none;
+    font-size: 0.9rem;
+    transition: all 0.3s ease; 
+}
+
+.editButton{
+    background-color: #007bff;
+}
+.editButton:hover,
+.deleteButton:hover,
+.createButton:hover,
+.cancelButton:hover,
+.confirmButton:hover {
+    opacity: 0.5;
+}
+
+.createButton,
+.confirmButton {
+    background-color: #28a745; 
+}
+
+.cancelButton,
+.deleteButton {
+    background-color: #dc3545; 
+}
+
+/* Estilos para el formulario a la derecha*/
+#forSection {
+    display: none;
+    width: 300px;
+    flex-shrink: 0; 
+    background-color: var(--form-background); 
+    border: 0.2px solid var(--border-color); 
+    border-radius: 8px; 
+    padding: 20px;
+    box-shadow: 0px 1px 10px grey;
+    backdrop-filter: blur(1.5px); 
+    transition: all 0.3s ease; 
+}
+
+
+.form-buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+
+#helpButton {
+    padding: 8px 16px;
+    background-color: var(--accounts-header-background);
+    color: var(--accounts-header-color);
+    border: none;
+    border-radius: 8px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 2px 4px var(--dropdown-content-shadow);
+}
+
+#helpButton:hover {
+    background-color: #3516a5;
+    box-shadow: 0 4px 8px var(--dropdown-content-shadow);
+}
+
+
+#helpButton:active {
+    box-shadow: 0 1px 2px var(--dropdown-content-shadow);
+}
+
+#helpButton {
+    padding: 8px 16px;
+    background-color: var(--accounts-header-background);
+    color: var(--accounts-header-color);
+    border: none;
+    border-radius: 8px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 2px 4px var(--dropdown-content-shadow);
+}
+
+#helpButton:hover {
+    background-color: #3516a5;
+    box-shadow: 0 4px 8px var(--dropdown-content-shadow);
+}
+#helpButton:active {
+    box-shadow: 0 1px 2px var(--dropdown-content-shadow);
+}
+
+
+/* H5P Modal Styles */
+#h5p-container {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    z-index: 9999;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+#h5p-container > div {
+    max-width: 900px;
+    max-height: 90vh;
+    width: 100%;
+    background: white;
+    border-radius: 8px;
+    overflow: auto;
+}
+
+
+/* Alertas*/
+.error {
+    color: var(--error-color); 
+    background-color: var(--error-background);
+    padding: 10px;
+    font-weight: 700;
+    font-size: 1.2rem;
+    border: 3px solid var(--error-border-color); 
+    text-align: center;
+    transition: all 0.3s ease; 
+}
+
+.success {
+    color: green;
+    background-color: var(--form-background); 
+    padding: 10px;
+    font-weight: 700;
+    font-size: 1.2rem;
+    border: 3px solid green;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+@media screen and (max-width: 900px) {
+    #mainWrapper {
+        margin: 2%;
+    }
+    .row {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        padding-bottom: 15px;
+    }
+    #tableBody .row {
+        padding-bottom: 15px;
+        margin-bottom: 15px;
+        border-bottom: 2px dashed grey;
+    }
+    #tableHeader {
+        display: none;
+    }
+
+    .row > div {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+    }
+
+    .row > div > p {
+        min-height: 20px;
+    }
+
+    .title {
+        font-weight: bold;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+}
