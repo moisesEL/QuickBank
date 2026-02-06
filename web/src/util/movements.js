@@ -16,6 +16,7 @@ const dateFormatter = new Intl.DateTimeFormat(undefined, {
    year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit'
 });
 
+let h5pInstance = null;
 
 // (GET) OBtener movimientos
 async function GetMovements(id) {
@@ -115,12 +116,12 @@ export async function renderMovements() {
        console.log(fullAccount.type); 
 
         document.getElementById("typeAccount").textContent = fullAccount.type;
-        document.getElementById("balance").textContent = fullAccount.balance;
+        document.getElementById("balance").textContent = currencyFormatter.format(fullAccount.balance);
 
 
        if (fullAccount.type === "CREDIT") {
-            document.getElementById("creditLine").textContent = fullAccount.creditLine;
-            document.getElementById("balanceTotal").textContent = disponibleTotal;
+            document.getElementById("creditLine").textContent = currencyFormatter.format(fullAccount.creditLine);
+            document.getElementById("balanceTotal").textContent = currencyFormatter.format(disponibleTotal);
 
 
        } else {
@@ -252,4 +253,45 @@ document.addEventListener("DOMContentLoaded", () => {
    if (btn) btn.addEventListener("click", saveMovementInline);
    const btnDelete = document.getElementById("btnDeleteLastMovement");
    if (btnDelete) btnDelete.addEventListener("click", deleteLastMovement);
+
+   /* h5p Code  */
+   const helpButton = document.getElementById('helpButton');
+
+   // When helpButton is pressed, initialize h5p container and display video
+   helpButton.addEventListener("click", () => {
+       const modal = document.getElementById('h5p-container');
+       
+       // Initialize H5P only once
+       if (!h5pInstance) {
+           const options = {
+               h5pJsonPath: '/QuickBank/src/assets/h5p/h5p-movements',
+               frameJs: '/QuickBank/src/assets/h5p/h5p-player/frame.bundle.js',
+               frameCss: '/QuickBank/src/assets/h5p/h5p-player/styles/h5p.css',
+               librariesPath: '/QuickBank/src/assets/h5p/h5p-libraries'
+           };
+           h5pInstance = new H5PStandalone.H5P(modal, options);
+       }
+       
+       // Show modal
+       modal.style.display = "flex";
+       document.body.style.overflow = "hidden";
+   });
+
+   // Close modal when clicking outside the video
+   document.addEventListener('click', (event) => {
+       const modal = document.getElementById('h5p-container');
+       if (event.target === modal) {
+           modal.style.display = "none";
+           document.body.style.overflow = "auto";
+       }
+   });
+
+   // Close modal with ESC key
+   document.addEventListener('keydown', (event) => {
+       const modal = document.getElementById('h5p-container');
+       if (event.key === 'Escape' && modal.style.display === 'flex') {
+           modal.style.display = "none";
+           document.body.style.overflow = "auto";
+       }
+   });
 });

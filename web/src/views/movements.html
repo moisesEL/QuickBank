@@ -7,20 +7,15 @@
     <link rel="icon" type="image/x-icon" href="/QuickBank/src/assets/Favicon.ico">
     <title>Movements - QuickBank</title>
 
-    <!-- Alternative styles -->
     <link rel="stylesheet" href="/QuickBank/src/css/light_theme.css" id="main-style" title="Light Mode">
     <link rel='alternate stylesheet' href='/QuickBank/src/css/dark_theme.css' title="Dark Mode" disabled>
 
-    <!-- Main style first -->
     <link rel="stylesheet" href="/QuickBank/src/css/main.css">
-    <!-- Personal style -->
     <link rel='stylesheet' href='/QuickBank/src/css/movements.css'>
 
-    <!-- Custom Google font import for navbar -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Kode+Mono&display=swap" rel="stylesheet">
-    <!-- Custom navBar -->
     <script src="/QuickBank/src/components/nav_bar.js"></script>
 
     <script>if (!sessionStorage.getItem('customer.id')) window.location.replace("/QuickBank");</script>
@@ -28,9 +23,10 @@
 
 
     <script src="/QuickBank/src/util/model.js"></script>
-    <script type="module" src="/QuickBank/src/util/movements.js"></script>
+        <script src="/QuickBank/src/assets/h5p/h5p-player/main.bundle.js"></script>
+<script src="/QuickBank/src/assets/h5p/h5p-player/h5p-standalone.min.js"></script>
 
-    <script src="../components/custom_password.js"></script>
+<script type="module" src="/QuickBank/src/util/movements.js"></script>
     <script src="/QuickBank/src/components/footer.js"></script>
 </head>
 <body>
@@ -75,14 +71,17 @@
                                 </td>
                             </tr>
                         </thead>
-                        <tbody id="tableBody"> <!-- Tabla generada--></tbody>
+                        <tbody id="tableBody"> </tbody>
                     </table>
                 </div>
-                <div class="delete-action-container">
+                <div class="container-actions">
+                                     <button id="helpButton">Help</button>
+                    <div id="h5p-container" class="h5p-container"></div>   
                     <button id="btnDeleteLastMovement" class="btn-delete">
                         <span class="material-icons" aria-hidden="true">delete</span>
                         Delete last movement
                     </button>
+
                 </div>
             </div>
             </div>
