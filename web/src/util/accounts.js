@@ -105,7 +105,7 @@ window.addEventListener("DOMContentLoaded", () => {
                 // Initialize H5P only once
                 if (!h5pInstance) {
                     const options = {
-                        h5pJsonPath: '/QuickBank/src/assets/h5p/h5p-content',
+                        h5pJsonPath: '/QuickBank/src/assets/h5p/h5p-accounts',
                         frameJs: '/QuickBank/src/assets/h5p/h5p-player/frame.bundle.js',
                         frameCss: '/QuickBank/src/assets/h5p/h5p-player/styles/h5p.css',
                         librariesPath: '/QuickBank/src/assets/h5p/h5p-libraries'
