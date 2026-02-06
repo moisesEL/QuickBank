@@ -169,6 +169,8 @@ function deleteUser(user) {
         displayError("You cannot delete your own user.");
         return;
     }
+    // ¿Seguro que quieres eliminar a " + user.email + "?"
+    if (!confirm("Are you sure you want to delete " + user.email + "?")) return;
  
     fetch(`${SERVICE_URL}/${user.id}`, { method: "DELETE" })
         .then(response => {
@@ -194,6 +196,9 @@ document.getElementById("btnCancel").addEventListener("click", () => {
 form.addEventListener("submit", async (e) => {
     e.preventDefault();
     clearMessage();
+    //  "¿Seguro que quieres guardar los cambios?"
+    if (!confirm("Are you sure you want to save the changes?")) return;
+
     const formData = new FormData(form);
     const password = generatePassword();
 
