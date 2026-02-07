@@ -188,6 +188,7 @@ window.addEventListener("resize", () => {
  * 
  * Generator function that yields account table rows
  * @param { Account[] } accounts
+ * @todo Formatear importes con separadores de miles y de decimales(máximo 2).
  */
 function* account_row_generator(accounts) {
     for (const account of accounts) {
@@ -342,7 +343,16 @@ function handleCellEdition(event, account) {
 }
 
 /**
- * 
+ *@todo Validar el formato de los importes mediante la siguiente RegExp
+        const esAmountRegex = /^(?:\d{1,15}|\d{1,3}(?:\.\d{3}){1,4})(?:,\d{1,2})?$/;
+     Explicación de esAmountRegex
+        ^
+            (?:                         # integer part options
+               \d{1,15}                 # 1 to 15 digits without thousand separator
+             | \d{1,3}(?:\.\d{3}){1,4}  # 1–3 digits, then 1–4 groups of ".ddd"
+            )
+            (?:,\d{1,2})?               # optional decimal with 1 or 2 digits
+            $
  * @param { HTMLInputElement } input 
  * @param { Account } account
  */
