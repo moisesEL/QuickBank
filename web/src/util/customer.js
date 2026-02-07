@@ -1,3 +1,8 @@
+/**
+ * @fixme Controlar que no se puedan borrar los Customer que tengan cuentas e informar al usuario de tal situación.
+ * Para lo anterior tendrá que hacer una petición GET /CRUDBankServerSide/webresources/account/customer/{id}. 
+ */
+
 import { Customer } from "./model.js";
 
 const SERVICE_URL = "/CRUDBankServerSide/webresources/customer";
@@ -58,7 +63,7 @@ export async function loadUsers() {
         const res = await fetch(SERVICE_URL, { headers: { "Accept": "application/json" } });
         if (!res.ok) throw new Error("Error loading users. Try again."); 
         const users = await res.json();
-
+        //FIXME Sustituir esta iteración por el uso de una función generadora
         for (let i = 0; i < users.length; i++) {
             const user = users[i];
             const row = document.createElement("div");
@@ -266,7 +271,7 @@ form.addEventListener("submit", async (e) => {
         displayError("All fields are required."); 
         return;
     }
-
+    //FIXME Validar el formato del email usando una expresión regular
     try {
         const method = selectedUser ? "PUT" : "POST";
         const res = await fetch(SERVICE_URL, {
