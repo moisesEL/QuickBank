@@ -82,7 +82,7 @@ function* movementRowGenerator(movements) {
                }
                value = currencyFormatter.format(value);
            }
-           //TODO Sustituir operador ?? por if-else
+           //FIXME Sustituir operador ?? por if-else
            td.textContent = value ?? "N/A";
            tr.appendChild(td)
        });
