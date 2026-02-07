@@ -1,3 +1,8 @@
+/** 
+ * @todo:  Calcular y mostrar el valor agregado del total de los ingresos y de los gastos.
+ */
+
+//TODO Cambiar Movements por Movement
 import { Movements } from "./model.js";
 
 // Capturamos los parámetros de la URL
@@ -77,7 +82,7 @@ function* movementRowGenerator(movements) {
                }
                value = currencyFormatter.format(value);
            }
-
+           //TODO Sustituir operador ?? por if-else
            td.textContent = value ?? "N/A";
            tr.appendChild(td)
        });
@@ -148,6 +153,16 @@ export async function renderMovements() {
 
 async function saveMovementInline() {
    const amountInput = document.getElementById("newAmount");
+    //TODO Utilizar la siguiente RegExp para validar que el importe pueda introducirse con separador de decimales y de miles.
+    const esAmountRegex = /^(?:\d{1,15}|\d{1,3}(?:\.\d{3}){1,4})(?:,\d{1,2})?$/;
+    /* Explanation for esAmountRegex:
+          (?:                                # integer part options
+            \d{1,15}                         # 1 to 15 digits without thousand separator
+            | \d{1,3}(?:\.\d{3}){1,4}        # 1–3 digits, then 1–4 groups of ".ddd"
+           )
+          (?:,\d{1,2})?                      # optional decimal with 1 or 2 digits
+    */
+   
    const amount = parseFloat(amountInput.value);
    const description = document.getElementById("newDescription").value;
    // const accountData = JSON.parse(sessionStorage.getItem("account")) || { id: accountId, balance: 100 };

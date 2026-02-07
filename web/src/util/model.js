@@ -35,7 +35,11 @@ class Account {
         }
     }
 }
-
+/**
+ * 
+ * @type {type}
+ * @todo Cambiar el nombre de la clase a Movement
+ */
 class Movements {
     constructor(id, balance, amount, description, timestamp) {
         this.id = id;
