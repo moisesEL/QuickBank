@@ -1,6 +1,7 @@
 import { Account } from "./model.js";
 import fetch_accounts_by_user_id from "./fetch_accounts_by_user_id.js";
 import sumAccountsBalances from "./sumAccountsBalances.js";
+import unformatString from "./unformatNumber.js";
 
 // GET all acounts /CRUDBankServerSide/webresources/account/customer/:idCustomer
 // GET account /CRUDBankServerSide/webresources/account/:accountId
@@ -262,13 +263,23 @@ function* account_row_generator(accounts) {
             cellContainer.appendChild(cell);
             row.appendChild(cellContainer);
         }
+        else if(field === 'balance' || field === 'creditLine' || field === 'beginBalance') {
+            const cell = document.createElement("p");
+            cell.setAttribute("data-role", field);
+            cell.setAttribute("class", field);
+            cell.innerText = account[field].toLocaleString('es-ES');
+            console.log(unformatString(cell.innerText));
+            cellContainer.appendChild(cell);
+            cell.addEventListener("dblclick", handleCreateButton);
+            row.appendChild(cellContainer);
+        }
         else {
             const cell = document.createElement("p");
             cell.setAttribute("data-role", field);
             cell.setAttribute("class", field);
             if (field === "beginBalanceTimestamp") {
                 const date = new Date(account[field]);
-                cell.innerText = `${formatAMPM(date)} - ${date.toLocaleDateString('en-US',
+                cell.innerText = `${formatAMPM(date)} - ${date.toLocaleDateString('es-ES',
                 { month: '2-digit', day: '2-digit', year: 'numeric' })}`;
             }
             else
@@ -313,6 +324,7 @@ function handleCellEdition(event, account) {
         input.type = 'number';
         input.min = "0";
         input.max = "1000000";
+        originalValue = unformatString(originalValue);
     }
     input.placeholder = `${dataRole}...`;
     input.value = originalValue;
@@ -587,6 +599,9 @@ function handleDeleteButton(event, account) {
         if (movementsIds.length === 0) {
             if (confirm(`Are you sure you want to delete your account: ${account.description}(${account.id}) ?`)) {
                 return Promise.resolve();
+            }
+            else {
+                return Promise.reject();
             }
         }
         else {

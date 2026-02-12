@@ -1,3 +1,4 @@
+import unformatNumber from "./unformatNumber.js";
 /**
  * @param { HTMLElement } toAppendOn The HTML element you want to append the total account's balances
  * @param { string } order The order in which you want to append the total balance. 'before' or 'after'
@@ -6,7 +7,7 @@ function sumAccountsBalances(toAppendOn, order) {
     // Get all balance cells
     const arrBalances = document.querySelectorAll("[data-role='balance']");
     // Sum each account's balance
-    const sum = Array.from(arrBalances).reduce((acc, element) => acc + (parseInt(element.innerText) || 0), 0);
+    const sum = Array.from(arrBalances).reduce((acc, element) => acc + (parseInt(unformatNumber(element.innerText)) || 0), 0);
     // Create p element to attach to DOM
     const total = document.createElement("p");
     total.setAttribute("id", "total")
