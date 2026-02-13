@@ -8,6 +8,11 @@ const title = document.getElementById("formTitle");
 const main = document.getElementById("mainWrapper");
 
 let selectedUser = null;
+/* 
+exprecion regulares pedira validar todo el formularioi
+un usuario que tiene cuentas no se elimine
+validar con expreciones regulares validar primero formato luego valor 
+comparar las variables del mismo tipo */
 
 /* =========================
    ****** MENSAJES ******
@@ -228,8 +233,30 @@ function deleteUser(user) {
 }
 
 
+/*hacer validaciones borrado de momento*/ 
+function validateForm() {
+    const email = form.elements["email"].value;
+    const phone = form.elements["phone"].value;
+    const zip = form.elements["zip"].value;
 
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const phoneRegex = /^\d{10}$/; 
+    const zipRegex = /^\d{5}$/;
 
+    if (!emailRegex.test(email)) {
+        displayError("Invalid email format.");
+        return false;
+    }
+    if (!phoneRegex.test(phone)) {
+        displayError("Phone must be 10 digits.");
+        return false;
+    }
+    if (!zipRegex.test(zip)) {
+        displayError("Zip must be 5 digits.");
+        return false;
+    }
+    return true;
+}
 /* =========================
    MANEJO DEL FORMULARIO
 ========================= */
