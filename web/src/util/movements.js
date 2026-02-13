@@ -1,3 +1,23 @@
+
+/*
+    PROBLEMAS A SOLUCIONAR:
+
+    1. Permitir al usuario poner , y . a la hora de hacer movimientos
+            VALIDAR CON EXPRESIÓN REGULAR: Al introducir el movimiento solo admitir puntos para los millares y coma para los decimales (varios puntos, 1 COMA)
+
+
+        ^\d{1,3}(\.\d{3})*(,\d{2})?$
+        
+        
+            comprarar las variables del mismo tipo, 
+                - PRIMERO FORMATO 
+                - LUEGO VALOR
+    2. Cambiar de plural a singular el modelo de dato
+    3. Darle responsividad a la tabla de movimientos
+    4. Implementar función agregada.
+
+*/
+
 import { Movements } from "./model.js";
 
 // Capturamos los parámetros de la URL
@@ -113,7 +133,6 @@ export async function renderMovements() {
 
        const movements = await GetMovements(accountId);
        tableBody.innerHTML = "";
-       console.log(fullAccount.type); 
 
         document.getElementById("typeAccount").textContent = fullAccount.type;
         document.getElementById("balance").textContent = currencyFormatter.format(fullAccount.balance);
@@ -147,8 +166,22 @@ export async function renderMovements() {
 // --- Agregar movimiento en linea ---
 
 async function saveMovementInline() {
-   const amountInput = document.getElementById("newAmount");
-   const amount = parseFloat(amountInput.value);
+    const amountInput = document.getElementById("newAmount");
+    const amountString = (amountInput.value);
+    const regexValidator = new RegExp("^\\d{1,3}(\\.\\d{3})*(,\\d{2})?$");
+
+    console.log("Valor introducido: " + amountString);
+    if (regexValidator.test(amountString)) {
+        console.log("formato valido");
+        var amount = amountString.to;
+
+   } else {
+        console.log("formato NO valido");
+
+}
+
+    console.log("Valor parseado: " + amount);
+
    const description = document.getElementById("newDescription").value;
    // const accountData = JSON.parse(sessionStorage.getItem("account")) || { id: accountId, balance: 100 };
 
@@ -156,7 +189,7 @@ async function saveMovementInline() {
    // logica para cuentas de credito
    const disponibleTotal = accountData.balance + (accountData.creditLine || 0);
 
-
+   
    if (accountData.type === "STANDARD" && description === "Payment" && accountData.balance < amount) {
       alert("Error: Operación rechazada. Retire dinero disponible");
       return;
