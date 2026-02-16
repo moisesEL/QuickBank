@@ -230,6 +230,13 @@ a {
     font-weight: 300;
 }
 
+.balance,
+.beginBalance,
+.creditLine {
+    justify-content: right !important;
+    margin-right: 5px;
+}
+
 .totalBalance::after {
     content: "€";
     margin-left: 3px;
