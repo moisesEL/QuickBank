@@ -24,19 +24,26 @@
 
 
 .tableContainer {
+   display: flex;
    width: 100%;
-   background: var(--accounts-background);
    border-radius: 30px;
    overflow: hidden;
+   flex-direction: row;
+   gap: 20px;
+   justify-content: flex-start;
+   align-items: flex-start;
+
+
 }
 
 #movementsTable {
    width: 100%;
    border-collapse: collapse;
+
 }
 
 .rowheader {
-   background-color: var(--accounts-header-background); 
+   background-color: var(--accounts-header-background);
    color: var(--accounts-header-color);
 }
 
@@ -48,19 +55,29 @@
    border: 1px solid rgba(155, 155, 155, 0.4);
 }
 
-.rowheader th:first-child { border-top-left-radius: 30px; }
-.rowheader th:last-child { border-top-right-radius: 30px; }
+.rowheader th:first-child {
+   border-top-left-radius: 30px;
+}
+
+.rowheader th:last-child {
+   border-top-right-radius: 30px;
+}
 
 #movementsTable td {
    padding: 18px;
-   border: 1px solid rgba(155, 155, 155, 0.4); 
+   border: 1px solid rgba(155, 155, 155, 0.4);
    text-align: center;
    font-size: 1.05rem;
    color: var(--primary-text-color);
 }
 
-#movementsTable tbody tr:last-child td:first-child { border-bottom-left-radius: 30px; }
-#movementsTable tbody tr:last-child td:last-child { border-bottom-right-radius: 30px; }
+#movementsTable tbody tr:last-child td:first-child {
+   border-bottom-left-radius: 30px;
+}
+
+#movementsTable tbody tr:last-child td:last-child {
+   border-bottom-right-radius: 30px;
+}
 
 #movementsTable td:nth-child(3),
 #movementsTable td:nth-child(4) {
@@ -77,18 +94,19 @@
    border: 1px solid rgba(155, 155, 155, 0.4);
 }
 
-.input-row input, .input-row select {
+.input-row input,
+.input-row select {
    padding: 12px;
    border: 1px solid var(--primary-text-color);
    border-radius: 8px;
    width: 100%;
    font-size: 1rem;
-   background-color: var(--primary-background); 
-   color: var(--primary-text-color); 
+   background-color: var(--primary-background);
+   color: var(--primary-text-color);
 }
 
 .btn-confirm {
-   background-color: #28a745; 
+   background-color: #28a745;
    color: white;
    border: none;
    padding: 12px;
@@ -113,7 +131,7 @@
 }
 
 .btn-delete {
-   background-color: var(--primary-background); 
+   background-color: var(--primary-background);
    color: #b82a38;
    border: 2px solid #dc3545;
    padding: 12px;
@@ -124,7 +142,8 @@
    font-weight: bold;
 }
 
-.btn-delete:hover, .btn-delete:focus {
+.btn-delete:hover,
+.btn-delete:focus {
    background-color: #dc3545;
    color: white;
    border-width: 2px;
@@ -142,130 +161,201 @@
 
 
 #helpButton {
-    padding: 8px 16px;
-    background-color: var(--accounts-header-background);
-    color: var(--accounts-header-color);
-    border: none;
-    border-radius: 8px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    box-shadow: 0 2px 4px var(--dropdown-content-shadow);
+   padding: 8px 16px;
+   background-color: var(--accounts-header-background);
+   color: var(--accounts-header-color);
+   border: none;
+   border-radius: 8px;
+   font-weight: 500;
+   cursor: pointer;
+   transition: all 0.2s ease;
+   display: inline-flex;
+   align-items: center;
+   gap: 8px;
+   box-shadow: 0 2px 4px var(--dropdown-content-shadow);
 }
 
 #helpButton:hover {
-    background-color: #3516a5;
-    box-shadow: 0 4px 8px var(--dropdown-content-shadow);
+   background-color: #3516a5;
+   box-shadow: 0 4px 8px var(--dropdown-content-shadow);
 }
 
 #helpButton:active {
-    box-shadow: 0 1px 2px var(--dropdown-content-shadow);
+   box-shadow: 0 1px 2px var(--dropdown-content-shadow);
 }
 
 
 #helpButton {
-    padding: 8px 16px;
-    background-color: var(--accounts-header-background);
-    color: var(--accounts-header-color);
-    border: none;
-    border-radius: 8px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    box-shadow: 0 2px 4px var(--dropdown-content-shadow);
+   padding: 8px 16px;
+   background-color: var(--accounts-header-background);
+   color: var(--accounts-header-color);
+   border: none;
+   border-radius: 8px;
+   font-weight: 500;
+   cursor: pointer;
+   transition: all 0.2s ease;
+   display: inline-flex;
+   align-items: center;
+   gap: 8px;
+   box-shadow: 0 2px 4px var(--dropdown-content-shadow);
 }
 
 #helpButton:hover {
-    background-color: #3516a5;
-    box-shadow: 0 4px 8px var(--dropdown-content-shadow);
+   background-color: #3516a5;
+   box-shadow: 0 4px 8px var(--dropdown-content-shadow);
 }
 
 #helpButton:active {
-    box-shadow: 0 1px 2px var(--dropdown-content-shadow);
+   box-shadow: 0 1px 2px var(--dropdown-content-shadow);
 }
 
 
 
 
 #informationAccount {
-    display: flex;
-    justify-content: space-around; 
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 20px;
-    
-    max-width: 850px; 
-    margin: 0 auto 40px auto; 
-    padding: 25px;
-    background-color: var(--third-background); 
-    border: 1px solid grey;
-    border-radius: 20px;
+   display: flex;
+   justify-content: space-around;
+   align-items: center;
+   flex-wrap: wrap;
+   gap: 20px;
+
+   max-width: 850px;
+   margin: 0 auto 40px auto;
+   padding: 25px;
+   background-color: var(--third-background);
+   border: 1px solid grey;
+   border-radius: 20px;
 }
 
-#informationAccount > div {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 5px 15px;
+#informationAccount>div {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   padding: 5px 15px;
 }
 
-#informationAccount > div {
-    font-size: 0.75rem;
-    color: var(--primary-text-color);
-    text-transform: uppercase;
-    letter-spacing: 1px;
+#informationAccount>div {
+   font-size: 0.75rem;
+   color: var(--primary-text-color);
+   text-transform: uppercase;
+   letter-spacing: 1px;
 }
 
 #informationAccount span {
-    font-size: 1.2rem;
-    color: var(--primary-text-color);
-    font-weight: 600;
-    margin-top: 5px;
+   font-size: 1.2rem;
+   color: var(--primary-text-color);
+   font-weight: 600;
+   margin-top: 5px;
 }
 
 #balanceTotal {
-    font-weight: 600;
-    font-size: 1.4rem !important;
+   font-weight: 600;
+   font-size: 1.4rem !important;
 }
 
 /* H5P Modal Styles */
 #h5p-container {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.8);
-    z-index: 9999;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
+   display: none;
+   position: fixed;
+   top: 0;
+   left: 0;
+   width: 100%;
+   height: 100%;
+   background-color: rgba(0, 0, 0, 0.8);
+   z-index: 9999;
+   justify-content: center;
+   align-items: center;
+   padding: 20px;
 }
 
-#h5p-container > div {
-    max-width: 900px;
-    max-height: 90vh;
-    width: 100%;
-    background: white;
-    border-radius: 8px;
-    overflow: auto;
+#h5p-container>div {
+   max-width: 900px;
+   max-height: 90vh;
+   width: 100%;
+   background: white;
+   border-radius: 8px;
+   overflow: auto;
 }
 
 @media screen and (max-width: 900px) {
-    #informationAccount {
-        flex-direction: column;
-        max-width: 95%;
-    }
-    #informationAccount > div {
-        border-bottom: 1px solid grey;
-        width: 100%;
-        padding: 10px 0;
-    }
+   #informationAccount {
+      flex-direction: column;
+      max-width: 95%;
+   }
+
+   #informationAccount>div {
+      border-bottom: 1px solid grey;
+      width: 100%;
+      padding: 10px 0;
+
+   }
+
+   .tableContainer {
+      flex-direction: column;
+   }
+
+   #mainWrapper {
+      margin: 2%;
+   }
+
+   .rowheader {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      margin-bottom: 15px;
+      
+   }
+
+     #tableBody {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      padding-bottom: 15px;
+   }
+
+  #tableBody > tr {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      padding-bottom: 15px;
+      margin-bottom: 15px;
+      border-bottom: 2px dashed grey;
+   }
+
+   #movementsTable {
+      flex-direction: column;
+      width: 100%;
+      flex: 1;
+      min-height: 100vh;
+      display: grid;
+      grid-template-rows: min-content 1fr;
+      grid-template-columns: 1fr;
+      border-top-left-radius: 20px;
+      border-top-right-radius: 20px;
+   }
+
+   #movementsTable  td {
+      text-align: center;
+   }
+ 
+   .input-row {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      margin-bottom: 15px;
+      margin-top: 15px;
+      border-radius: 10px;
+
+   }
+
+   td {
+      border-radius: 10px;
+   }
+
+#movementsTable td:nth-child(3),
+#movementsTable td:nth-child(4) {
+   text-align: center;
+   padding-right: 0;
+}
+
 }
