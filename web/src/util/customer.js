@@ -8,6 +8,7 @@ const title = document.getElementById("formTitle");
 const main = document.getElementById("mainWrapper");
 
 let selectedUser = null;
+let h5pInstance = null;
 /* 
 exprecion regulares pedira validar todo el formularioi
 un usuario que tiene cuentas no se elimine
@@ -139,47 +140,6 @@ export async function loadUsers() {
         displayError("Error loading users. Try again.");
     }
 
-    /*  h5p Code  */
-    const helpButton = document.getElementById('helpButton');
-    let h5pInstance = null;
-
-    // When helpButton is pressed, initialize h5p container and display video
-    helpButton.addEventListener("click", () => {
-        const modal = document.getElementById('h5p-container');
-        
-        // Initialize H5P only once
-        if (!h5pInstance) {
-            const options = {
-                h5pJsonPath: '/QuickBank/src/assets/h5p/h5p-customer',
-                frameJs: '/QuickBank/src/assets/h5p/h5p-player/frame.bundle.js',
-                frameCss: '/QuickBank/src/assets/h5p/h5p-player/styles/h5p.css',
-                librariesPath: '/QuickBank/src/assets/h5p/h5p-libraries'
-            };
-            h5pInstance = new H5PStandalone.H5P(modal, options);
-        }
-        
-        // Show modal
-        modal.style.display = "flex";
-        document.body.style.overflow = "hidden";
-    });
-
-    // Close modal when clicking outside the video
-    document.addEventListener('click', (event) => {
-        const modal = document.getElementById('h5p-container');
-        if (event.target === modal) {
-            modal.style.display = "none";
-            document.body.style.overflow = "auto";
-        }
-    });
-
-    // Close modal with ESC key
-    document.addEventListener('keydown', (event) => {
-        const modal = document.getElementById('h5p-container');
-        if (event.key === 'Escape' && modal.style.display === 'flex') {
-            modal.style.display = "none";
-            document.body.style.overflow = "auto";
-        }
-    });
 }
 
 /* =========================
@@ -312,8 +272,52 @@ form.addEventListener("submit", async (e) => {
     }
 });
 
+/* =========================
+   H5P actualizado
+   ========================= */
+document.addEventListener("DOMContentLoaded", () => { /*el DOMContentLoaded se asegura de que el código se ejecute después de que el DOM esté completamente cargado
+ eso me evita que se vea doble el video   */
+/* h5p Code  */
+   const helpButton = document.getElementById('helpButton');
 
+   // When helpButton is pressed, initialize h5p container and display video
+   helpButton.addEventListener("click", () => {
+       const modal = document.getElementById('h5p-container');
+       
+       // Initialize H5P only once
+       if (!h5pInstance) {
+           const options = {
+               h5pJsonPath: '/QuickBank/src/assets/h5p/h5p-customer',
+               frameJs: '/QuickBank/src/assets/h5p/h5p-player/frame.bundle.js',
+               frameCss: '/QuickBank/src/assets/h5p/h5p-player/styles/h5p.css',
+               librariesPath: '/QuickBank/src/assets/h5p/h5p-libraries'
+           };
+           h5pInstance = new H5PStandalone.H5P(modal, options);
+       }
+       
+       // Show modal
+       modal.style.display = "flex";
+       document.body.style.overflow = "hidden";
+   });
 
+   // Close modal when clicking outside the video
+   document.addEventListener('click', (event) => {
+       const modal = document.getElementById('h5p-container');
+       if (event.target === modal) {
+           modal.style.display = "none";
+           document.body.style.overflow = "auto";
+       }
+   });
+
+   // Close modal with ESC key
+   document.addEventListener('keydown', (event) => {
+       const modal = document.getElementById('h5p-container');
+       if (event.key === 'Escape' && modal.style.display === 'flex') {
+           modal.style.display = "none";
+           document.body.style.overflow = "auto";
+       }
+   });
+});
 
 
 /* CARGAR INICIALMENTE */
