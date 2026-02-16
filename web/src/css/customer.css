@@ -201,7 +201,6 @@
     grid-template-columns: repeat(12, 1fr); 
     width: 100%;
     gap: 0;
-    background-color: var(--accounts-background); 
 }
 
 .row > div {
@@ -237,6 +236,12 @@
     border-top-right-radius: 30px;
 }
 
+#tableBody .row:last-child > div:first-child {
+    border-bottom-left-radius: 30px;
+}
+#tableBody .row:last-child > div:last-child {
+    border-bottom-right-radius: 30px;
+}
 /* Body de tabla */
 #tableBody {
     display: flex;
