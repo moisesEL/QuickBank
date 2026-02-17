@@ -2,26 +2,23 @@ import { Customer } from "./model.js";
 
 const SERVICE_URL = "/CRUDBankServerSide/webresources/customer";
 const tableBody = document.getElementById("tableBody");
-const forSection = document.getElementById("forSection"); 
-const form = document.getElementById("form"); 
+const forSection = document.getElementById("forSection");
+const form = document.getElementById("form");
 const title = document.getElementById("formTitle");
 const main = document.getElementById("mainWrapper");
+const alertContainer = document.getElementById("alertContainer");
 
 let selectedUser = null;
 let h5pInstance = null;
-/* 
-exprecion regulares pedira validar todo el formularioi
-un usuario que tiene cuentas no se elimine
-validar con expreciones regulares validar primero formato luego valor 
-comparar las variables del mismo tipo */
+let usersCache = []; // ⭐ AÑADIDO: cache para validar emails duplicados
 
 /* =========================
-   ****** MENSAJES ******
+   MENSAJES GENERALES
 ========================= */
 function displayError(message) {
-    document.querySelectorAll('.error').forEach(element => element.remove());
+    clearMessage(); // ⭐ AÑADIDO: limpiar mensajes generales antes
     const error = document.createElement("span");
-    error.setAttribute("class", "error");
+    error.className = "error";
     error.setAttribute("role", "alert");
     error.setAttribute("aria-live", "assertive");
     error.innerText = message;
@@ -29,17 +26,17 @@ function displayError(message) {
 }
 
 function displaySuccess(message) {
-    document.querySelectorAll('.success').forEach(element => element.remove());
+    clearMessage();
     const success = document.createElement("span");
-    success.setAttribute("class", "success");
+    success.className = "success";
     success.setAttribute("role", "alert");
-    success.setAttribute("aria-live", "assertive");
+    success.setAttribute("aria-live", "polite");
     success.innerText = message;
     alertContainer.appendChild(success);
 }
 
 function clearMessage() {
-    document.querySelectorAll('.error, .success').forEach(element => element.remove());
+    document.querySelectorAll('.error, .success').forEach(el => el.remove());
 }
 
 /* =========================
@@ -55,21 +52,22 @@ function generatePassword(length = 8) {
 }
 
 /* =========================
-   CARGAR USUARIOS 
+   CARGAR USUARIOS
 ========================= */
 export async function loadUsers() {
     tableBody.innerHTML = "";
     clearMessage();
     try {
         const res = await fetch(SERVICE_URL, { headers: { "Accept": "application/json" } });
-        if (!res.ok) throw new Error("Error loading users. Try again."); 
+        if (!res.ok) throw new Error("Error loading users. Try again.");
         const users = await res.json();
+        usersCache = users; // ⭐ AÑADIDO: cache para validaciones
 
-        for (let i = 0; i < users.length; i++) {
-            const user = users[i];
+        users.forEach(user => {
             const row = document.createElement("div");
             row.className = "row";
             row.setAttribute("role", "row");
+           
 
             row.innerHTML = `
                 <div role="cell">${user.id}</div>
@@ -89,30 +87,15 @@ export async function loadUsers() {
                 </div>
             `;
 
-            row.onclick = () => {
-                // Limpiamos selección anterior
-                const allRows = document.querySelectorAll(".row");
-                for (let j = 0; j < allRows.length; j++) {
-                    allRows[j].classList.remove("selected");
-                }
-                row.classList.add("selected");
-                selectedUser = user;
-            };
+            row.onclick = () => selectRow(row, user);
 
-            row.querySelector(".editButton").addEventListener("click", (e) => {
-                e.stopPropagation();
-                editUser(user);
-            });
-
-            row.querySelector(".deleteButton").addEventListener("click", (e) => {
-                e.stopPropagation();
-                deleteUser(user);
-            });
+            row.querySelector(".editButton").onclick = e => { e.stopPropagation(); editUser(user); };
+            row.querySelector(".deleteButton").onclick = e => { e.stopPropagation(); deleteUser(user); };
 
             tableBody.appendChild(row);
-        }
+        });
 
-        // Fila vacía para create
+        // Fila para crear
         const createRow = document.createElement("div");
         createRow.className = "row";
         createRow.setAttribute("role", "row");
@@ -128,154 +111,193 @@ export async function loadUsers() {
             <div role="cell"></div>
             <div role="cell"></div>
             <div role="cell"></div>
-            <div role="cell" class="actionsContainer">
+           <div role="cell" class="actionsContainer">
                 <button class="createButton" aria-label="Create user">Create</button>
             </div>
         `;
-        createRow.querySelector(".createButton").addEventListener("click", handleCreateButton);
+        createRow.querySelector(".createButton").onclick = handleCreateButton;
         tableBody.appendChild(createRow);
 
     } catch (err) {
         console.error(err);
         displayError("Error loading users. Try again.");
     }
+}
 
+function selectRow(row, user) {
+    document.querySelectorAll(".row").forEach(r => r.classList.remove("selected"));
+    row.classList.add("selected");
+    selectedUser = user;
 }
 
 /* =========================
-   FUNCIONES DE LOS  BOTONES
+   BOTONES
 ========================= */
 function handleCreateButton() {
     selectedUser = null;
     form.reset();
     title.textContent = "Create user";
     forSection.style.display = "block";
-    form.elements["firstName"].focus();
+    form.firstName.focus();
 }
 
 function editUser(user) {
     selectedUser = user;
+    clearMessage();
     title.textContent = "Edit user";
-    const keys = Object.keys(user);
-    for (let i = 0; i < keys.length; i++) {
-        const key = keys[i];
-        if (form.elements[key]) {
-            form.elements[key].value = user[key];
-        }
-    }
+
+    Object.keys(user).forEach(k => {
+        if (form.elements[k]) form.elements[k].value = user[k];
+    });
+
     forSection.style.display = "block";
-    form.elements["firstName"].focus(); 
+    form.firstName.focus();
 }
 
-function deleteUser(user) {
-    if (!user) {
-        displayError("Select a user to delete."); 
-        return;
-    }
+async function deleteUser(user) {
+    if (!user) return;
+
     if (user.email === sessionStorage.getItem("customer.email")) {
-        displayError("You cannot delete your own user.");
+        displayError("Action denied: You cannot delete your own admin account.");
         return;
     }
-    // ¿Seguro que quieres eliminar a " + user.email + "?"
-    if (!confirm("Are you sure you want to delete " + user.email + "?")) return;
- 
-    fetch(`${SERVICE_URL}/${user.id}`, { method: "DELETE" })
-        .then(response => {
-            if (!response.ok) throw new Error("Error deleting user"); 
-            displaySuccess("User deleted successfully.");
-            selectedUser = null;
-            loadUsers();
-        })
-        .catch(err => {
-            console.error(err);
-            displayError("Error deleting user. Try again."); 
-        });
+
+    // ⭐ AÑADIDO: validar si usuario tiene cuentas bancarias
+    if (user.accountList && user.accountList.length > 0) {
+        displayError("Cannot delete: This user still has active bank accounts.");
+        return;
+    }
+
+    if (!confirm(`Confirm deletion of ${user.email}?`)) return;
+
+    try {
+        const res = await fetch(`${SERVICE_URL}/${user.id}`, { method: "DELETE" });
+        if (!res.ok) throw new Error();
+        displaySuccess("User deleted successfully.");
+        loadUsers();
+    } catch {
+        displayError("Error: User could not be deleted. Check dependencies.");
+    }
 }
 
-
-/*hacer validaciones borrado de momento*/ 
-function validateForm() {
-    const email = form.elements["email"].value;
-    const phone = form.elements["phone"].value;
-    const zip = form.elements["zip"].value;
-
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    const phoneRegex = /^\d{10}$/; 
-    const zipRegex = /^\d{5}$/;
-
-    if (!emailRegex.test(email)) {
-        displayError("Invalid email format.");
-        return false;
-    }
-    if (!phoneRegex.test(phone)) {
-        displayError("Phone must be 10 digits.");
-        return false;
-    }
-    if (!zipRegex.test(zip)) {
-        displayError("Zip must be 5 digits.");
-        return false;
-    }
-    return true;
-}
 /* =========================
    MANEJO DEL FORMULARIO
 ========================= */
-document.getElementById("btnCancel").addEventListener("click", () => {
-    forSection.style.display = "none"; 
+document.getElementById("btnCancel").onclick = () => {
+    forSection.style.display = "none";
     selectedUser = null;
-});
+    clearMessage();
+};
 
+/* =========================
+   FUNCIONES AUXILIARES VALIDACION mensajes debajo porsi acaso
+========================= */
+
+// ⭐ AÑADIDO: mostrar errores debajo del input y con focus por si acaso
+function pintarErrorEspecifico(inputName, mensaje) {
+    const inputField = form.elements[inputName];
+    if (!inputField) return;
+    clearErrorField(inputField);
+    inputField.classList.add("input_error");
+    inputField.setAttribute("aria-invalid", "true"); // ⭐ accesibilidad
+    inputField.focus();
+    const span = document.createElement("span");
+    span.className = "field-error-msg";
+    span.style.color = 'red';
+    span.style.fontSize = '12px';
+    span.innerText = mensaje;
+    inputField.insertAdjacentElement('afterend', span);
+}
+
+// ⭐ Limpiar errores de un input
+function clearErrorField(inputField){
+    const next = inputField.nextElementSibling;
+    if(next && next.classList.contains("field-error-msg")) next.remove();
+    inputField.classList.remove("input_error");
+    inputField.removeAttribute("aria-invalid");
+}
+
+/* =========================
+   SUBMIT CON VALIDACIONES
+========================= */
 form.addEventListener("submit", async (e) => {
     e.preventDefault();
     clearMessage();
-    //  "¿Seguro que quieres guardar los cambios?"
+    form.querySelectorAll(".input_error").forEach(i=>clearErrorField(i));
+
     if (!confirm("Are you sure you want to save the changes?")) return;
 
     const formData = new FormData(form);
-    const password = generatePassword();
+    const password = selectedUser ? selectedUser.password : generatePassword();
 
     const customer = new Customer(
         selectedUser ? selectedUser.id : null,
-        formData.get("firstName"),
-        formData.get("lastName"),
-        formData.get("middleInitial"),
-        formData.get("street"),
-        formData.get("city"),
-        formData.get("state"),
-        formData.get("zip"),
-        formData.get("phone"),
-        formData.get("email"),
+        formData.get("firstName").trim(),
+        formData.get("lastName").trim(),
+        formData.get("middleInitial").trim(),
+        formData.get("street").trim(),
+        formData.get("city").trim(),
+        formData.get("state").trim(),
+        formData.get("zip").trim(),
+        formData.get("phone").trim(),
+        formData.get("email").trim(),
         password
     );
 
-    // Validaciones simples
-    if (!customer.firstName || !customer.lastName || !customer.street || !customer.city || !customer.state || !customer.zip || !customer.phone || !customer.email) {
-        displayError("All fields are required."); 
-        return;
-    }
-
     try {
+        // ⭐ AÑADIDO: validación de cada campo con mensajes debajo
+        validarCampos(customer);
+
+        // ⭐ AÑADIDO: email duplicado antes del fetch
+        const duplicate = usersCache.find(u=>u.email===customer.email && (!selectedUser || u.id!==selectedUser.id));
+        if(duplicate) throw {input:"email", message:"This email is already registered."};
+
         const method = selectedUser ? "PUT" : "POST";
-        const res = await fetch(SERVICE_URL, {
+        const res = await fetch(SERVICE_URL,{
             method,
-            headers: { "Content-Type": "application/json", "Accept": "application/json" },
-            body: JSON.stringify(customer)
+            headers:{"Content-Type":"application/json", "Accept":"application/json"},
+            body:JSON.stringify(customer)
         });
-        if (!res.ok) throw new Error("Error saving user");
-        displaySuccess("User saved successfully."); 
-        forSection.style.display = "none"; 
+
+        if(res.status === 403) throw {input:"email", message:"Ecorreo ya en uso."};
+        if(!res.ok) throw new Error("Error saving user");
+
+        displaySuccess("User saved successfully.");
+        forSection.style.display="none";
         selectedUser = null;
         loadUsers();
-    } catch (err) {
-        console.error(err);
-        displayError("Error saving user. Try again."); 
+
+    } catch(err){
+        if(err.input) pintarErrorEspecifico(err.input, err.message);
+        else displayError(err.message || "Error saving user");
     }
 });
 
 /* =========================
+   FUNCION VALIDACION DE CAMPOS
+========================= */
+function validarCampos(customer){
+    const nameRegex = /^[A-Za-zÁÉÍÓÚáéíóúñÑ\s]{2,50}$/;
+    const middleRegex = /^[A-Za-z]$/;
+    const zipRegex = /^\d{1,6}$/;
+    const phoneRegex = /^\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}$/;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if(!nameRegex.test(customer.firstName)) throw {input:"firstName", message:"First name must contain only letters and spaces (2-50 chars)."};
+    if(!nameRegex.test(customer.lastName)) throw {input:"lastName", message:"Last name must contain only letters and spaces (2-50 chars)."};
+    if(customer.middleInitial && !middleRegex.test(customer.middleInitial)) throw {input:"middleInitial", message:"Middle initial must be 1 letter."};
+    if(customer.street.length<1) throw {input:"street", message:"Street is required."};
+    if(customer.city.length<1) throw {input:"city", message:"City is required."};
+    if(customer.state.length<1) throw {input:"state", message:"State is required."};
+    if(!zipRegex.test(customer.zip)) throw {input:"zip", message:"Zip must be a number (1-6 digits)."};
+    if(!phoneRegex.test(customer.phone)) throw {input:"phone", message:"Phone format invalid."};
+    if(!emailRegex.test(customer.email)) throw {input:"email", message:"Enter a valid email (example@domain.com)."};
+}
+
+/* =========================
    H5P actualizado
-   ========================= */
-document.addEventListener("DOMContentLoaded", () => { /*el DOMContentLoaded se asegura de que el código se ejecute después de que el DOM esté completamente cargado
+========================= */
+document.addEventListener("DOMContentLoaded",()=>{ /*el DOMContentLoaded se asegura de que el código se ejecute después de que el DOM esté completamente cargado
  eso me evita que se vea doble el video   */
 /* h5p Code  */
    const helpButton = document.getElementById('helpButton');
@@ -319,6 +341,7 @@ document.addEventListener("DOMContentLoaded", () => { /*el DOMContentLoaded se a
    });
 });
 
-
-/* CARGAR INICIALMENTE */
+/* =========================
+   CARGAR INICIALMENTE
+========================= */
 loadUsers();
