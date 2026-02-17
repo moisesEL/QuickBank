@@ -486,3 +486,18 @@
         box-sizing: border-box;
     }
 }
+
+/* =========================
+   VALIDACIÓN DE CAMPOS
+========================= */
+.input_error {
+    border-color: red !important;
+    border-width: 2px !important;
+}
+
+.field-error {
+    color: red;
+    font-size: 0.9rem;
+    margin-top: 5px;
+    display: block;
+}
