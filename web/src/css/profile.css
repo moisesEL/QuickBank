@@ -210,20 +210,6 @@ letter-spacing: 1px;
     background-color: var(--primary-btn-hover);
 }
 
-.balance::after,
-.beginBalance::after,
-.creditLine::after {
-    content: "€";
-    margin-left: 3px;
-    font-weight: 300;
-}
-
-.totalBalance::after {
-    content: "€";
-    margin-left: 3px;
-    font-weight: bold;
-}
-
 @media screen and (max-width: 1100px) {
     #mainWrapper {
         padding: 20px;
