@@ -1,13 +1,16 @@
 import { Account } from "./model.js";
 import fetch_accounts_by_user_id from "./fetch_accounts_by_user_id.js";
 import sumAccountsBalances from "./sumAccountsBalances.js";
-import unformatString from "./unformatNumber.js";
+import unformatString from "./unformatString.js";
 
 // GET all acounts /CRUDBankServerSide/webresources/account/customer/:idCustomer
 // GET account /CRUDBankServerSide/webresources/account/:accountId
 // PUT account /CRUDBankServerSide/webresources/account
 // DELETE account /CRUDBankServerSide/webresources/account/:accountId
 // POST account /CRUDBankServerSide/webresources/account
+
+// Regex to validate es-ES number format (e.g., 1.234.567,89 or 1.234.567,89 €)
+const esESNumberFormat = /^\d{1,3}(\.\d{3})*(,\d+)?(\s*€)?$/;
 
 // Save customer id for server petitions
 let customerId = sessionStorage.getItem('customer.id');
@@ -267,10 +270,10 @@ function* account_row_generator(accounts) {
             const cell = document.createElement("p");
             cell.setAttribute("data-role", field);
             cell.setAttribute("class", field);
-            cell.innerText = account[field].toLocaleString('es-ES');
-            console.log(unformatString(cell.innerText));
+            cell.innerText = account[field].toLocaleString('es-ES', { style: 'currency', currency: 'EUR' });
             cellContainer.appendChild(cell);
-            cell.addEventListener("dblclick", handleCreateButton);
+            if (field === 'creditLine' && account.type === 'CREDIT')
+                cell.addEventListener("dblclick", (event) => {handleCellEdition(event, account)});
             row.appendChild(cellContainer);
         }
         else {
@@ -282,11 +285,8 @@ function* account_row_generator(accounts) {
                 cell.innerText = `${formatAMPM(date)} - ${date.toLocaleDateString('es-ES',
                 { month: '2-digit', day: '2-digit', year: 'numeric' })}`;
             }
-            else
-                cell.innerText = account[field];
+            else cell.innerText = account[field];
             if (field === "description")
-                cell.addEventListener("dblclick", (event) => {handleCellEdition(event, account)})
-            else if (field === "creditLine" && account.type === "CREDIT")
                 cell.addEventListener("dblclick", (event) => {handleCellEdition(event, account)})
             cellContainer.appendChild(cell);
             row.appendChild(cellContainer);
@@ -304,7 +304,7 @@ function* account_row_generator(accounts) {
 function handleCellEdition(event, account) {
     const cell = event.currentTarget;
     // Get the original cell value
-    const originalValue = cell.innerText;
+    let originalValue = cell.innerText;
 
     // Get parent container
     const cellContainer = cell.parentNode;
@@ -317,14 +317,9 @@ function handleCellEdition(event, account) {
     input.setAttribute("data-role", dataRole)
     input.setAttribute("aria-label", dataRole)
     input.setAttribute("class", cell.getAttribute("class"));
-    if (dataRole === 'description') {
-        input.type = 'text';
-    }
-    else {
-        input.type = 'number';
-        input.min = "0";
-        input.max = "1000000";
-        originalValue = unformatString(originalValue);
+    input.type = 'text';
+    if (dataRole !== 'description') {
+        input.placeholder = 'e.g., 1.234.567,89';
     }
     input.placeholder = `${dataRole}...`;
     input.value = originalValue;
@@ -360,7 +355,7 @@ function handleCellEdition(event, account) {
  */
 function saveCellChanges(input, account) {
     // Extract new value from input
-    const newValue = input.value;
+    let newValue = input.value;
 
     // Extract data-role from input
     const dataRole = input.getAttribute("data-role");
@@ -375,9 +370,11 @@ function saveCellChanges(input, account) {
                 throw new Error(`Your account description can't have more than 60 characters`);
         }
         if (dataRole === 'creditLine') {
-            // Check if credit line is a number
-            if (isNaN(parseFloat(newValue)))
-                throw new Error(`Your account's credit line has to be a number`);
+            // Validate es-ES format before parsing
+            if (!esESNumberFormat.test(newValue))
+                throw new Error(`Credit line must be a valid number (e.g., 1.234.567,89)`);
+
+            newValue = unformatString(newValue);
             // Check if credit line is not negative
             if (newValue < 0)
                 throw new Error(`Your account's credit line can't be negative`);
@@ -493,6 +490,13 @@ function handleEditButton(event, account) {
         container.setAttribute("role", "cell");
         container.setAttribute("data-title", element.parentNode.getAttribute("data-title"));
         
+        if (window.innerWidth < 900) {
+            const titleElement = element.parentNode.querySelector(".title");
+            if (titleElement) {
+                container.appendChild(titleElement.cloneNode(true));
+            }
+        }
+        
         if (element.getAttribute("data-role") === "description") {
             const input = document.createElement("input");
             input.setAttribute("name", "description");
@@ -510,10 +514,8 @@ function handleEditButton(event, account) {
             input.setAttribute("aria-label", "Credit line")
             input.setAttribute("data-role", "Credit line")
             input.setAttribute("class", element.getAttribute("class"))
-            input.placeholder = "credit line...";
-            input.min = "0";
-            input.max = "1000000";
-            input.type = "number";
+            input.type = "text";
+            input.placeholder = "e.g., 1.234.567,89";
             input.value = element.innerText;
             container.appendChild(input);
         }
@@ -544,17 +546,21 @@ function handleEditButton(event, account) {
         const form = event.currentTarget;
         const formData = new FormData(form);
         account.description = formData.get('description');
-        account.creditLine = formData.get('creditLine') || 0;
+        const creditLineInput = formData.get('creditLine');
+        if (account.type === "CREDIT") {
+            if (creditLineInput && !esESNumberFormat.test(creditLineInput))
+                throw new Error(`Credit line must be a valid number (e.g., 1.234.567,89)`);
+            account.creditLine = creditLineInput ? unformatString(creditLineInput) : 0;
+            if (account.creditLine < 0)
+                throw new Error(`Your account's credit line can't be negative`);
+        }
+        
         try {
             // Check if description has correct length
             if (account.description.length === 0)
                 throw new Error(`Your account description can't be empty`);
             if (account.description.length > 60)
                 throw new Error(`Your account description can't have more than 60 characters`);
-
-            // Check if credit line is not negative
-            if (account.type === "CREDIT" && account.creditLine < 0)
-                throw new Error(`Your account's credit line can't be negative`);
 
             // If every validation goes through, update account.
             fetch('/CRUDBankServerSide/webresources/account', {
@@ -736,10 +742,8 @@ function handleCreateButton(event) {
             input.setAttribute("name", "balance");
             input.setAttribute("aria-label", "Balance");
             input.setAttribute("class", "balance");
-            input.placeholder = "balance...";
-            input.min = "0";
-            input.max = "1000000";
-            input.type = "number";
+            input.type = "text";
+            input.placeholder = "e.g., 1.234.567,89";
             input.value = "0";
             container.appendChild(input);
         }
@@ -750,10 +754,8 @@ function handleCreateButton(event) {
                 input.setAttribute("name", "creditLine");
                 input.setAttribute("aria-label", "Credit line");
                 input.setAttribute("class", "creditLine");
-                input.placeholder = "credit line...";
-                input.min = "0";
-                input.max = "1000000";
-                input.type = "number";
+                input.type = "text";
+                input.placeholder = "e.g., 1.234.567,89";
                 input.value = "0";
                 container.appendChild(input);
             }
@@ -772,10 +774,8 @@ function handleCreateButton(event) {
                     input.setAttribute("name", "creditLine");
                     input.setAttribute("aria-label", "Credit line");
                     input.setAttribute("class", "creditLine");
-                    input.placeholder = "credit line...";
-                    input.min = "0";
-                    input.max = "1000000";
-                    input.type = "number";
+                    input.type = "text";
+                    input.placeholder = "e.g., 1.234.567,89";
                     input.value = "0";
                     toReplace.parentNode.replaceChild(input, toReplace);
                 }
@@ -836,8 +836,11 @@ function handleCreateSubmit(event) {
     account.id = formData.get('id');
     account.type = formData.get('type');
     account.description = formData.get('description');
-    account.balance = parseFloat(formData.get('balance') || 0);
-    account.creditLine = parseFloat(formData.get('creditLine') || 0);
+    const rawBalance = formData.get('balance') || '0';
+    const rawCreditLine = formData.get('creditLine') || '0';
+
+    account.balance = parseFloat(unformatString(rawBalance));
+    account.creditLine = parseFloat(unformatString(rawCreditLine));
     account.beginBalance = account.balance;
     account.beginBalanceTimestamp = formData.get('beginBalanceTimestamp');
 
@@ -849,13 +852,24 @@ function handleCreateSubmit(event) {
         if (account.description.length > 60)
             throw new Error(`Your account description can't have more than 60 characters`);
 
+        if (!esESNumberFormat.test(rawBalance))
+            throw new Error(`Balance must be a valid number (e.g., 1.234.567,89)`);
+            
+        if (isNaN(account.balance))
+            throw new Error(`Your account balance must be a valid number`);
+            
         // Check if balance is not negative
         if (account.balance < 0)
             throw new Error(`Your account balance can't be negative`);
 
-        // Check if credit line is not negative when account's type is CREDIT
-        if (account.type === "CREDIT" && account.creditLine < 0)
-            throw new Error(`Your account credit can't be empty if the account type is CREDIT`);
+        if (account.type === "CREDIT") {
+            if (!esESNumberFormat.test(rawCreditLine))
+                throw new Error(`Credit line must be a valid number (e.g., 1.234.567,89)`);
+            if (isNaN(account.creditLine))
+                throw new Error(`Your account's credit line must be a valid number`);
+            if (account.creditLine < 0)
+                throw new Error(`Your account's credit line can't be negative`);
+        }
 
         fetch('/CRUDBankServerSide/webresources/account', {
             method: 'POST',
