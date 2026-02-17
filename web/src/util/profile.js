@@ -160,8 +160,12 @@ function* shortened_account_row_generator(accounts) {
         const cell = document.createElement("p");
         cell.setAttribute("data-role", field);
         cell.setAttribute("class", field);
-        cell.innerText = account[field];
-
+        if (field === 'balance' || field === 'creditLine') {
+            cell.innerText = account[field].toLocaleString('es-ES', { style: 'currency', currency: 'EUR' });
+        }
+        else {
+            cell.innerText = account[field];
+        }
         // Appending every element to the DOM
         cellContainer.appendChild(cell);
         row.appendChild(cellContainer);
