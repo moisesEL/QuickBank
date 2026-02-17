@@ -18,10 +18,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Kode+Mono&display=swap" rel="stylesheet">
     <script src="/QuickBank/src/components/nav_bar.js"></script>
     <!--TODO: Mover este código JS a un script extarno y ejecutarlo en el evento del DOM apropiado-->
-    <script>if (!sessionStorage.getItem('customer.id')) window.location.replace("/QuickBank");</script>
+
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
-
+    
     <script src="/QuickBank/src/util/model.js"></script>
     <script src="/QuickBank/src/assets/h5p/h5p-player/main.bundle.js"></script>
     <script src="/QuickBank/src/assets/h5p/h5p-player/h5p-standalone.min.js"></script>
@@ -44,6 +44,11 @@
                 </div>
 
 
+                <div id="funcionesAgregadas">
+                    <div>Total Deposits: <span id="totalDeposits"> </span></div> 
+                    <div>Total Payments: <span id="totalPayments"> </span></div> 
+                </div>
+
                 <div class="tableContainer">
                     <table id="movementsTable" aria-label="Movements history">
                         <thead>
@@ -63,7 +68,7 @@
                                     </select>
                                 </td>
                                 <td>
-                                    <input type="number" id="newAmount" placeholder="0.00" step="0.01" required
+                                    <input id="newAmount" placeholder="0.00" step="0.01" required
                                         aria-label="Enter movement amount">
                                 </td>
                                 <td><span aria-hidden="true">---</span></td>

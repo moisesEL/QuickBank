@@ -190,6 +190,14 @@
     box-shadow: 0 1px 2px var(--dropdown-content-shadow);
 }
 
+#funcionesAgregadas {
+
+   display: flex;
+   gap: 138px;
+  justify-content: center;
+  padding-bottom: 20px;
+}
+
 
 
 

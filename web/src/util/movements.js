@@ -3,7 +3,7 @@
  */
 
 //TODO Cambiar Movements por Movement
-import { Movements } from "./model.js";
+import { Movement } from "./model.js";
 
 // Capturamos los parámetros de la URL
 const urlParams = new URLSearchParams(window.location.search);
@@ -82,9 +82,13 @@ function* movementRowGenerator(movements) {
                }
                value = currencyFormatter.format(value);
            }
-           //FIXME Sustituir operador ?? por if-else
-           td.textContent = value ?? "N/A";
-           tr.appendChild(td)
+           //FIXME Sustituir operador ?? por if-else           
+            if ( value != null) {
+                td.textContent = value;
+            } else {
+                td.textContent = "N/A"
+            }
+            tr.appendChild(td)
        });
 
        const tdAction = document.createElement("td");
@@ -135,6 +139,24 @@ export async function renderMovements() {
 
        }
 
+// TODO HECHO: Calcular y mostrar el valor agregado del total de los ingresos y de los gastos. 
+
+        let totalDeposits = 0;
+        let totalPayments = 0;
+
+        // Recorremos todos los movivientos
+        for (let i = 0; i < movements.length; i++) {
+            if (movements[i].description === "Deposit") {
+                totalDeposits = totalDeposits + movements[i].amount;
+            } else {
+               totalPayments = totalPayments + movements[i].amount;
+
+            }
+        }
+
+        document.getElementById("totalDeposits").textContent = currencyFormatter.format(totalDeposits);
+        document.getElementById("totalPayments").textContent = currencyFormatter.format(totalPayments);
+
 
         movements.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
 
@@ -153,6 +175,8 @@ export async function renderMovements() {
 
 async function saveMovementInline() {
    const amountInput = document.getElementById("newAmount");
+   const amountString = amountInput.value.trim();
+
     //TODO Utilizar la siguiente RegExp para validar que el importe pueda introducirse con separador de decimales y de miles.
     const esAmountRegex = /^(?:\d{1,15}|\d{1,3}(?:\.\d{3}){1,4})(?:,\d{1,2})?$/;
     /* Explanation for esAmountRegex:
@@ -162,8 +186,25 @@ async function saveMovementInline() {
            )
           (?:,\d{1,2})?                      # optional decimal with 1 or 2 digits
     */
-   
-   const amount = parseFloat(amountInput.value);
+    
+    console.log("Valor introducido b: " + amountString);
+
+    let amount = 0;
+
+    if (esAmountRegex.test(amountString)) {
+        console.log("formato valido");
+        // Cambiamos los puntos de millares por espacio en blanco
+        // Cambiamos la coma por punto decimales
+        const formatAmount = amountString.replace(/\./g, "").replace(",", ".");
+        amount = parseFloat(formatAmount);
+    } else {
+        alert("Formato de importe no válido. Usa el formato: 1.000,00 o 100");
+        console.log("formato NO valido");
+        return;
+    }
+    
+    console.log("Valor parseado: " + amount);
+
    const description = document.getElementById("newDescription").value;
    // const accountData = JSON.parse(sessionStorage.getItem("account")) || { id: accountId, balance: 100 };
 
@@ -184,7 +225,7 @@ async function saveMovementInline() {
 
    if (amount <= 0) return alert("Valor no válido");
 
-   if (isNaN(amount)) {
+    if (isNaN(amount)) {
        alert("Introduce un valor numérico válido");
        return;
    }
@@ -200,7 +241,7 @@ async function saveMovementInline() {
    }
 
    try {
-       const movObj = new Movements(null, newBalance, amount, description, new Date().toISOString());
+       const movObj = new Movement(null, newBalance, amount, description, new Date().toISOString());
        await PostMovement(accountData.id, movObj);
       
        accountData.balance = newBalance;
@@ -268,6 +309,9 @@ document.addEventListener("DOMContentLoaded", () => {
    if (btn) btn.addEventListener("click", saveMovementInline);
    const btnDelete = document.getElementById("btnDeleteLastMovement");
    if (btnDelete) btnDelete.addEventListener("click", deleteLastMovement);
+
+    //  TODO: Mover este código JS a un script extarno y ejecutarlo en el evento del DOM apropiado
+   if (!sessionStorage.getItem('customer.id')) window.location.replace("/QuickBank");
 
    /* h5p Code  */
    const helpButton = document.getElementById('helpButton');
