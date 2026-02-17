@@ -18,7 +18,7 @@
 
 */
 
-import { Movements } from "./model.js";
+import { Movement } from "./model.js";
 
 // Capturamos los parámetros de la URL
 const urlParams = new URLSearchParams(window.location.search);
@@ -132,6 +132,10 @@ export async function renderMovements() {
        sessionStorage.setItem("account", JSON.stringify(fullAccount));
 
        const movements = await GetMovements(accountId);
+
+        // Funcion agregada: movimientos totales
+       document.getElementById("totalMovements").textContent = movements.length;
+
        tableBody.innerHTML = "";
 
         document.getElementById("typeAccount").textContent = fullAccount.type;
@@ -152,6 +156,18 @@ export async function renderMovements() {
 
         movements.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
 
+        // Funcion agregada: sumar depositos
+        let totalDeposits = 0;
+
+        // Recorremos todos los movivientos
+        for (let i = 0; i < movements.length; i++) {
+            if (movements[i].description === "Deposit") {
+                totalDeposits = totalDeposits + movements[i].amount;
+            }
+        }
+
+        document.getElementById("totalDeposits").textContent = currencyFormatter.format(totalDeposits);
+
        const rowGenerator = movementRowGenerator(movements);
        for (const row of rowGenerator) {
            tableBody.appendChild(row);
@@ -167,71 +183,78 @@ export async function renderMovements() {
 
 async function saveMovementInline() {
     const amountInput = document.getElementById("newAmount");
-    const amountString = (amountInput.value);
-    const regexValidator = new RegExp("^\\d{1,3}(\\.\\d{3})*(,\\d{2})?$");
+    const amountString = amountInput.value.trim();
+        // Expresion regural ejemplo
+        const regexValidator = new RegExp("^\\d{1,3}(\\.\\d{3})*(,\\d{2})?$");
+
+    let amount = 0;
 
     console.log("Valor introducido: " + amountString);
     if (regexValidator.test(amountString)) {
         console.log("formato valido");
-        var amount = amountString.to;
-
-   } else {
+        // Cambiamos los puntos de millares por espacio en blanco
+        // Cambiamos la coma por punto decimales
+        const formatAmount = amountString.replace(/\./g, "").replace(",", ".");
+        amount = parseFloat(formatAmount);
+    } else {
+        alert("Formato de importe no válido. Usa el formato: 1.000,00 o 100");
         console.log("formato NO valido");
-
-}
-
+        return;
+    }
+    
     console.log("Valor parseado: " + amount);
 
    const description = document.getElementById("newDescription").value;
    // const accountData = JSON.parse(sessionStorage.getItem("account")) || { id: accountId, balance: 100 };
 
-   const accountData = JSON.parse(sessionStorage.getItem("account"))
-   // logica para cuentas de credito
-   const disponibleTotal = accountData.balance + (accountData.creditLine || 0);
+   const accountData = JSON.parse(sessionStorage.getItem("account"));
+        // logica para cuentas de credito
+    const disponibleTotal = accountData.balance + (accountData.creditLine || 0);
 
-   
-   if (accountData.type === "STANDARD" && description === "Payment" && accountData.balance < amount) {
-      alert("Error: Operación rechazada. Retire dinero disponible");
-      return;
-   }
+    // Validaciones
+    if (accountData.type === "STANDARD" && description === "Payment" && accountData.balance < amount) {
+        alert("Error: Operación rechazada. Retire dinero disponible");
+        return;
+    }
 
     if (accountData.type === "CREDIT" && description === "Payment" && amount > disponibleTotal) {
-       return alert("Error: Operación rechazada. Supera su límite de crédito disponible.");
-   }
-  
+        return alert("Error: Operación rechazada. Supera su límite de crédito disponible.");
+    }
+    
 
-   if (amount <= 0) return alert("Valor no válido");
+    if (amount <= 0) return alert("Valor no válido");
 
-   if (isNaN(amount)) {
-       alert("Introduce un valor numérico válido");
-       return;
-   }
+    if (isNaN(amount)) {
+        alert("Introduce un valor numérico válido");
+        return;
+    }
 
 
 
-   let newBalance;
+    let newBalance;
 
-   if (description === "Deposit") {
-       newBalance = accountData.balance + amount;
-   } else {
-       newBalance = accountData.balance - amount;
-   }
+    if (description === "Deposit") {
+        newBalance = accountData.balance + amount;
+    } else {
+        newBalance = accountData.balance - amount;
+    }
 
-   try {
-       const movObj = new Movements(null, newBalance, amount, description, new Date().toISOString());
-       await PostMovement(accountData.id, movObj);
+    try {
+        // Cambio plural a singular
+        const movObj = new Movement (null, newBalance, amount, description, new Date().toISOString());
+        await PostMovement(accountData.id, movObj);
       
-       accountData.balance = newBalance;
-       await PutAccount(accountData);
+        accountData.balance = newBalance;
+        await PutAccount(accountData);
 
-       sessionStorage.setItem("account", JSON.stringify(accountData));
-       amountInput.value = "";
-       await renderMovements();
-       alert("¡Transacción realizada con éxito!");
+        sessionStorage.setItem("account", JSON.stringify(accountData));
+        amountInput.value = "";
+        await renderMovements();
+        alert("¡Transacción realizada con éxito!");
       
-   } catch (e) {
-       alert("Error en la transacción");
-   }
+    } catch (e) {
+        alert("Error en la transacción");
+    }
 }
 // --- Eliminar último movimiento ---
 

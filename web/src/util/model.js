@@ -36,7 +36,7 @@ class Account {
     }
 }
 
-class Movements {
+class Movement {
     constructor(id, balance, amount, description, timestamp) {
         this.id = id;
         this.balance = balance;
@@ -93,6 +93,6 @@ class Customer {
 
 export {
     Account,
-    Movements,
+    Movement,
     Customer
 };
