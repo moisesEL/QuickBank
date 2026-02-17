@@ -25,7 +25,7 @@
 
     <!-- Checks if user is logged in, if not, redirects to Index -->
     <!-- TODO Mover este código JS a un script externo y ejecutarlo en el evento apropiado del DOM-->
-    <script>if (!sessionStorage.getItem('customer.id')) window.location.replace("/QuickBank");</script>
+
 
     <!-- Custom Google icon import for password component -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -62,20 +62,20 @@
                 <div role="rowgroup" id="tableBody" aria-label="Table body"></div>
             </div>
             
-            <!-- Formulario Crear / Editar -->
+  <!-- Formulario Crear / Editar -->
             <section id="forSection" aria-label="Customer form">
                 <form id="form">
                 <h3 id="formTitle">Crear usuario</h3>
                 
-                    <input name="firstName" placeholder="First name" required aria-label="First Name">
-                    <input name="lastName" placeholder="Last name" required aria-label="Last Name">
-                    <input name="middleInitial" placeholder="Middle Initial" maxlength="1" aria-label="Middle Initial">
-                    <input name="street" placeholder="Street" required aria-label="Street">
-                    <input name="city" placeholder="City" required aria-label="City">
-                    <input name="state" placeholder="State" required aria-label="State">
-                    <input name="zip" placeholder="Zip" required aria-label="Zip">
-                    <input name="phone" placeholder="Phone" required aria-label="Phone">
-                    <input name="email" type="email" placeholder="Email" required aria-label="Email">
+                    <input id="firstName" name="firstName" placeholder="First name" required aria-label="First Name">
+                    <input id="lastName" name="lastName" placeholder="Last name" required aria-label="Last Name">
+                    <input id="middleInitial" name="middleInitial" placeholder="Middle Initial" maxlength="1" aria-label="Middle Initial">
+                    <input id="street" name="street" placeholder="Street" required aria-label="Street">
+                    <input id="city" name="city" placeholder="City" required aria-label="City">
+                    <input id="state" name="state" placeholder="State" required aria-label="State">
+                    <input id="zip" name="zip" placeholder="Zip" required aria-label="Zip">
+                    <input id="phone" name="phone" placeholder="Phone" required aria-label="Phone">
+                    <input id="email" name="email" type="email" placeholder="Email" required aria-label="Email">
                     <div class="form-buttons">
                         <button type="submit" class="confirmButton" aria-label="Save">Save</button>
                         <button type="button" id="btnCancel" class="cancelButton" aria-label="Cancel">Cancel</button>

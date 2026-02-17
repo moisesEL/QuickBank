@@ -427,6 +427,13 @@
     text-align: center;
     transition: all 0.3s ease;
 }
+/*para los mensajes de error debajo de los inputs del formulario*/
+.field-error-msg {
+    color: red;
+    font-size: 0.9rem;
+    margin-top: 4px;
+    text-align: left;
+}
 
 @media screen and (max-width: 900px) {
     #mainWrapper {
