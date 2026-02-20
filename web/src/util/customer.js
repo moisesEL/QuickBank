@@ -60,96 +60,49 @@ function generatePassword(length = 8) {
     CARGAR USUARIOS
 ========================== */   
 function* userGenerator(users) {
-    for (const user of users) {
-        yield user;
-    } 
+   for(const user of users) {   
+    const row = document.createElement("div");
+    ["id", "firstName", "lastName", "middleInitial", "street", "city", "state", "zip", "phone", "email"].forEach(field => {
+        const cell = document.createElement("div");
+        cell.textContent = user[field] || "";
+        row.appendChild(cell);
+    });
+    yield row;
+
+}
 }
 
+export async function fetchUsers() {    
 
-export async function loadUsers() {
-    tableBody.innerHTML = "";
-    clearMessage();
     try {
         const res = await fetch(SERVICE_URL, { headers: { "Accept": "application/json" } });
         if (!res.ok) throw new Error("Error loading users. Try again."); 
-        const users = await res.json();
-        //FIXME Sustituir esta iteración por el uso de una función generadora // lo meti en una funcion aparte y hago el llamado  */
-          
-        for (const user of userGenerator(users)) {  
-            const row = document.createElement("div");
-            row.className = "row";
-            row.setAttribute("role", "row");
+        return await res.json();
 
-            row.innerHTML = `
-                <div role="cell">${user.id}</div>
-                <div role="cell">${user.firstName}</div>
-                <div role="cell">${user.lastName}</div>
-                <div role="cell">${user.middleInitial || ""}</div>
-                <div role="cell">${user.street}</div>
-                <div role="cell">${user.city}</div>
-                <div role="cell">${user.state}</div>
-                <div role="cell">${user.zip}</div>
-                <div role="cell">${user.phone}</div>
-                <div role="cell">${user.email}</div>
-                <div role="cell">******</div>
-                <div role="cell" class="actionsContainer">
-                    <button class="editButton" aria-label="Edit user">Edit</button>
-                    <button class="deleteButton" aria-label="Delete user">Delete</button>
-                </div>
-            `;
 
-            row.onclick = () => {
-                // Limpiamos selección anterior
-                const allRows = document.querySelectorAll(".row");
-                for (let j = 0; j < allRows.length; j++) {
-                    allRows[j].classList.remove("selected");
-                }
-                row.classList.add("selected");
-                selectedUser = user;
-            };
-
-            row.querySelector(".editButton").addEventListener("click", (e) => {
-                e.stopPropagation();
-                editUser(user);
-            });
-
-            row.querySelector(".deleteButton").addEventListener("click", (e) => {
-                e.stopPropagation();
-                deleteUser(user);
-            });
-
-            tableBody.appendChild(row);
-        }
-
-        // Fila vacía para create
-        const createRow = document.createElement("div");
-        createRow.className = "row";
-        createRow.setAttribute("role", "row");
-        createRow.innerHTML = `
-            <div role="cell"></div>
-            <div role="cell"></div>
-            <div role="cell"></div>
-            <div role="cell"></div>
-            <div role="cell"></div>
-            <div role="cell"></div>
-            <div role="cell"></div>
-            <div role="cell"></div>
-            <div role="cell"></div>
-            <div role="cell"></div>
-            <div role="cell"></div>
-            <div role="cell" class="actionsContainer">
-                <button class="createButton" aria-label="Create user">Create</button>
-            </div>
-        `;
-        createRow.querySelector(".createButton").addEventListener("click", handleCreateButton);
-        tableBody.appendChild(createRow);
-
-    } catch (err) {
+        
+    }catch (err) {
         console.error(err);
         displayError("Error loading users. Try again.");
+        return [];
     }
-
+    
 }
+async function loadUsers() {
+    const users = await fetchUsers(); 
+    
+    usersCache = users;
+    
+    const tbody = document.querySelector("#usersTabletbody");
+    if(tbody) return;
+    tableBody.innerHTML = "";
+    for (const row of userGenerator(users)) {
+        tableBody.appendChild(row);
+    }
+    const createRow = document.createElement("div");
+}
+
+   //FIXME Sustituir esta iteración por el uso de una función generadora // lo meti en una funcion aparte y hago el llamado  */
 
 /* =========================
    FUNCIONES DE LOS  BOTONES
