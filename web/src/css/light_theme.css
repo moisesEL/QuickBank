@@ -37,6 +37,9 @@
     /* White? */
     --white: white;
 
+    /*movements */
+    --movements-amount-text-color: #034D07;
+
     /* I got lost here */
     --navbar-shadow: rgba(0,0,0,0.5);
     --dropdown-content-shadow: rgba(0,0,0,0.1);

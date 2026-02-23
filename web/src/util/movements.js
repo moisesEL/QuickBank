@@ -78,7 +78,7 @@ function* movementRowGenerator(movements) {
            }
            else if ((field === "amount" || field === "balance") && value !== undefined) {
                if (field === "amount" && parseFloat(value) > 0) {
-                   td.style.color = "green";
+                   td.style.color = "var(--movements-amount-text-color)";
                }
                value = currencyFormatter.format(value);
            }

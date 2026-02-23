@@ -113,9 +113,9 @@
 }
 
 .btn-delete {
-   background-color: var(--primary-background); 
-   color: #b82a38;
-   border: 2px solid #dc3545;
+   background-color: #8B0000;
+   color: white;
+   border: 2px solid #8B0000;
    padding: 12px;
    border-radius: 10px;
    cursor: pointer;
@@ -125,9 +125,11 @@
 }
 
 .btn-delete:hover, .btn-delete:focus {
-   background-color: #dc3545;
-   color: white;
-   border-width: 2px;
+  box-shadow: 0 4px 8px var(--dropdown-content-shadow);
+  background-color: #951818;
+  color: white;
+  border-width: 2px;
+  border-color: #951818;
 }
 
 .section-label {
@@ -165,30 +167,6 @@
     box-shadow: 0 1px 2px var(--dropdown-content-shadow);
 }
 
-
-#helpButton {
-    padding: 8px 16px;
-    background-color: var(--accounts-header-background);
-    color: var(--accounts-header-color);
-    border: none;
-    border-radius: 8px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    box-shadow: 0 2px 4px var(--dropdown-content-shadow);
-}
-
-#helpButton:hover {
-    background-color: #3516a5;
-    box-shadow: 0 4px 8px var(--dropdown-content-shadow);
-}
-
-#helpButton:active {
-    box-shadow: 0 1px 2px var(--dropdown-content-shadow);
-}
 
 #funcionesAgregadas {
 
